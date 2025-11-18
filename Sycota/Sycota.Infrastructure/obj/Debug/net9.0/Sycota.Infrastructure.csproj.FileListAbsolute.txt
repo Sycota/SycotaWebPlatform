@@ -1,0 +1,15 @@
+C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Infrastructure\bin\Debug\net9.0\Sycota.Infrastructure.deps.json
+C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Infrastructure\bin\Debug\net9.0\Sycota.Infrastructure.runtimeconfig.json
+C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Infrastructure\bin\Debug\net9.0\Sycota.Infrastructure.dll
+C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Infrastructure\bin\Debug\net9.0\Sycota.Infrastructure.pdb
+C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Infrastructure\obj\Debug\net9.0\Sycota.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Infrastructure\obj\Debug\net9.0\Sycota.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Infrastructure\obj\Debug\net9.0\Sycota.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Infrastructure\obj\Debug\net9.0\Sycota.Infrastructure.AssemblyInfo.cs
+C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Infrastructure\obj\Debug\net9.0\Sycota.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Infrastructure\obj\Debug\net9.0\Sycota.Infrastructure.sourcelink.json
+C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Infrastructure\obj\Debug\net9.0\Sycota.Infrastructure.dll
+C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Infrastructure\obj\Debug\net9.0\refint\Sycota.Infrastructure.dll
+C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Infrastructure\obj\Debug\net9.0\Sycota.Infrastructure.pdb
+C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Infrastructure\obj\Debug\net9.0\Sycota.Infrastructure.genruntimeconfig.cache
+C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Infrastructure\obj\Debug\net9.0\ref\Sycota.Infrastructure.dll
