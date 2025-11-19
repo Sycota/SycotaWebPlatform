@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Sycota.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0898e8b8f06c5af7b961673a7d0691fb999f15c1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7e0a2fe9e5cc591329806459c5c3b14bba11ca3a")]
 [assembly: System.Reflection.AssemblyProductAttribute("Sycota.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Sycota.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

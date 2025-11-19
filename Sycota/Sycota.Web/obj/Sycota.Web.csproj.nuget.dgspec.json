@@ -173,7 +173,11 @@
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Sycota.Domain.csproj": {
+                "projectPath": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Sycota.Domain.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

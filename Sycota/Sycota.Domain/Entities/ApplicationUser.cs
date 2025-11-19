@@ -4,7 +4,10 @@ namespace Sycota.Domain.Entities;
 
 public class ApplicationUser : IdentityUser
 {
-    // Username and Email are already in IdentityUser
-    // We'll make them required through configuration
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string? DOB { get; set; }
+    public string? Nationality { get; set; }
 }
+
 

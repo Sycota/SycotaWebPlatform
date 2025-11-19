@@ -3218,7 +3218,8 @@
           "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "9.0.11",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "9.0.11",
           "Microsoft.AspNetCore.Identity.UI": "9.0.11",
-          "Microsoft.EntityFrameworkCore.SqlServer": "9.0.11"
+          "Microsoft.EntityFrameworkCore.SqlServer": "9.0.11",
+          "Sycota.Domain": "1.0.0"
         },
         "compile": {
           "bin/placeholder/Sycota.Infrastructure.dll": {}

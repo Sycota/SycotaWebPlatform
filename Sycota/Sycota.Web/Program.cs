@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Sycota.Web.Data;
+using Sycota.Infrastructure.Data;
 using Sycota.Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);

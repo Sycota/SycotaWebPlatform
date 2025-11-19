@@ -1767,6 +1767,19 @@
             "rid": "win"
           }
         }
+      },
+      "Sycota.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "9.0.11"
+        },
+        "compile": {
+          "bin/placeholder/Sycota.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Sycota.Domain.dll": {}
+        }
       }
     }
   },
@@ -5150,6 +5163,11 @@
         "system.windows.extensions.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "Sycota.Domain/1.0.0": {
+      "type": "project",
+      "path": "../Sycota.Domain/Sycota.Domain.csproj",
+      "msbuildProject": "../Sycota.Domain/Sycota.Domain.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -5158,7 +5176,8 @@
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 9.0.11",
       "Microsoft.AspNetCore.Identity.UI >= 9.0.11",
       "Microsoft.EntityFrameworkCore.SqlServer >= 9.0.11",
-      "Microsoft.EntityFrameworkCore.Tools >= 9.0.11"
+      "Microsoft.EntityFrameworkCore.Tools >= 9.0.11",
+      "Sycota.Domain >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -5194,7 +5213,11 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Sycota.Domain.csproj": {
+              "projectPath": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Sycota.Domain.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
