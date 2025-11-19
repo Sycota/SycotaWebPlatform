@@ -1,38 +1,110 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\",
+  "WorkspaceRootPath": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|c:\\users\\gogo1\\desktop\\sycotawebplatform\\sycota\\sycota.web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|solutionrelative:sycota.web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|c:\\users\\gogo1\\desktop\\sycotawebplatform\\sycota\\sycota.web\\areas\\identity\\pages\\account\\register.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.web\\views\\shared\\_loginpartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|solutionrelative:sycota.web\\views\\shared\\_loginpartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.web\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|solutionrelative:sycota.web\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.web\\views\\shared\\_validationscriptspartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|solutionrelative:sycota.web\\views\\shared\\_validationscriptspartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.domain\\enums\\clubrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|solutionrelative:sycota.domain\\enums\\clubrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.domain\\entities\\clubmember.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|solutionrelative:sycota.domain\\entities\\clubmember.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.domain\\entities\\shooterprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|solutionrelative:sycota.domain\\entities\\shooterprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.domain\\entities\\trainingscore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|solutionrelative:sycota.domain\\entities\\trainingscore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.domain\\enums\\trainingtype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|solutionrelative:sycota.domain\\enums\\trainingtype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.domain\\enums\\issfweapontype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|solutionrelative:sycota.domain\\enums\\issfweapontype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.domain\\enums\\issfcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|solutionrelative:sycota.domain\\enums\\issfcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.domain\\entities\\shot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|solutionrelative:sycota.domain\\entities\\shot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.domain\\entities\\trainingsession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|solutionrelative:sycota.domain\\entities\\trainingsession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.domain\\entities\\club.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|solutionrelative:sycota.domain\\entities\\club.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Infrastructure\\Migrations\\20251119073449_InitialMigration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Sycota.Infrastructure\\Migrations\\20251119073449_InitialMigration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Infrastructure\\Migrations\\20251119073353_FKFix.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Sycota.Infrastructure\\Migrations\\20251119073353_FKFix.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Infrastructure\\Migrations\\20251119073108_InitialMigration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Sycota.Infrastructure\\Migrations\\20251119073108_InitialMigration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.web\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|solutionrelative:sycota.web\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5A4E214D-351D-4FCA-B6A5-087F8B426098}|Sycota.Infrastructure\\Sycota.Infrastructure.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.infrastructure\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5A4E214D-351D-4FCA-B6A5-087F8B426098}|Sycota.Infrastructure\\Sycota.Infrastructure.csproj|solutionrelative:sycota.infrastructure\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.domain\\entities\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A1B66DF-AD9C-4EAF-8D0A-0E2279F911BA}|Sycota.Domain\\Sycota.Domain.csproj|solutionrelative:sycota.domain\\entities\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.web\\areas\\identity\\pages\\account\\register.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|solutionrelative:sycota.web\\areas\\identity\\pages\\account\\register.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|c:\\users\\gogo1\\desktop\\sycotawebplatform\\sycota\\sycota.web\\areas\\identity\\pages\\account\\login.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.web\\areas\\identity\\pages\\account\\login.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|solutionrelative:sycota.web\\areas\\identity\\pages\\account\\login.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|c:\\users\\gogo1\\desktop\\sycotawebplatform\\sycota\\sycota.web\\areas\\identity\\pages\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.web\\areas\\identity\\pages\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|solutionrelative:sycota.web\\areas\\identity\\pages\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|c:\\users\\gogo1\\desktop\\sycotawebplatform\\sycota\\sycota.web\\areas\\identity\\pages\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.web\\areas\\identity\\pages\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|solutionrelative:sycota.web\\areas\\identity\\pages\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|c:\\users\\gogo1\\desktop\\sycotawebplatform\\sycota\\sycota.web\\scaffoldingreadme.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "AbsoluteMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.web\\scaffoldingreadme.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|solutionrelative:sycota.web\\scaffoldingreadme.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|c:\\users\\gogo1\\desktop\\sycotawebplatform\\sycota\\sycota.web\\models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|c:\\users\\gogo1\\documents\\github\\sycotawebplatform\\sycota\\sycota.web\\models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{735E1081-98E7-4879-A9DB-52760C909998}|Sycota.Web\\Sycota.Web.csproj|solutionrelative:sycota.web\\models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5A4E214D-351D-4FCA-B6A5-087F8B426098}|Sycota.Infrastructure\\Sycota.Infrastructure.csproj|c:\\users\\gogo1\\desktop\\sycotawebplatform\\sycota\\sycota.infrastructure\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5A4E214D-351D-4FCA-B6A5-087F8B426098}|Sycota.Infrastructure\\Sycota.Infrastructure.csproj|solutionrelative:sycota.infrastructure\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,119 +114,351 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Program.cs",
-              "RelativeDocumentMoniker": "Sycota.Web\\Program.cs",
-              "ToolTip": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Program.cs",
-              "RelativeToolTip": "Sycota.Web\\Program.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAACoAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-16T16:44:57.915Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{269a02dc-6af8-11d3-bdc4-00c04f688e50}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Register.cshtml.cs",
-              "DocumentMoniker": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Areas\\Identity\\Pages\\Account\\Register.cshtml.cs",
-              "RelativeDocumentMoniker": "Sycota.Web\\Areas\\Identity\\Pages\\Account\\Register.cshtml.cs",
-              "ToolTip": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Areas\\Identity\\Pages\\Account\\Register.cshtml.cs",
-              "RelativeToolTip": "Sycota.Web\\Areas\\Identity\\Pages\\Account\\Register.cshtml.cs",
-              "ViewState": "AgIAAJ4AAAAAAAAAAAAswAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-16T16:44:52.027Z",
+              "DocumentIndex": 3,
+              "Title": "_ValidationScriptsPartial.cshtml",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
+              "RelativeDocumentMoniker": "Sycota.Web\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
+              "RelativeToolTip": "Sycota.Web\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-19T07:52:48.486Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Login.cshtml.cs",
-              "DocumentMoniker": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Areas\\Identity\\Pages\\Account\\Login.cshtml.cs",
-              "RelativeDocumentMoniker": "Sycota.Web\\Areas\\Identity\\Pages\\Account\\Login.cshtml.cs",
-              "ToolTip": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Areas\\Identity\\Pages\\Account\\Login.cshtml.cs",
-              "RelativeToolTip": "Sycota.Web\\Areas\\Identity\\Pages\\Account\\Login.cshtml.cs",
-              "ViewState": "AgIAAGsAAAAAAAAAAAAswBIAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-16T16:44:41.982Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Register.cshtml",
-              "DocumentMoniker": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Areas\\Identity\\Pages\\Account\\Register.cshtml",
-              "RelativeDocumentMoniker": "Sycota.Web\\Areas\\Identity\\Pages\\Account\\Register.cshtml",
-              "ToolTip": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Areas\\Identity\\Pages\\Account\\Register.cshtml",
-              "RelativeToolTip": "Sycota.Web\\Areas\\Identity\\Pages\\Account\\Register.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Sycota.Web\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Sycota.Web\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-16T16:44:37.093Z",
+              "WhenOpened": "2025-11-19T07:52:38.564Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Login.cshtml",
-              "DocumentMoniker": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Areas\\Identity\\Pages\\Account\\Login.cshtml",
-              "RelativeDocumentMoniker": "Sycota.Web\\Areas\\Identity\\Pages\\Account\\Login.cshtml",
-              "ToolTip": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Areas\\Identity\\Pages\\Account\\Login.cshtml",
-              "RelativeToolTip": "Sycota.Web\\Areas\\Identity\\Pages\\Account\\Login.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "_LoginPartial.cshtml",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Views\\Shared\\_LoginPartial.cshtml",
+              "RelativeDocumentMoniker": "Sycota.Web\\Views\\Shared\\_LoginPartial.cshtml",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Views\\Shared\\_LoginPartial.cshtml",
+              "RelativeToolTip": "Sycota.Web\\Views\\Shared\\_LoginPartial.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-16T16:44:34.293Z",
+              "WhenOpened": "2025-11-19T07:52:37.148Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ScaffoldingReadMe.txt",
-              "DocumentMoniker": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Web\\ScaffoldingReadMe.txt",
-              "RelativeDocumentMoniker": "Sycota.Web\\ScaffoldingReadMe.txt",
-              "ToolTip": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Web\\ScaffoldingReadMe.txt",
-              "RelativeToolTip": "Sycota.Web\\ScaffoldingReadMe.txt",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2025-11-16T15:57:37.102Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "ErrorViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Models\\ErrorViewModel.cs",
-              "RelativeDocumentMoniker": "Sycota.Web\\Models\\ErrorViewModel.cs",
-              "ToolTip": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Models\\ErrorViewModel.cs",
-              "RelativeToolTip": "Sycota.Web\\Models\\ErrorViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
+              "DocumentIndex": 9,
+              "Title": "ISSFWeaponType.cs",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Enums\\ISSFWeaponType.cs",
+              "RelativeDocumentMoniker": "Sycota.Domain\\Enums\\ISSFWeaponType.cs",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Enums\\ISSFWeaponType.cs",
+              "RelativeToolTip": "Sycota.Domain\\Enums\\ISSFWeaponType.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-16T15:51:45.156Z",
+              "WhenOpened": "2025-11-19T07:45:11.82Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "ApplicationDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Infrastructure\\Data\\ApplicationDbContext.cs",
-              "RelativeDocumentMoniker": "Sycota.Infrastructure\\Data\\ApplicationDbContext.cs",
-              "ToolTip": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Infrastructure\\Data\\ApplicationDbContext.cs",
-              "RelativeToolTip": "Sycota.Infrastructure\\Data\\ApplicationDbContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "DocumentIndex": 10,
+              "Title": "ISSFCategory.cs",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Enums\\ISSFCategory.cs",
+              "RelativeDocumentMoniker": "Sycota.Domain\\Enums\\ISSFCategory.cs",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Enums\\ISSFCategory.cs",
+              "RelativeToolTip": "Sycota.Domain\\Enums\\ISSFCategory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-16T15:45:33.299Z",
+              "WhenOpened": "2025-11-19T07:45:10.546Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Shot.cs",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Entities\\Shot.cs",
+              "RelativeDocumentMoniker": "Sycota.Domain\\Entities\\Shot.cs",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Entities\\Shot.cs",
+              "RelativeToolTip": "Sycota.Domain\\Entities\\Shot.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-19T07:22:55.641Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Program.cs",
+              "RelativeDocumentMoniker": "Sycota.Web\\Program.cs",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Program.cs",
+              "RelativeToolTip": "Sycota.Web\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAABsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-16T16:44:57.915Z",
               "EditorCaption": ""
             },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "TrainingScore.cs",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Entities\\TrainingScore.cs",
+              "RelativeDocumentMoniker": "Sycota.Domain\\Entities\\TrainingScore.cs",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Entities\\TrainingScore.cs",
+              "RelativeToolTip": "Sycota.Domain\\Entities\\TrainingScore.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T16:42:23.015Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ShooterProfile.cs",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Entities\\ShooterProfile.cs",
+              "RelativeDocumentMoniker": "Sycota.Domain\\Entities\\ShooterProfile.cs",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Entities\\ShooterProfile.cs",
+              "RelativeToolTip": "Sycota.Domain\\Entities\\ShooterProfile.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAQwA0AAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T16:41:27.773Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ClubMember.cs",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Entities\\ClubMember.cs",
+              "RelativeDocumentMoniker": "Sycota.Domain\\Entities\\ClubMember.cs",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Entities\\ClubMember.cs",
+              "RelativeToolTip": "Sycota.Domain\\Entities\\ClubMember.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAkAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T16:41:15.828Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ClubRole.cs",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Enums\\ClubRole.cs",
+              "RelativeDocumentMoniker": "Sycota.Domain\\Enums\\ClubRole.cs",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Enums\\ClubRole.cs",
+              "RelativeToolTip": "Sycota.Domain\\Enums\\ClubRole.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T16:32:15.896Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "TrainingType.cs",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Enums\\TrainingType.cs",
+              "RelativeDocumentMoniker": "Sycota.Domain\\Enums\\TrainingType.cs",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Enums\\TrainingType.cs",
+              "RelativeToolTip": "Sycota.Domain\\Enums\\TrainingType.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-19T07:45:13.181Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "20251119073449_InitialMigration.cs",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Infrastructure\\Migrations\\20251119073449_InitialMigration.cs",
+              "RelativeDocumentMoniker": "Sycota.Infrastructure\\Migrations\\20251119073449_InitialMigration.cs",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Infrastructure\\Migrations\\20251119073449_InitialMigration.cs",
+              "RelativeToolTip": "Sycota.Infrastructure\\Migrations\\20251119073449_InitialMigration.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-19T07:34:49.21Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "20251119073353_FKFix.cs",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Infrastructure\\Migrations\\20251119073353_FKFix.cs",
+              "RelativeDocumentMoniker": "Sycota.Infrastructure\\Migrations\\20251119073353_FKFix.cs",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Infrastructure\\Migrations\\20251119073353_FKFix.cs",
+              "RelativeToolTip": "Sycota.Infrastructure\\Migrations\\20251119073353_FKFix.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-19T07:33:54.102Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "20251119073108_InitialMigration.cs",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Infrastructure\\Migrations\\20251119073108_InitialMigration.cs",
+              "RelativeDocumentMoniker": "Sycota.Infrastructure\\Migrations\\20251119073108_InitialMigration.cs",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Infrastructure\\Migrations\\20251119073108_InitialMigration.cs",
+              "RelativeToolTip": "Sycota.Infrastructure\\Migrations\\20251119073108_InitialMigration.cs",
+              "ViewState": "AgIAAKsBAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-19T07:31:08.934Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Club.cs",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Entities\\Club.cs",
+              "RelativeDocumentMoniker": "Sycota.Domain\\Entities\\Club.cs",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Entities\\Club.cs",
+              "RelativeToolTip": "Sycota.Domain\\Entities\\Club.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAxwBAAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T16:41:14.265Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "TrainingSession.cs",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Entities\\TrainingSession.cs",
+              "RelativeDocumentMoniker": "Sycota.Domain\\Entities\\TrainingSession.cs",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Entities\\TrainingSession.cs",
+              "RelativeToolTip": "Sycota.Domain\\Entities\\TrainingSession.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T16:42:15.819Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\appsettings.json",
+              "RelativeDocumentMoniker": "Sycota.Web\\appsettings.json",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\appsettings.json",
+              "RelativeToolTip": "Sycota.Web\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-11-19T07:28:25.129Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "ApplicationUser.cs",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Entities\\ApplicationUser.cs",
+              "RelativeDocumentMoniker": "Sycota.Domain\\Entities\\ApplicationUser.cs",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Entities\\ApplicationUser.cs",
+              "RelativeToolTip": "Sycota.Domain\\Entities\\ApplicationUser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T16:23:02.856Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Infrastructure\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "Sycota.Infrastructure\\Data\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Infrastructure\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "Sycota.Infrastructure\\Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAEAAAAAAAAAAAADwv5MAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-16T15:45:33.299Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "Register.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Areas\\Identity\\Pages\\Account\\Register.cshtml.cs",
+              "RelativeDocumentMoniker": "Sycota.Web\\Areas\\Identity\\Pages\\Account\\Register.cshtml.cs",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Areas\\Identity\\Pages\\Account\\Register.cshtml.cs",
+              "RelativeToolTip": "Sycota.Web\\Areas\\Identity\\Pages\\Account\\Register.cshtml.cs",
+              "ViewState": "AgIAAJ4AAAAAAAAAAAAswAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-16T16:44:52.027Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Login.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Areas\\Identity\\Pages\\Account\\Login.cshtml.cs",
+              "RelativeDocumentMoniker": "Sycota.Web\\Areas\\Identity\\Pages\\Account\\Login.cshtml.cs",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Areas\\Identity\\Pages\\Account\\Login.cshtml.cs",
+              "RelativeToolTip": "Sycota.Web\\Areas\\Identity\\Pages\\Account\\Login.cshtml.cs",
+              "ViewState": "AgIAAGsAAAAAAAAAAAAswBIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-16T16:44:41.982Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Register.cshtml",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Areas\\Identity\\Pages\\Account\\Register.cshtml",
+              "RelativeDocumentMoniker": "Sycota.Web\\Areas\\Identity\\Pages\\Account\\Register.cshtml",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Areas\\Identity\\Pages\\Account\\Register.cshtml",
+              "RelativeToolTip": "Sycota.Web\\Areas\\Identity\\Pages\\Account\\Register.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-16T16:44:37.093Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Areas\\Identity\\Pages\\Account\\Login.cshtml",
+              "RelativeDocumentMoniker": "Sycota.Web\\Areas\\Identity\\Pages\\Account\\Login.cshtml",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Areas\\Identity\\Pages\\Account\\Login.cshtml",
+              "RelativeToolTip": "Sycota.Web\\Areas\\Identity\\Pages\\Account\\Login.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-16T16:44:34.293Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "ScaffoldingReadMe.txt",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\ScaffoldingReadMe.txt",
+              "RelativeDocumentMoniker": "Sycota.Web\\ScaffoldingReadMe.txt",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\ScaffoldingReadMe.txt",
+              "RelativeToolTip": "Sycota.Web\\ScaffoldingReadMe.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2025-11-16T15:57:37.102Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "ErrorViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Models\\ErrorViewModel.cs",
+              "RelativeDocumentMoniker": "Sycota.Web\\Models\\ErrorViewModel.cs",
+              "ToolTip": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Web\\Models\\ErrorViewModel.cs",
+              "RelativeToolTip": "Sycota.Web\\Models\\ErrorViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-16T15:51:45.156Z"
             }
           ]
         }

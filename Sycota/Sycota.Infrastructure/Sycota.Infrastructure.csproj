@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Sycota.Application\Sycota.Application.csproj" />
     <ProjectReference Include="..\Sycota.Domain\Sycota.Domain.csproj" />
   </ItemGroup>
 

@@ -10,3 +10,15 @@ C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Application\obj\Debug\net
 C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Application\obj\Debug\net9.0\refint\Sycota.Application.dll
 C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Application\obj\Debug\net9.0\Sycota.Application.pdb
 C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Application\obj\Debug\net9.0\ref\Sycota.Application.dll
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Application\bin\Debug\net9.0\Sycota.Application.deps.json
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Application\bin\Debug\net9.0\Sycota.Application.dll
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Application\bin\Debug\net9.0\Sycota.Application.pdb
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Application\obj\Debug\net9.0\Sycota.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Application\obj\Debug\net9.0\Sycota.Application.AssemblyInfoInputs.cache
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Application\obj\Debug\net9.0\Sycota.Application.AssemblyInfo.cs
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Application\obj\Debug\net9.0\Sycota.Application.csproj.CoreCompileInputs.cache
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Application\obj\Debug\net9.0\Sycota.Application.sourcelink.json
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Application\obj\Debug\net9.0\Sycota.Application.dll
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Application\obj\Debug\net9.0\refint\Sycota.Application.dll
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Application\obj\Debug\net9.0\Sycota.Application.pdb
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Application\obj\Debug\net9.0\ref\Sycota.Application.dll

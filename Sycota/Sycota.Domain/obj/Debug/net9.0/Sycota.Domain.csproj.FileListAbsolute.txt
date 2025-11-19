@@ -11,3 +11,16 @@ C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Domain\obj\Debug\net9.0\S
 C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Domain\obj\Debug\net9.0\refint\Sycota.Domain.dll
 C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Domain\obj\Debug\net9.0\Sycota.Domain.pdb
 C:\Users\gogo1\Desktop\SycotaWebPlatform\Sycota\Sycota.Domain\obj\Debug\net9.0\ref\Sycota.Domain.dll
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Domain\bin\Debug\net9.0\Sycota.Domain.deps.json
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Domain\bin\Debug\net9.0\Sycota.Domain.dll
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Domain\bin\Debug\net9.0\Sycota.Domain.pdb
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Domain\obj\Debug\net9.0\Sycota.Domain.csproj.AssemblyReference.cache
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Domain\obj\Debug\net9.0\Sycota.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Domain\obj\Debug\net9.0\Sycota.Domain.AssemblyInfoInputs.cache
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Domain\obj\Debug\net9.0\Sycota.Domain.AssemblyInfo.cs
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Domain\obj\Debug\net9.0\Sycota.Domain.csproj.CoreCompileInputs.cache
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Domain\obj\Debug\net9.0\Sycota.Domain.sourcelink.json
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Domain\obj\Debug\net9.0\Sycota.Domain.dll
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Domain\obj\Debug\net9.0\refint\Sycota.Domain.dll
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Domain\obj\Debug\net9.0\Sycota.Domain.pdb
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Domain\obj\Debug\net9.0\ref\Sycota.Domain.dll

@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Sycota.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7e0a2fe9e5cc591329806459c5c3b14bba11ca3a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+92e6d5ad7affbd0b24b11d9a5488676ca7745845")]
 [assembly: System.Reflection.AssemblyProductAttribute("Sycota.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Sycota.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

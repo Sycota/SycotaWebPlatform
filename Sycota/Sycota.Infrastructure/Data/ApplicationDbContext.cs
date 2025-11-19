@@ -58,7 +58,7 @@ namespace Sycota.Infrastructure.Data
                 entity.HasOne(e => e.Trainer)
                     .WithMany(t => t.Competitors)
                     .HasForeignKey(e => e.TrainerId)
-                    .OnDelete(DeleteBehavior.SetNull);
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             // Configure TrainingSession entity
@@ -109,9 +109,7 @@ namespace Sycota.Infrastructure.Data
                 entity.Property(e => e.Notes).HasMaxLength(1000);
                 
                 // Enum conversions
-                entity.Property(e => e.WeaponType).HasConversion<int>();
-                entity.Property(e => e.TrainingType).HasConversion<int>();
-            });
+                entity.Property(e => e.WeaponType).HasConversion<int>();});
 
             // Configure Shot entity (individual shot details for ISSF 10m)
             builder.Entity<Shot>(entity =>
@@ -148,15 +146,10 @@ namespace Sycota.Infrastructure.Data
                 entity.Property(e => e.NationalLicenseNumber).HasMaxLength(100);
                 entity.Property(e => e.MedicalCertificateNumber).HasMaxLength(100);
                 
-                // Personal best scores (ISSF 10m: max 654.0 for qualification, 261.6 for final)
-                entity.Property(e => e.PersonalBestQualification).HasPrecision(6, 1);
-                entity.Property(e => e.PersonalBestFinal).HasPrecision(5, 1);
-                
                 entity.Property(e => e.AdditionalNotes).HasMaxLength(2000);
                 
                 // Enum conversions
                 entity.Property(e => e.PrimaryWeapon).HasConversion<int>();
-                entity.Property(e => e.SecondaryWeapon).HasConversion<int>();
                 entity.Property(e => e.Category).HasConversion<int>();
             });
         }

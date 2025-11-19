@@ -23,7 +23,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 // Configure to use username for sign in
 builder.Services.Configure<IdentityOptions>(options =>
 {
-    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     options.User.RequireUniqueEmail = true;
 });
 builder.Services.AddControllersWithViews();

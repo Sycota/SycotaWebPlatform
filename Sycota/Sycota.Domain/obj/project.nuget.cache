@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "CaeZucml89g=",
+  "dgSpecHash": "x9W2DHiT3I4=",
   "success": true,
-  "projectFilePath": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Sycota.Domain.csproj",
+  "projectFilePath": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Sycota.Domain.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\gogo1\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\9.0.11\\microsoft.aspnetcore.cryptography.internal.9.0.11.nupkg.sha512",
     "C:\\Users\\gogo1\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\9.0.11\\microsoft.aspnetcore.cryptography.keyderivation.9.0.11.nupkg.sha512",

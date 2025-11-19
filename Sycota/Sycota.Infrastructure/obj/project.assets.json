@@ -1768,6 +1768,19 @@
           }
         }
       },
+      "Sycota.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "Sycota.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Sycota.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Sycota.Application.dll": {}
+        }
+      },
       "Sycota.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
@@ -5164,6 +5177,11 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "Sycota.Application/1.0.0": {
+      "type": "project",
+      "path": "../Sycota.Application/Sycota.Application.csproj",
+      "msbuildProject": "../Sycota.Application/Sycota.Application.csproj"
+    },
     "Sycota.Domain/1.0.0": {
       "type": "project",
       "path": "../Sycota.Domain/Sycota.Domain.csproj",
@@ -5177,6 +5195,7 @@
       "Microsoft.AspNetCore.Identity.UI >= 9.0.11",
       "Microsoft.EntityFrameworkCore.SqlServer >= 9.0.11",
       "Microsoft.EntityFrameworkCore.Tools >= 9.0.11",
+      "Sycota.Application >= 1.0.0",
       "Sycota.Domain >= 1.0.0"
     ]
   },
@@ -5187,11 +5206,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Infrastructure\\Sycota.Infrastructure.csproj",
+      "projectUniqueName": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Infrastructure\\Sycota.Infrastructure.csproj",
       "projectName": "Sycota.Infrastructure",
-      "projectPath": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Infrastructure\\Sycota.Infrastructure.csproj",
+      "projectPath": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Infrastructure\\Sycota.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\gogo1\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Infrastructure\\obj\\",
+      "outputPath": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -5214,8 +5233,11 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Sycota.Domain.csproj": {
-              "projectPath": "C:\\Users\\gogo1\\Desktop\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Sycota.Domain.csproj"
+            "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Application\\Sycota.Application.csproj": {
+              "projectPath": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Application\\Sycota.Application.csproj"
+            },
+            "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Sycota.Domain.csproj": {
+              "projectPath": "C:\\Users\\gogo1\\Documents\\GitHub\\SycotaWebPlatform\\Sycota\\Sycota.Domain\\Sycota.Domain.csproj"
             }
           }
         }
@@ -5275,7 +5297,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
