@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Sycota.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+92e6d5ad7affbd0b24b11d9a5488676ca7745845")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d61d1238d5ba6cde883ad90bcab281b8e2c4cf55")]
 [assembly: System.Reflection.AssemblyProductAttribute("Sycota.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Sycota.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

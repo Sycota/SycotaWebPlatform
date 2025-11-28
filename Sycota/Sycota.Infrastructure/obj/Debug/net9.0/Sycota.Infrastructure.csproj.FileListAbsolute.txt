@@ -31,3 +31,5 @@ C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Infrastructure\b
 C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Infrastructure\obj\Debug\net9.0\Sycota.I.6D457AF2.Up2Date
 C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Infrastructure\obj\Debug\net9.0\Sycota.Infrastructure.genruntimeconfig.cache
 C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Infrastructure\obj\Debug\net9.0\ref\Sycota.Infrastructure.dll
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Infrastructure\bin\Debug\net9.0\Sycota.Application.dll
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Infrastructure\bin\Debug\net9.0\Sycota.Application.pdb

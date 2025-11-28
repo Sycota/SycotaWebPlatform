@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36705.20 d17.14
+VisualStudioVersion = 17.14.36705.20
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sycota.Application", "Sycota.Application\Sycota.Application.csproj", "{0BC1AF72-9ECA-4A18-B5E9-211CD197F522}"
 EndProject
@@ -10,6 +10,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sycota.Infrastructure", "Sycota.Infrastructure\Sycota.Infrastructure.csproj", "{5A4E214D-351D-4FCA-B6A5-087F8B426098}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sycota.Web", "Sycota.Web\Sycota.Web.csproj", "{735E1081-98E7-4879-A9DB-52760C909998}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sycota.Tests.Unit", "Sycota.Tests.Unit\Sycota.Tests.Unit.csproj", "{404512A3-0EE7-4063-9A66-DF35FC72B802}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sycota.Tests.Integration", "Sycota.Tests.Integration\Sycota.Tests.Integration.csproj", "{925E0020-8331-4964-BE5A-B4C6758A15B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{735E1081-98E7-4879-A9DB-52760C909998}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{735E1081-98E7-4879-A9DB-52760C909998}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{735E1081-98E7-4879-A9DB-52760C909998}.Release|Any CPU.Build.0 = Release|Any CPU
+		{404512A3-0EE7-4063-9A66-DF35FC72B802}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{404512A3-0EE7-4063-9A66-DF35FC72B802}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{404512A3-0EE7-4063-9A66-DF35FC72B802}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{404512A3-0EE7-4063-9A66-DF35FC72B802}.Release|Any CPU.Build.0 = Release|Any CPU
+		{925E0020-8331-4964-BE5A-B4C6758A15B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{925E0020-8331-4964-BE5A-B4C6758A15B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{925E0020-8331-4964-BE5A-B4C6758A15B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{925E0020-8331-4964-BE5A-B4C6758A15B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

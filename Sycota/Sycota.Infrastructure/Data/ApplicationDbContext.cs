@@ -85,7 +85,7 @@ namespace Sycota.Infrastructure.Data
                 entity.HasKey(e => e.Id);
 
                 entity.HasOne(e => e.TrainingSession)
-                    .WithMany(ts => ts.Scores)
+                    .WithMany()
                     .HasForeignKey(e => e.TrainingSessionId)
                     .OnDelete(DeleteBehavior.Cascade);
 

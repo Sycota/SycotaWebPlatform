@@ -22,3 +22,7 @@ C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Application\obj\
 C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Application\obj\Debug\net9.0\refint\Sycota.Application.dll
 C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Application\obj\Debug\net9.0\Sycota.Application.pdb
 C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Application\obj\Debug\net9.0\ref\Sycota.Application.dll
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Application\bin\Debug\net9.0\Sycota.Domain.dll
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Application\bin\Debug\net9.0\Sycota.Domain.pdb
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Application\obj\Debug\net9.0\Sycota.Application.csproj.AssemblyReference.cache
+C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota\Sycota.Application\obj\Debug\net9.0\Sycota.A.F0ADA436.Up2Date

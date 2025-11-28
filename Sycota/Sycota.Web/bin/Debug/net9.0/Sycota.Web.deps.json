@@ -2356,6 +2356,9 @@
       "System.Threading.Tasks.Dataflow/8.0.0": {},
       "System.Threading.Tasks.Extensions/4.5.4": {},
       "Sycota.Application/1.0.0": {
+        "dependencies": {
+          "Sycota.Domain": "1.0.0"
+        },
         "runtime": {
           "Sycota.Application.dll": {
             "assemblyVersion": "1.0.0.0",
@@ -2380,6 +2383,7 @@
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "9.0.11",
           "Microsoft.AspNetCore.Identity.UI": "9.0.11",
           "Microsoft.EntityFrameworkCore.SqlServer": "9.0.11",
+          "Sycota.Application": "1.0.0",
           "Sycota.Domain": "1.0.0"
         },
         "runtime": {
