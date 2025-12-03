@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Sycota.Application.Interfaces;
+using Sycota.Application.Interfaces.Options;
 using Sycota.Domain.Entities;
 using Sycota.Domain.Enums;
 using Sycota.Infrastructure.Data;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sycota.Application.Interfaces;
+using Sycota.Application.Interfaces.Options;
 using Sycota.Domain.Entities;
 using Sycota.Infrastructure.Data;
 

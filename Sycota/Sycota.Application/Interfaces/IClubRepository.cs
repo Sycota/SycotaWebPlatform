@@ -1,4 +1,5 @@
-﻿using Sycota.Domain.Entities;
+﻿using Sycota.Application.Interfaces.Options;
+using Sycota.Domain.Entities;
 
 namespace Sycota.Application.Interfaces
 {

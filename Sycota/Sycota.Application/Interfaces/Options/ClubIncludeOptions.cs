@@ -1,6 +1,6 @@
-namespace Sycota.Application.Interfaces
+namespace Sycota.Application.Interfaces.Options
 {
-    [System.Flags]
+    [Flags]
     public enum ClubIncludeOptions
     {
         None = 0,
