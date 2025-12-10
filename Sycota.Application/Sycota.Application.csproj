@@ -14,4 +14,12 @@
     <ProjectReference Include="..\Sycota.Domain\Sycota.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota.Application\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota.Application\.editorconfig" />
+  </ItemGroup>
+
 </Project>
