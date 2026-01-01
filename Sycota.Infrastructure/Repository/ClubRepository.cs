@@ -56,6 +56,7 @@ namespace Sycota.Infrastructure.Repository
 
             _context.Clubs.Remove(club);
             await _context.SaveChangesAsync();
+
         }
 
         private static IQueryable<Club> ApplyIncludeOptions(IQueryable<Club> query, ClubIncludeOptions include)

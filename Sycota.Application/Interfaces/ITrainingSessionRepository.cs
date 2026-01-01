@@ -15,3 +15,5 @@ namespace Sycota.Application.Interfaces
     }
 }
 
+
+

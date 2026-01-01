@@ -10,7 +10,7 @@ using Sycota.Infrastructure.Data;
 using Sycota.Infrastructure.Repository;
 using Xunit;
 
-namespace Sycota.Tests.Integration.Repositories;
+namespace Sycota.Tests.Integration.Services;
 
 public class ClubServiceTests : IAsyncLifetime
 {

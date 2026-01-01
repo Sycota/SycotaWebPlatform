@@ -67,6 +67,16 @@ namespace Sycota.Infrastructure.Repository
                 .Where(cm => cm.Role == ClubRole.Admin)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<ClubMember>> GetCompetitorsByTrainerIdAsync(int trainerId, ClubMemberIncludeOptions include = ClubMemberIncludeOptions.None)
+        {
+            var query = ApplyIncludeOptions(_context.ClubMembers.AsQueryable(), include);
+
+            return await query
+                .AsNoTracking()
+                .Where(cm => cm.TrainerId == trainerId)
+                .ToListAsync();
+        }
         public async Task<IEnumerable<ClubMember>> GetAllClubMembersAsync(ClubMemberIncludeOptions include = ClubMemberIncludeOptions.None)
         {
             var query = ApplyIncludeOptions(_context.ClubMembers.AsQueryable(), include);
@@ -101,6 +111,15 @@ namespace Sycota.Infrastructure.Repository
 
             _context.ClubMembers.Remove(member);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<ClubMember?> GetByUserAndClubAsync(string userId, int clubId, ClubMemberIncludeOptions include = ClubMemberIncludeOptions.None)
+        {
+            var query = ApplyIncludeOptions(_context.ClubMembers.AsQueryable(), include);
+
+            return await query
+                .AsNoTracking()
+                .FirstOrDefaultAsync(cm => cm.UserId == userId && cm.ClubId == clubId);
         }
 
         private static IQueryable<ClubMember> ApplyIncludeOptions(IQueryable<ClubMember> query, ClubMemberIncludeOptions include)

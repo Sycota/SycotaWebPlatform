@@ -21,6 +21,7 @@ namespace Sycota.Infrastructure.Data
         {
             base.OnModelCreating(builder);
 
+
             // Configure Club entity
             builder.Entity<Club>(entity =>
             {
