@@ -15,6 +15,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Sycota.Application\Sycota.Application.csproj" />
+    <ProjectReference Include="..\Sycota.Domain\Sycota.Domain.csproj" />
+    <ProjectReference Include="..\Sycota.Infrastructure\Sycota.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
 

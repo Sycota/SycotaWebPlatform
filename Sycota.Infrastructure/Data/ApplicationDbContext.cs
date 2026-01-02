@@ -2,104 +2,160 @@
 using Microsoft.EntityFrameworkCore;
 using Sycota.Domain.Entities;
 
-namespace Sycota.Infrastructure.Data
+namespace Sycota.Infrastructure.Data;
+
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
+    }
+
+    public DbSet<Club> Clubs { get; set; }
+    public DbSet<ClubMember> ClubMembers { get; set; }
+    public DbSet<TrainingSession> TrainingSessions { get; set; }
+    public DbSet<ShooterProfile> ShooterProfiles { get; set; }
+    public DbSet<SessionResult> SessionResults { get; set; }
+    public DbSet<Shot> Shots { get; set; }
+
+    // new DbSet for target specs
+    public DbSet<TargetSpecification> TargetSpecifications { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        // Configure Club entity
+        builder.Entity<Club>(entity =>
         {
-        }
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
+            entity.Property(e => e.Description).HasMaxLength(1000);
+            entity.Property(e => e.Address).HasMaxLength(500);
+            entity.Property(e => e.ContactEmail).HasMaxLength(256);
+            entity.Property(e => e.ContactPhone).HasMaxLength(50);
 
-        // DbSets for the new entities
-        public DbSet<Club> Clubs { get; set; }
-        public DbSet<ClubMember> ClubMembers { get; set; }
-        public DbSet<TrainingSession> TrainingSessions { get; set; }
-        public DbSet<ShooterProfile> ShooterProfiles { get; set; }
+            entity.HasOne(e => e.CreatedBy)
+                .WithMany()
+                .HasForeignKey(e => e.CreatedById)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        // Configure ClubMember entity
+        builder.Entity<ClubMember>(entity =>
         {
-            base.OnModelCreating(builder);
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => new { e.UserId, e.ClubId }).IsUnique();
 
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // Configure Club entity
-            builder.Entity<Club>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
-                entity.Property(e => e.Description).HasMaxLength(1000);
-                entity.Property(e => e.Address).HasMaxLength(500);
-                entity.Property(e => e.ContactEmail).HasMaxLength(256);
-                entity.Property(e => e.ContactPhone).HasMaxLength(50);
+            entity.HasOne(e => e.Club)
+                .WithMany(c => c.Members)
+                .HasForeignKey(e => e.ClubId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-                entity.HasOne(e => e.CreatedBy)
-                    .WithMany()
-                    .HasForeignKey(e => e.CreatedById)
-                    .OnDelete(DeleteBehavior.Restrict);
-            });
+            entity.HasOne(e => e.Trainer)
+                .WithMany(t => t.Competitors)
+                .HasForeignKey(e => e.TrainerId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
 
-            // Configure ClubMember entity
-            builder.Entity<ClubMember>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.HasIndex(e => new { e.UserId, e.ClubId }).IsUnique();
+        // Configure TrainingSession entity
+        builder.Entity<TrainingSession>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
+            entity.Property(e => e.Description).HasMaxLength(1000);
 
-                entity.HasOne(e => e.User)
-                    .WithMany()
-                    .HasForeignKey(e => e.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.Club)
+                .WithMany(c => c.TrainingSessions)
+                .HasForeignKey(e => e.ClubId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-                entity.HasOne(e => e.Club)
-                    .WithMany(c => c.Members)
-                    .HasForeignKey(e => e.ClubId)
-                    .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.CreatedBy)
+                .WithMany()
+                .HasForeignKey(e => e.CreatedById)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
 
-                entity.HasOne(e => e.Trainer)
-                    .WithMany(t => t.Competitors)
-                    .HasForeignKey(e => e.TrainerId)
-                    .OnDelete(DeleteBehavior.Restrict);
-            });
+        // Configure ShooterProfile entity (ISSF 10m specific)
+        builder.Entity<ShooterProfile>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.ClubMemberId).IsUnique();
 
-            // Configure TrainingSession entity
-            builder.Entity<TrainingSession>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
-                entity.Property(e => e.Description).HasMaxLength(1000);
+            entity.HasOne(e => e.ClubMember)
+                .WithOne(cm => cm.ShooterProfile)
+                .HasForeignKey<ShooterProfile>(e => e.ClubMemberId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-                entity.HasOne(e => e.Club)
-                    .WithMany(c => c.TrainingSessions)
-                    .HasForeignKey(e => e.ClubId)
-                    .OnDelete(DeleteBehavior.Cascade);
+            // License information
+            entity.Property(e => e.ISSFLicenseNumber).HasMaxLength(100);
+            entity.Property(e => e.NationalLicenseNumber).HasMaxLength(100);
+            entity.Property(e => e.MedicalCertificateNumber).HasMaxLength(100);
+            
+            entity.Property(e => e.AdditionalNotes).HasMaxLength(2000);
+            
+            // Enum conversions
+            entity.Property(e => e.PrimaryWeapon).HasConversion<int>();
+            entity.Property(e => e.Category).HasConversion<int>();
+        });
 
-                entity.HasOne(e => e.CreatedBy)
-                    .WithMany()
-                    .HasForeignKey(e => e.CreatedById)
-                    .OnDelete(DeleteBehavior.Restrict);
-            });
+        // SessionResult configuration
+        builder.Entity<SessionResult>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.TotalScore).HasColumnType("decimal(8,2)");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-            // Configure ShooterProfile entity (ISSF 10m specific)
-            builder.Entity<ShooterProfile>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.HasIndex(e => e.ClubMemberId).IsUnique();
+            entity.HasOne(e => e.ClubMember)
+                .WithMany()
+                .HasForeignKey(e => e.ClubMemberId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-                entity.HasOne(e => e.ClubMember)
-                    .WithOne(cm => cm.ShooterProfile)
-                    .HasForeignKey<ShooterProfile>(e => e.ClubMemberId)
-                    .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.TrainingSession)
+                .WithMany()
+                .HasForeignKey(e => e.TrainingSessionId)
+                .OnDelete(DeleteBehavior.SetNull);
 
-                // License information
-                entity.Property(e => e.ISSFLicenseNumber).HasMaxLength(100);
-                entity.Property(e => e.NationalLicenseNumber).HasMaxLength(100);
-                entity.Property(e => e.MedicalCertificateNumber).HasMaxLength(100);
-                
-                entity.Property(e => e.AdditionalNotes).HasMaxLength(2000);
-                
-                // Enum conversions
-                entity.Property(e => e.PrimaryWeapon).HasConversion<int>();
-                entity.Property(e => e.Category).HasConversion<int>();
-            });
-        }
+            entity.HasMany(e => e.Shots)
+                .WithOne(s => s.SessionResult)
+                .HasForeignKey(s => s.SessionResultId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // Shot configuration updated for X/Y coordinates
+        builder.Entity<Shot>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Xmm).IsRequired();
+            entity.Property(e => e.Ymm).IsRequired();
+            entity.Property(e => e.Position).HasConversion<int>();
+            entity.Property(e => e.Notes).HasMaxLength(1000);
+
+            entity.HasOne(s => s.SessionResult)
+                  .WithMany(sr => sr.Shots)
+                  .HasForeignKey(s => s.SessionResultId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(s => s.SessionResultId);
+        });
+
+        // TargetSpecification mapping
+        builder.Entity<TargetSpecification>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.TargetDiameterMm).IsRequired();
+            entity.Property(e => e.RingsCount).IsRequired().HasDefaultValue(10);
+            entity.Property(e => e.RingWidthMm);
+            entity.Property(e => e.InnerTenRadiusMm).HasDefaultValue(2);
+            entity.Property(e => e.WeaponType).HasConversion<int?>();
+            entity.Property(e => e.Notes).HasMaxLength(2000);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+        });
     }
 }
