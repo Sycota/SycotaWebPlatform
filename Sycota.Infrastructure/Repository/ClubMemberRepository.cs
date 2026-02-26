@@ -42,7 +42,7 @@ namespace Sycota.Infrastructure.Repository
             return await query
                 .AsNoTracking()
                 .Where(cm => cm.ClubId == clubId)
-                .Where(cm => cm.Role == ClubRole.Trainer)
+                .Where(cm => cm.Role == ClubRole.Trainer || (cm.Role == ClubRole.Admin && cm.IsAlsoTrainer))
                 .ToListAsync();
         }
 

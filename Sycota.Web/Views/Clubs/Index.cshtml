@@ -1,0 +1,102 @@
+@model Sycota.Web.Models.ViewModels.ClubIndexViewModel
+@{
+    ViewData["Title"] = "Clubs";
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-primary">
+            <i class="bi bi-bullseye me-2"></i>Shooting Clubs
+        </h1>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-1"></i>Create Club
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (Model.CurrentMembership != null)
+    {
+        <div class="alert alert-info mb-4">
+            <i class="bi bi-info-circle me-2"></i>
+            You are currently a <strong>@Model.CurrentMembership.Role</strong> at 
+            <a asp-action="Details" asp-route-id="@Model.CurrentMembership.ClubId" class="alert-link">
+                @Model.CurrentMembership.Club?.Name
+            </a>
+        </div>
+    }
+
+    @if (!Model.Clubs.Any())
+    {
+        <div class="text-center py-5">
+            <i class="bi bi-building display-1 text-muted"></i>
+            <h3 class="mt-3 text-muted">No Clubs Found</h3>
+            <p class="text-muted">Be the first to create a shooting club!</p>
+            <a asp-action="Create" class="btn btn-primary btn-lg">
+                <i class="bi bi-plus-circle me-1"></i>Create Your Club
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var club in Model.Clubs)
+            {
+                var memberCount = club.Members?.Count ?? 0;
+                var isMember = Model.CurrentMembership?.ClubId == club.Id;
+
+                <div class="col">
+                    <div class="card h-100 shadow-sm @(isMember ? "border-primary" : "")">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h5 class="card-title">@club.Name</h5>
+                                @if (isMember)
+                                {
+                                    <span class="badge bg-primary">Member</span>
+                                }
+                            </div>
+                            <p class="card-text text-muted">@(club.Description.Length > 100 ? club.Description.Substring(0, 100) + "..." : club.Description)</p>
+                            
+                            <div class="d-flex align-items-center text-muted small mb-2">
+                                <i class="bi bi-geo-alt me-1"></i>
+                                <span>@club.Address</span>
+                            </div>
+                            
+                            <div class="d-flex align-items-center text-muted small">
+                                <i class="bi bi-people me-1"></i>
+                                <span>@memberCount member@(memberCount != 1 ? "s" : "")</span>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0">
+                            <div class="d-flex gap-2">
+                                <a asp-action="Details" asp-route-id="@club.Id" class="btn btn-outline-primary flex-grow-1">
+                                    <i class="bi bi-eye me-1"></i>View
+                                </a>
+                                @if (!isMember && Model.CurrentMembership == null)
+                                {
+                                    <a asp-action="Join" asp-route-id="@club.Id" class="btn btn-primary flex-grow-1">
+                                        <i class="bi bi-person-plus me-1"></i>Join
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

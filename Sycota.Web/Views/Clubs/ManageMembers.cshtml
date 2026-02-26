@@ -1,0 +1,212 @@
+@model Sycota.Web.Models.ViewModels.ManageMembersViewModel
+@{
+    ViewData["Title"] = "Manage Members - " + Model.Club.Name;
+}
+
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">Clubs</a></li>
+            <li class="breadcrumb-item"><a asp-action="Details" asp-route-id="@Model.Club.Id">@Model.Club.Name</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Manage Members</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="bi bi-people-fill me-2"></i>Manage Members</h1>
+        <a asp-action="Details" asp-route-id="@Model.Club.Id" class="btn btn-secondary">
+            <i class="bi bi-arrow-left me-1"></i>Back to Club
+        </a>
+    </div>
+
+    <div class="row">
+        <!-- Competitors Section -->
+        <div class="col-12 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-person-fill me-2"></i>Competitors (@Model.Competitors.Count())</span>
+                    <span class="badge bg-info">@Model.Competitors.Count(c => c.TrainerId == null) unassigned</span>
+                </div>
+                <div class="card-body">
+                    @if (!Model.Competitors.Any())
+                    {
+                        <p class="text-muted mb-0"><i class="bi bi-info-circle me-2"></i>No competitors in this club yet.</p>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Competitor</th>
+                                        <th>Assigned Trainer</th>
+                                        <th>Joined</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var competitor in Model.Competitors)
+                                    {
+                                        var competitorName = !string.IsNullOrEmpty(competitor.User?.FirstName) 
+                                            ? $"{competitor.User.FirstName} {competitor.User.LastName}" 
+                                            : competitor.User?.UserName;
+                                        var trainerName = competitor.Trainer != null 
+                                            ? (!string.IsNullOrEmpty(competitor.Trainer.User?.FirstName) 
+                                                ? $"{competitor.Trainer.User.FirstName} {competitor.Trainer.User.LastName}" 
+                                                : competitor.Trainer.User?.UserName)
+                                            : null;
+                                        <tr>
+                                            <td>
+                                                <strong>@competitorName</strong>
+                                                <br /><small class="text-muted">@competitor.User?.Email</small>
+                                            </td>
+                                            <td>
+                                                @if (competitor.Trainer != null)
+                                                {
+                                                    <span class="badge bg-warning text-dark">
+                                                        <i class="bi bi-person-badge me-1"></i>@trainerName
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted fst-italic">
+                                                        <i class="bi bi-dash-circle me-1"></i>Not assigned
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td>@competitor.JoinedAt.ToString("MMM dd, yyyy")</td>
+                                            <td>
+                                                <a asp-action="AssignTrainer" asp-route-id="@Model.Club.Id" asp-route-competitorId="@competitor.Id" 
+                                                   class="btn btn-sm btn-outline-primary me-1">
+                                                    <i class="bi bi-person-lines-fill"></i> Assign Trainer
+                                                </a>
+                                                <form asp-action="RemoveMember" asp-route-id="@Model.Club.Id" asp-route-memberId="@competitor.Id" 
+                                                      method="post" class="d-inline"
+                                                      onsubmit="return confirm('Are you sure you want to remove this member from the club?');">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                        <i class="bi bi-person-x"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Trainers Section -->
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-person-badge me-2"></i>Trainers (@Model.Trainers.Count())
+                </div>
+                <div class="card-body">
+                    @if (!Model.Trainers.Any())
+                    {
+                        <p class="text-muted mb-0"><i class="bi bi-info-circle me-2"></i>No trainers in this club yet.</p>
+                    }
+                    else
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var trainer in Model.Trainers)
+                            {
+                                var trainerName = !string.IsNullOrEmpty(trainer.User?.FirstName) 
+                                    ? $"{trainer.User.FirstName} {trainer.User.LastName}" 
+                                    : trainer.User?.UserName;
+                                var assignedCount = Model.Competitors.Count(c => c.TrainerId == trainer.Id);
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>@trainerName</strong>
+                                        <br /><small class="text-muted">@trainer.User?.Email</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="badge bg-info me-2">@assignedCount trainees</span>
+                                        <form asp-action="RemoveMember" asp-route-id="@Model.Club.Id" asp-route-memberId="@trainer.Id" 
+                                              method="post" class="d-inline"
+                                              onsubmit="return confirm('Removing this trainer will unassign all their competitors. Continue?');">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-person-x"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Admins Section -->
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-shield-fill me-2"></i>Admins (@Model.Admins.Count())
+                </div>
+                <div class="card-body">
+                    @if (!Model.Admins.Any())
+                    {
+                        <p class="text-muted mb-0"><i class="bi bi-info-circle me-2"></i>No admins in this club.</p>
+                    }
+                    else
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var admin in Model.Admins)
+                            {
+                                var adminName = !string.IsNullOrEmpty(admin.User?.FirstName) 
+                                    ? $"{admin.User.FirstName} {admin.User.LastName}" 
+                                    : admin.User?.UserName;
+                                var assignedCount = Model.Competitors.Count(c => c.TrainerId == admin.Id);
+                                <div class="list-group-item">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>@adminName</strong>
+                                            <br /><small class="text-muted">@admin.User?.Email</small>
+                                        </div>
+                                        <div>
+                                            <span class="badge bg-danger me-2">Admin</span>
+                                            @if (admin.IsAlsoTrainer)
+                                            {
+                                                <span class="badge bg-warning text-dark">
+                                                    <i class="bi bi-person-badge"></i> Trainer (@assignedCount)
+                                                </span>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <form asp-action="ToggleAdminTrainer" asp-route-id="@Model.Club.Id" asp-route-memberId="@admin.Id" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            @if (admin.IsAlsoTrainer)
+                                            {
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                                    <i class="bi bi-toggle-on me-1"></i>Disable Trainer Role
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit" class="btn btn-sm btn-outline-warning">
+                                                    <i class="bi bi-toggle-off me-1"></i>Enable Trainer Role
+                                                </button>
+                                            }
+                                        </form>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+                <div class="card-footer bg-light">
+                    <small class="text-muted">
+                        <i class="bi bi-info-circle me-1"></i>Admins can enable trainer role to be assigned competitors while keeping admin privileges.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

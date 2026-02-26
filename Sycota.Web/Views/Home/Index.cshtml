@@ -1,8 +1,95 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "SYCOTAᐩ - Precision Shooting Platform";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <!-- Hero Section -->
+    <div class="text-center py-5">
+        <h1 class="display-3 fw-bold mb-3 sycota-brand" style="color: var(--sycota-bg-dark);">
+            SYCOTAᐩ
+        </h1>
+        <p class="lead text-muted mb-4">
+            The premier platform for precision shooting clubs, trainers, and competitors
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <a asp-controller="Clubs" asp-action="Index" class="btn btn-accent btn-lg">
+                    <i class="bi bi-bullseye me-2"></i>View Clubs
+                </a>
+            }
+            else
+            {
+                <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-accent btn-lg">
+                    <i class="bi bi-person-plus me-2"></i>Get Started
+                </a>
+                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-primary btn-lg">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                </a>
+            }
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row g-4 py-5">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm text-center">
+                <div class="card-body p-4">
+                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; background-color: rgba(47, 102, 144, 0.1);">
+                        <i class="bi bi-bullseye fs-1" style="color: var(--sycota-accent-blue);"></i>
+                    </div>
+                    <h4 class="card-title">Club Management</h4>
+                    <p class="card-text text-muted">
+                        Create and manage shooting clubs. Organize members, trainers, and competitors all in one place.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm text-center">
+                <div class="card-body p-4">
+                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; background-color: rgba(87, 114, 72, 0.1);">
+                        <i class="bi bi-graph-up-arrow fs-1" style="color: var(--sycota-bg-medium);"></i>
+                    </div>
+                    <h4 class="card-title">Track Results</h4>
+                    <p class="card-text text-muted">
+                        Record training sessions with detailed shot data. Monitor progress and analyze performance over time.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm text-center">
+                <div class="card-body p-4">
+                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; background-color: rgba(44, 57, 31, 0.1);">
+                        <i class="bi bi-people fs-1" style="color: var(--sycota-bg-dark);"></i>
+                    </div>
+                    <h4 class="card-title">Train & Compete</h4>
+                    <p class="card-text text-muted">
+                        Connect trainers with competitors. Share insights, provide feedback, and help athletes reach their goals.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="rounded-3 p-5 text-center my-5" style="background-color: rgba(47, 102, 144, 0.1);">
+        <h2 class="mb-3">Ready to elevate your shooting game?</h2>
+        <p class="text-muted mb-4">
+            Join <span class="sycota-brand">SYCOTAᐩ</span> today and become part of a community dedicated to precision shooting excellence.
+        </p>
+        @if (User.Identity?.IsAuthenticated != true)
+        {
+            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-accent btn-lg">
+                <i class="bi bi-rocket-takeoff me-2"></i>Join Now
+            </a>
+        }
+        else
+        {
+            <a asp-controller="Clubs" asp-action="Create" class="btn btn-accent btn-lg">
+                <i class="bi bi-plus-circle me-2"></i>Create Your Club
+            </a>
+        }
+    </div>
 </div>

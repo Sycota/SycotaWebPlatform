@@ -1,0 +1,133 @@
+@model Sycota.Web.Models.ViewModels.AssignTrainerViewModel
+@{
+    ViewData["Title"] = "Assign Trainer";
+}
+
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">Clubs</a></li>
+            <li class="breadcrumb-item"><a asp-action="ManageMembers" asp-route-id="@Model.ClubId">Manage Members</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Assign Trainer</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="bi bi-person-lines-fill me-2"></i>Assign Trainer</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info mb-4">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-person-fill fs-3 me-3"></i>
+                            <div>
+                                <strong>Competitor:</strong><br />
+                                <span class="fs-5">@Model.CompetitorName</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.CurrentTrainerName))
+                    {
+                        <div class="mb-4">
+                            <small class="text-muted">Currently assigned to:</small>
+                            <div class="d-flex align-items-center mt-1">
+                                <span class="badge bg-warning text-dark fs-6">
+                                    <i class="bi bi-person-badge me-1"></i>@Model.CurrentTrainerName
+                                </span>
+                            </div>
+                        </div>
+                    }
+
+                    <form asp-action="AssignTrainer" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="ClubId" />
+                        <input type="hidden" asp-for="CompetitorId" />
+                        <input type="hidden" asp-for="CompetitorName" />
+
+                        <div class="mb-4">
+                            <label asp-for="SelectedTrainerId" class="form-label">Select Trainer</label>
+                            <select asp-for="SelectedTrainerId" class="form-select form-select-lg">
+                                <option value="">-- No trainer (remove assignment) --</option>
+                                @foreach (var trainer in Model.AvailableTrainers)
+                                {
+                                    var trainerName = !string.IsNullOrEmpty(trainer.User?.FirstName) 
+                                        ? $"{trainer.User.FirstName} {trainer.User.LastName}" 
+                                        : trainer.User?.UserName;
+                                    var isCurrentTrainer = trainer.Id == Model.CurrentTrainerId;
+                                    <option value="@trainer.Id" selected="@isCurrentTrainer">
+                                        @trainerName @(isCurrentTrainer ? "(current)" : "")
+                                    </option>
+                                }
+                            </select>
+                            <div class="form-text">
+                                Select a trainer to assign to this competitor, or select "No trainer" to remove the current assignment.
+                            </div>
+                        </div>
+
+                        @if (!Model.AvailableTrainers.Any())
+                        {
+                            <div class="alert alert-warning">
+                                <i class="bi bi-exclamation-triangle me-2"></i>
+                                <strong>No trainers available</strong><br />
+                                <small>There are no trainers in this club yet. Invite trainers to the club first.</small>
+                            </div>
+                        }
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-accent" @(Model.AvailableTrainers.Any() || Model.CurrentTrainerId.HasValue ? "" : "disabled")>
+                                <i class="bi bi-check-lg me-1"></i>
+                                @if (Model.CurrentTrainerId.HasValue)
+                                {
+                                    @:Update Assignment
+                                }
+                                else
+                                {
+                                    @:Assign Trainer
+                                }
+                            </button>
+                            <a asp-action="ManageMembers" asp-route-id="@Model.ClubId" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left me-1"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            @if (Model.AvailableTrainers.Any())
+            {
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <i class="bi bi-info-circle me-2"></i>Available Trainers
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group list-group-flush">
+                            @foreach (var trainer in Model.AvailableTrainers)
+                            {
+                                var trainerName = !string.IsNullOrEmpty(trainer.User?.FirstName) 
+                                    ? $"{trainer.User.FirstName} {trainer.User.LastName}" 
+                                    : trainer.User?.UserName;
+                                var isCurrentTrainer = trainer.Id == Model.CurrentTrainerId;
+                                <div class="list-group-item d-flex justify-content-between align-items-center @(isCurrentTrainer ? "bg-light" : "")">
+                                    <div>
+                                        <strong>@trainerName</strong>
+                                        @if (isCurrentTrainer)
+                                        {
+                                            <span class="badge bg-success ms-2">Current</span>
+                                        }
+                                        <br /><small class="text-muted">@trainer.User?.Email</small>
+                                    </div>
+                                    <span class="badge bg-info">
+                                        @trainer.Competitors.Count trainees
+                                    </span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

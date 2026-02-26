@@ -16,6 +16,8 @@ namespace Sycota.Infrastructure.Data
         public DbSet<ClubMember> ClubMembers { get; set; }
         public DbSet<TrainingSession> TrainingSessions { get; set; }
         public DbSet<ShooterProfile> ShooterProfiles { get; set; }
+        public DbSet<ClubJoinRequest> ClubJoinRequests { get; set; }
+        public DbSet<ClubInvitation> ClubInvitations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -99,6 +101,72 @@ namespace Sycota.Infrastructure.Data
                 // Enum conversions
                 entity.Property(e => e.PrimaryWeapon).HasConversion<int>();
                 entity.Property(e => e.Category).HasConversion<int>();
+            });
+
+            // Configure ClubJoinRequest entity
+            builder.Entity<ClubJoinRequest>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => new { e.UserId, e.ClubId, e.Status });
+
+                entity.Property(e => e.Message).HasMaxLength(1000);
+                entity.Property(e => e.RejectionReason).HasMaxLength(500);
+                entity.Property(e => e.RequestedRole).HasConversion<int>();
+                entity.Property(e => e.Status).HasConversion<int>();
+
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(e => e.Club)
+                    .WithMany(c => c.JoinRequests)
+                    .HasForeignKey(e => e.ClubId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.RequestedTrainer)
+                    .WithMany()
+                    .HasForeignKey(e => e.RequestedTrainerId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(e => e.ProcessedBy)
+                    .WithMany()
+                    .HasForeignKey(e => e.ProcessedById)
+                    .OnDelete(DeleteBehavior.NoAction);
+            });
+
+            // Configure ClubInvitation entity
+            builder.Entity<ClubInvitation>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.InvitationCode).IsUnique();
+                entity.HasIndex(e => new { e.ClubId, e.Email, e.Status });
+
+                entity.Property(e => e.Email).IsRequired().HasMaxLength(256);
+                entity.Property(e => e.InvitationCode).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.Message).HasMaxLength(1000);
+                entity.Property(e => e.OfferedRole).HasConversion<int>();
+                entity.Property(e => e.Status).HasConversion<int>();
+
+                entity.HasOne(e => e.Club)
+                    .WithMany(c => c.Invitations)
+                    .HasForeignKey(e => e.ClubId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.CreatedBy)
+                    .WithMany()
+                    .HasForeignKey(e => e.CreatedById)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(e => e.AssignedTrainer)
+                    .WithMany()
+                    .HasForeignKey(e => e.AssignedTrainerId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(e => e.AcceptedByUser)
+                    .WithMany()
+                    .HasForeignKey(e => e.AcceptedByUserId)
+                    .OnDelete(DeleteBehavior.NoAction);
             });
         }
     }

@@ -10,10 +10,13 @@ public class Club
     public string? ContactPhone { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public string CreatedById { get; set; } = string.Empty;
+    public bool RequiresApproval { get; set; } = true; // If true, join requests need admin approval
     
     // Navigation properties
     public ApplicationUser CreatedBy { get; set; } = null!;
     public ICollection<ClubMember> Members { get; set; } = new List<ClubMember>();
     public ICollection<TrainingSession> TrainingSessions { get; set; } = new List<TrainingSession>();
+    public ICollection<ClubJoinRequest> JoinRequests { get; set; } = new List<ClubJoinRequest>();
+    public ICollection<ClubInvitation> Invitations { get; set; } = new List<ClubInvitation>();
 }
 

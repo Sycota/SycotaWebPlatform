@@ -1,0 +1,394 @@
+@model Sycota.Web.Models.ViewModels.TrainingSessionDetailsViewModel
+@{
+    ViewData["Title"] = Model.Session.Name;
+}
+
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="Index">Clubs</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="Details" asp-route-id="@Model.Session.ClubId">Club</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="MyResults" asp-route-id="@Model.Session.ClubId">My Results</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Session.Name</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">
+                        <i class="bi bi-bullseye me-2"></i>@Model.Session.Name
+                    </h2>
+                    <span class="badge bg-secondary">@Model.Session.WeaponType</span>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(Model.Session.Description))
+                    {
+                        <p class="lead">@Model.Session.Description</p>
+                    }
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <small class="text-muted d-block">Date</small>
+                            <strong><i class="bi bi-calendar me-1"></i>@Model.Session.SessionDate.ToString("MMMM dd, yyyy")</strong>
+                        </div>
+                        <div class="col-md-4">
+                            <small class="text-muted d-block">Time</small>
+                            <strong><i class="bi bi-clock me-1"></i>@Model.Session.SessionDate.ToString("HH:mm")</strong>
+                        </div>
+                        <div class="col-md-4">
+                            <small class="text-muted d-block">Shooter</small>
+                            <strong><i class="bi bi-person me-1"></i>@Model.Session.CreatedBy?.UserName</strong>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Session.Notes))
+                    {
+                        <div class="alert alert-light">
+                            <i class="bi bi-journal-text me-1"></i>
+                            <strong>Notes:</strong> @Model.Session.Notes
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Target Visualization -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <i class="bi bi-crosshair me-2"></i>Shot Placement
+                </div>
+                <div class="card-body text-center" style="background-color: #e8e8e8;">
+                    <canvas id="targetCanvas" width="400" height="400" style="border-radius: 8px;"></canvas>
+                </div>
+            </div>
+
+            <!-- Shot Groups -->
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <i class="bi bi-list-ol me-2"></i>Shot Details
+                </div>
+                <div class="card-body" id="shotDetails">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <!-- Statistics Card -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <i class="bi bi-graph-up me-2"></i>Statistics
+                </div>
+                <div class="card-body">
+                    <div class="row text-center mb-3">
+                        <div class="col-6">
+                            <div class="fs-3 fw-bold text-primary" id="totalShots">0</div>
+                            <small class="text-muted">Total Shots</small>
+                        </div>
+                        <div class="col-6">
+                            <div class="fs-3 fw-bold text-success" id="totalScore">0.0</div>
+                            <small class="text-muted">Total Score</small>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="fs-5 fw-bold" id="avgScore">0.0</div>
+                            <small class="text-muted">Average</small>
+                        </div>
+                        <div class="col-6">
+                            <div class="fs-5 fw-bold" id="tenCount">0</div>
+                            <small class="text-muted">10s / 10.9s</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions Card -->
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <i class="bi bi-lightning me-2"></i>Actions
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        @if (Model.CanEdit)
+                        {
+                            <a asp-action="RecordShots" asp-route-id="@Model.Session.Id" class="btn btn-accent">
+                                <i class="bi bi-pencil me-1"></i>Edit Shots
+                            </a>
+                        }
+                        <a asp-controller="Clubs" asp-action="MyResults" asp-route-id="@Model.Session.ClubId" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left me-1"></i>Back to Results
+                        </a>
+                        @if (Model.CanEdit)
+                        {
+                            <hr />
+                            <form asp-action="Delete" asp-route-id="@Model.Session.Id" method="post"
+                                  onsubmit="return confirm('Are you sure you want to permanently delete this training session? This action cannot be undone.');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-danger w-100">
+                                    <i class="bi bi-trash me-1"></i>Delete Training Session
+                                </button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+(function() {
+    const shotsData = @Html.Raw(Model.Session.Shots ?? "{\"warmupShots\":[],\"groups\":[]}");
+    
+    const canvas = document.getElementById('targetCanvas');
+    const ctx = canvas.getContext('2d');
+    const scale = 8;
+    const offsetX = canvas.width / 2;
+    const offsetY = canvas.height / 2;
+    
+    const INNER_TEN_RADIUS = 0.25;
+    const PELLET_RADIUS = 2.25;
+    
+    const RING_OUTER_RADII = [
+        { ring: 10, outerRadius: 2.5 },
+        { ring: 9, outerRadius: 5.0 },
+        { ring: 8, outerRadius: 7.5 },
+        { ring: 7, outerRadius: 10.0 },
+        { ring: 6, outerRadius: 12.5 },
+        { ring: 5, outerRadius: 15.0 },
+        { ring: 4, outerRadius: 17.5 },
+        { ring: 3, outerRadius: 20.0 },
+        { ring: 2, outerRadius: 22.5 },
+        { ring: 1, outerRadius: 25.0 }
+    ];
+
+    function calculateScore(x, y) {
+        const dist = Math.sqrt(x * x + y * y);
+        const effectiveRadius = Math.max(0, dist - PELLET_RADIUS);
+        
+        if (effectiveRadius <= INNER_TEN_RADIUS) {
+            return 10.9;
+        }
+        
+        if (effectiveRadius <= 2.5) {
+            const positionInRing = (effectiveRadius - INNER_TEN_RADIUS) / (2.5 - INNER_TEN_RADIUS);
+            const decimalScore = 10.9 - (positionInRing * 0.9);
+            return Math.round(decimalScore * 10) / 10;
+        }
+        
+        for (let ring = 9; ring >= 1; ring--) {
+            const ringData = RING_OUTER_RADII.find(r => r.ring === ring);
+            const prevRingData = RING_OUTER_RADII.find(r => r.ring === ring + 1);
+            const innerRadius = prevRingData ? prevRingData.outerRadius : 2.5;
+            const outerRadius = ringData.outerRadius;
+            
+            if (effectiveRadius <= outerRadius) {
+                const positionInRing = (effectiveRadius - innerRadius) / (outerRadius - innerRadius);
+                const decimalScore = (ring + 0.9) - (positionInRing * 0.9);
+                return Math.round(decimalScore * 10) / 10;
+            }
+        }
+        
+        return 0;
+    }
+
+    function drawTarget() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Background - light tan/cream like real targets
+        ctx.fillStyle = '#f5f0e6';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.save();
+        ctx.translate(offsetX, offsetY);
+        
+        // White outer area (rings 1-3)
+        ctx.beginPath();
+        ctx.arc(0, 0, 25 * scale, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+        
+        // Draw ring lines for white area (1, 2, 3)
+        for (let ring = 1; ring <= 3; ring++) {
+            const radius = (25 - (ring - 1) * 2.5) * scale;
+            ctx.beginPath();
+            ctx.arc(0, 0, radius, 0, Math.PI * 2);
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 0.6;
+            ctx.stroke();
+        }
+        
+        // Black area (rings 4-10)
+        ctx.beginPath();
+        ctx.arc(0, 0, 17.5 * scale, 0, Math.PI * 2);
+        ctx.fillStyle = '#000000';
+        ctx.fill();
+        
+        // Draw white ring lines within black area (5-9)
+        for (let ring = 5; ring <= 9; ring++) {
+            const ringData = RING_OUTER_RADII.find(r => r.ring === ring);
+            const radius = ringData.outerRadius * scale;
+            ctx.beginPath();
+            ctx.arc(0, 0, radius, 0, Math.PI * 2);
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 0.4;
+            ctx.stroke();
+        }
+        
+        // Ring 10 outline (white)
+        ctx.beginPath();
+        ctx.arc(0, 0, 2.5 * scale, 0, Math.PI * 2);
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 0.4;
+        ctx.stroke();
+        
+        // Inner 10 dot (white)
+        ctx.beginPath();
+        ctx.arc(0, 0, INNER_TEN_RADIUS * scale, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+        
+        // Ring numbers in white area (1, 2, 3)
+        ctx.font = `bold ${6 * scale / 10}px Arial`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        for (let ring = 1; ring <= 3; ring++) {
+            const radius = (25 - (ring - 0.5) * 2.5) * scale;
+            ctx.fillStyle = '#000000';
+            ctx.fillText(String(ring), radius, 0);
+            ctx.fillText(String(ring), -radius, 0);
+            ctx.fillText(String(ring), 0, radius);
+            ctx.fillText(String(ring), 0, -radius);
+        }
+        
+        // Ring numbers in black area (4-9) - white text
+        for (let ring = 4; ring <= 9; ring++) {
+            const radius = (25 - (ring - 0.5) * 2.5) * scale;
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText(String(ring), radius, 0);
+            ctx.fillText(String(ring), -radius, 0);
+            ctx.fillText(String(ring), 0, radius);
+            ctx.fillText(String(ring), 0, -radius);
+        }
+        
+        // Draw shots
+        const pelletRadius = PELLET_RADIUS * scale;
+        const colors = ['#6c757d', '#dc3545', '#0d6efd', '#198754', '#fd7e14', '#6f42c1'];
+        
+        // Warmup shots
+        (shotsData.warmupShots || []).forEach((shot, i) => {
+            drawShot(shot, pelletRadius, colors[0], i + 1);
+        });
+        
+        // Group shots
+        (shotsData.groups || []).forEach((group, gi) => {
+            const color = colors[(gi % 5) + 1];
+            (group.shots || []).forEach((shot, i) => {
+                drawShot(shot, pelletRadius, color, i + 1);
+            });
+        });
+        
+        ctx.restore();
+    }
+
+    function drawShot(shot, pelletRadius, color, num) {
+        ctx.beginPath();
+        ctx.arc(shot.x * scale, shot.y * scale, pelletRadius, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        
+        // Shot number with outline for visibility
+        ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 1.5;
+        ctx.font = 'bold 9px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.strokeText(String(num), shot.x * scale, shot.y * scale);
+        ctx.fillText(String(num), shot.x * scale, shot.y * scale);
+    }
+
+    function updateStatistics() {
+        let allShots = [...(shotsData.warmupShots || [])];
+        let scoredShots = [];
+        
+        (shotsData.groups || []).forEach(group => {
+            allShots = [...allShots, ...(group.shots || [])];
+            scoredShots = [...scoredShots, ...(group.shots || [])];
+        });
+        
+        let totalScore = 0;
+        let tenCount = 0;
+        
+        scoredShots.forEach(shot => {
+            const score = calculateScore(shot.x, shot.y);
+            totalScore += score;
+            if (score >= 10) tenCount++;
+        });
+        
+        document.getElementById('totalShots').textContent = allShots.length;
+        document.getElementById('totalScore').textContent = totalScore.toFixed(1);
+        document.getElementById('avgScore').textContent = scoredShots.length > 0 ? (totalScore / scoredShots.length).toFixed(2) : '0.0';
+        document.getElementById('tenCount').textContent = tenCount;
+    }
+
+    function renderShotDetails() {
+        const container = document.getElementById('shotDetails');
+        let html = '';
+        
+        if (shotsData.warmupShots && shotsData.warmupShots.length > 0) {
+            html += '<h6><i class="bi bi-thermometer-half me-1"></i>Warmup Shots</h6>';
+            html += renderShotTable(shotsData.warmupShots);
+        }
+        
+        (shotsData.groups || []).forEach((group, i) => {
+            if (group.shots && group.shots.length > 0) {
+                html += `<h6 class="mt-3"><i class="bi bi-${i + 1}-circle me-1"></i>Group ${i + 1} <span class="badge bg-secondary">${group.valueType || '10-shot-series'}</span></h6>`;
+                html += renderShotTable(group.shots, true);
+            }
+        });
+        
+        if (!html) {
+            html = '<p class="text-muted text-center"><i class="bi bi-bullseye me-1"></i>No shots recorded yet.</p>';
+        }
+        
+        container.innerHTML = html;
+    }
+
+    function renderShotTable(shots, showTotal = false) {
+        let html = '<table class="table table-sm" style="background: #fff;"><thead style="background-color: #495057; color: #ffffff;"><tr><th>#</th><th>Position (mm)</th><th>Score</th></tr></thead><tbody>';
+        let total = 0;
+        
+        shots.forEach((shot, i) => {
+            const score = calculateScore(shot.x, shot.y);
+            total += score;
+            let scoreClass = '';
+            if (score >= 10.5) scoreClass = 'text-success fw-bold';
+            else if (score >= 10) scoreClass = 'text-success';
+            else if (score >= 9) scoreClass = 'text-primary';
+            else scoreClass = 'text-dark';
+            
+            html += `<tr><td><span class="badge bg-secondary">${i + 1}</span></td><td class="small font-monospace">(${shot.x.toFixed(1)}, ${shot.y.toFixed(1)})</td><td class="${scoreClass} fw-bold">${score.toFixed(1)}</td></tr>`;
+        });
+        
+        if (showTotal && shots.length > 0) {
+            html += `<tr class="table-active"><td colspan="2"><strong>Total</strong></td><td><strong>${total.toFixed(1)}</strong></td></tr>`;
+        }
+        
+        html += '</tbody></table>';
+        return html;
+    }
+
+    drawTarget();
+    updateStatistics();
+    renderShotDetails();
+})();
+</script>
+}

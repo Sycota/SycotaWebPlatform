@@ -1,0 +1,91 @@
+@model Sycota.Web.Models.ViewModels.AcceptInvitationViewModel
+@{
+    ViewData["Title"] = "Accept Invitation";
+    Layout = "_Layout";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card">
+            <div class="card-header text-center">
+                <h4 class="mb-0"><i class="bi bi-envelope-open me-2"></i>Club Invitation</h4>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-4">
+                    <i class="bi bi-bullseye display-1 text-primary"></i>
+                </div>
+
+                <h2 class="mb-3">You've been invited to join</h2>
+                <h3 class="text-primary mb-4">@Model.Invitation.Club.Name</h3>
+
+                <div class="bg-light p-3 rounded mb-4">
+                    <div class="row">
+                        <div class="col-6">
+                            <small class="text-muted">Role</small>
+                            <p class="mb-0"><span class="badge bg-secondary">@Model.Invitation.OfferedRole</span></p>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted">Invited by</small>
+                            <p class="mb-0">@Model.Invitation.CreatedBy.UserName</p>
+                        </div>
+                    </div>
+                    @if (Model.Invitation.AssignedTrainer != null)
+                    {
+                        <hr />
+                        <div class="row">
+                            <div class="col-12">
+                                <small class="text-muted">Assigned Trainer</small>
+                                <p class="mb-0">@Model.Invitation.AssignedTrainer.User.UserName</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.Invitation.Message))
+                {
+                    <div class="alert alert-info">
+                        <i class="bi bi-chat-quote me-2"></i>
+                        <em>"@Model.Invitation.Message"</em>
+                    </div>
+                }
+
+                <p class="text-muted mb-4">
+                    <i class="bi bi-clock me-1"></i>
+                    This invitation expires on @Model.Invitation.ExpiresAt.ToString("f")
+                </p>
+
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <form asp-action="AcceptInvitation" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="code" value="@Model.Invitation.InvitationCode" />
+                        <input type="hidden" name="confirm" value="true" />
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-accent btn-lg">
+                                <i class="bi bi-check-lg me-1"></i>Accept Invitation
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                Decline
+                            </a>
+                        </div>
+                    </form>
+                }
+                else
+                {
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        You need to be logged in to accept this invitation.
+                    </div>
+                    <div class="d-grid gap-2">
+                        <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString" class="btn btn-primary btn-lg">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>Log In
+                        </a>
+                        <a asp-area="Identity" asp-page="/Account/Register" asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString" class="btn btn-outline-primary">
+                            <i class="bi bi-person-plus me-1"></i>Create Account
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

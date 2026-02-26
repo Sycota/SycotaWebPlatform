@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sycota.Infrastructure.Data;
 using Sycota.Domain.Entities;
+using Sycota.Application.Interfaces;
+using Sycota.Application.Services;
+using Sycota.Infrastructure.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +29,18 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     options.User.RequireUniqueEmail = true;
 });
+
+// Register Repositories
+builder.Services.AddScoped<IClubRepository, ClubRepository>();
+builder.Services.AddScoped<IClubMemberRepository, ClubMemberRepository>();
+builder.Services.AddScoped<ITrainingSessionRepository, TrainingSessionRepository>();
+builder.Services.AddScoped<IShooterProfileRepository, ShooterProfileRepository>();
+builder.Services.AddScoped<IClubJoinRequestRepository, ClubJoinRequestRepository>();
+builder.Services.AddScoped<IClubInvitationRepository, ClubInvitationRepository>();
+
+// Register Services
+builder.Services.AddScoped<IClubService, ClubService>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

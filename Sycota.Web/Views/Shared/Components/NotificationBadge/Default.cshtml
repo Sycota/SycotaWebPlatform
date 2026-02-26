@@ -1,0 +1,58 @@
+@model Sycota.Web.Models.ViewModels.NotificationsViewModel
+
+@if (Model.TotalCount > 0)
+{
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-bell-fill"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge">
+                @Model.TotalCount
+                <span class="visually-hidden">notifications</span>
+            </span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end notification-dropdown">
+            <li class="dropdown-header">
+                <strong><i class="bi bi-envelope me-2"></i>Club Invitations</strong>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            @foreach (var invitation in Model.PendingInvitations.Take(5))
+            {
+                <li>
+                    <a class="dropdown-item notification-item" asp-controller="Clubs" asp-action="AcceptInvitation" asp-route-code="@invitation.InvitationCode">
+                        <div class="d-flex align-items-start">
+                            <i class="bi bi-bullseye text-primary me-2 mt-1"></i>
+                            <div>
+                                <strong>@invitation.Club.Name</strong>
+                                <br />
+                                <small class="text-muted">
+                                    Invited as <span class="badge bg-secondary">@invitation.OfferedRole</span>
+                                </small>
+                                <br />
+                                <small class="text-muted">
+                                    <i class="bi bi-clock me-1"></i>Expires @invitation.ExpiresAt.ToString("MMM dd")
+                                </small>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            }
+            @if (Model.TotalCount > 5)
+            {
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a class="dropdown-item text-center" asp-controller="Notifications" asp-action="Index">
+                        View all @Model.TotalCount invitations
+                    </a>
+                </li>
+            }
+        </ul>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Notifications" asp-action="Index" title="Notifications">
+            <i class="bi bi-bell"></i>
+        </a>
+    </li>
+}

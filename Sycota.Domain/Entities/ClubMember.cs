@@ -5,10 +5,13 @@ namespace Sycota.Domain.Entities;
 public class ClubMember
 {
     public int Id { get; set; }
-    public string UserId { get; set; }
+    public string UserId { get; set; } = string.Empty;
     public int ClubId { get; set; }
     public ClubRole Role { get; set; }
     public DateTime JoinedAt { get; set; }
+    
+    // For admins who also train competitors
+    public bool IsAlsoTrainer { get; set; }
     
     // For trainers: which competitors they train
     public int? TrainerId { get; set; } // If this member is a competitor, this links to their trainer (ClubMember.Id)
@@ -19,5 +22,8 @@ public class ClubMember
     public ClubMember? Trainer { get; set; } // Trainer navigation property
     public ICollection<ClubMember> Competitors { get; set; } = new List<ClubMember>(); // Competitors trained by this trainer
     public ShooterProfile? ShooterProfile { get; set; } // Additional profile info for competitors
+
+    // Helper property to check if member can train competitors
+    public bool CanTrain => Role == ClubRole.Trainer || (Role == ClubRole.Admin && IsAlsoTrainer);
 }
 
