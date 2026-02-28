@@ -130,6 +130,12 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--sycota-accent-yellow) !important;
 }
 
+/* Ensure btn-accent always has dark text, even in card headers */
+.card-header .btn-accent,
+.btn-accent {
+    color: var(--sycota-text-dark) !important;
+}
+
 /* Footer - Fixed contrast */
 .footer {
     background-color: var(--sycota-bg-dark);
