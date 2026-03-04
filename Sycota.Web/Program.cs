@@ -37,9 +37,13 @@ builder.Services.AddScoped<ITrainingSessionRepository, TrainingSessionRepository
 builder.Services.AddScoped<IShooterProfileRepository, ShooterProfileRepository>();
 builder.Services.AddScoped<IClubJoinRequestRepository, ClubJoinRequestRepository>();
 builder.Services.AddScoped<IClubInvitationRepository, ClubInvitationRepository>();
+builder.Services.AddScoped<IAiChatMessageRepository, AiChatMessageRepository>();
 
 // Register Services
 builder.Services.AddScoped<IClubService, ClubService>();
+
+// Register AI Analysis Service
+builder.Services.AddHttpClient<IAiAnalysisService, GeminiAiAnalysisService>();
 
 builder.Services.AddControllersWithViews();
 

@@ -18,6 +18,7 @@ namespace Sycota.Infrastructure.Data
         public DbSet<ShooterProfile> ShooterProfiles { get; set; }
         public DbSet<ClubJoinRequest> ClubJoinRequests { get; set; }
         public DbSet<ClubInvitation> ClubInvitations { get; set; }
+        public DbSet<AiChatMessage> AiChatMessages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -167,6 +168,26 @@ namespace Sycota.Infrastructure.Data
                     .WithMany()
                     .HasForeignKey(e => e.AcceptedByUserId)
                     .OnDelete(DeleteBehavior.NoAction);
+            });
+
+            // Configure AiChatMessage entity
+            builder.Entity<AiChatMessage>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => new { e.TrainingSessionId, e.CreatedAt });
+
+                entity.Property(e => e.Role).IsRequired().HasMaxLength(20);
+                entity.Property(e => e.Content).IsRequired();
+
+                entity.HasOne(e => e.TrainingSession)
+                    .WithMany()
+                    .HasForeignKey(e => e.TrainingSessionId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }

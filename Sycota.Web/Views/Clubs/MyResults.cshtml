@@ -1,37 +1,43 @@
 @model Sycota.Web.Models.ViewModels.MyResultsViewModel
 @{
-    ViewData["Title"] = "My Results";
+    ViewData["Title"] = "????? ?????????";
+    var isCompetitor = Model.CurrentMembership.Role == Sycota.Domain.Enums.ClubRole.Competitor;
 }
 
 <div class="container">
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a asp-action="Index">Clubs</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">???????</a></li>
             <li class="breadcrumb-item"><a asp-action="Details" asp-route-id="@Model.CurrentMembership.ClubId">@Model.CurrentMembership.Club?.Name</a></li>
-            <li class="breadcrumb-item active" aria-current="page">My Results</li>
+            <li class="breadcrumb-item active" aria-current="page">????? ?????????</li>
         </ol>
     </nav>
 
     <div class="row">
         <div class="col-lg-8">
             <div class="card shadow-sm mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
                     <h2 class="mb-0">
-                        <i class="bi bi-graph-up me-2"></i>My Training Results
+                        <i class="bi bi-graph-up me-2"></i>????? ???????????? ?????????
                     </h2>
-                    <a asp-controller="TrainingSessions" asp-action="Create" asp-route-id="@Model.CurrentMembership.ClubId" class="btn btn-accent">
-                        <i class="bi bi-plus-circle me-1"></i>New Session
-                    </a>
+                    <div class="d-flex gap-2">
+                        <a asp-action="PerformanceDashboard" asp-route-id="@Model.CurrentMembership.ClubId" class="btn btn-outline-primary">
+                            <i class="bi bi-speedometer2 me-1"></i>????? ?? ???????????
+                        </a>
+                        <a asp-controller="TrainingSessions" asp-action="Create" asp-route-id="@Model.CurrentMembership.ClubId" class="btn btn-accent">
+                            <i class="bi bi-plus-circle me-1"></i>???? ?????
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body">
                     @if (!Model.TrainingSessions.Any())
                     {
                         <div class="text-center py-5">
                             <i class="bi bi-clipboard-data display-1 text-muted"></i>
-                            <h4 class="mt-3 text-muted">No Training Sessions Yet</h4>
-                            <p class="text-muted">Start training to see your results here!</p>
+                            <h4 class="mt-3 text-muted">??? ??? ???? ???????????? ?????</h4>
+                            <p class="text-muted">????????? ?? ?????????, ?? ?? ?????? ??????????? ?? ???!</p>
                             <a asp-controller="TrainingSessions" asp-action="Create" asp-route-id="@Model.CurrentMembership.ClubId" class="btn btn-accent btn-lg mt-2">
-                                <i class="bi bi-plus-circle me-1"></i>Record Your First Session
+                                <i class="bi bi-plus-circle me-1"></i>???????? ??????? ?? ?????
                             </a>
                         </div>
                     }
@@ -41,17 +47,17 @@
                             <table class="table table-hover">
                                 <thead style="background-color: #495057; color: #ffffff;">
                                     <tr>
-                                        <th>Date</th>
-                                        <th>Session Name</th>
-                                        <th>Weapon Type</th>
-                                        <th>Actions</th>
+                                        <th>????</th>
+                                        <th>??? ?? ???????</th>
+                                        <th>??? ??????</th>
+                                        <th>????????</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var session in Model.TrainingSessions)
                                     {
                                         <tr>
-                                            <td>@session.SessionDate.ToString("MMM dd, yyyy")</td>
+                                            <td>@session.SessionDate.ToString("dd.MM.yyyy")</td>
                                             <td>
                                                 <a asp-controller="TrainingSessions" asp-action="Details" asp-route-id="@session.Id" class="text-decoration-none">
                                                     @session.Name
@@ -62,16 +68,16 @@
                                             </td>
                                             <td>
                                                 <div class="btn-group btn-group-sm">
-                                                    <a asp-controller="TrainingSessions" asp-action="Details" asp-route-id="@session.Id" class="btn btn-outline-primary" title="View">
+                                                    <a asp-controller="TrainingSessions" asp-action="Details" asp-route-id="@session.Id" class="btn btn-outline-primary" title="???????">
                                                         <i class="bi bi-eye"></i>
                                                     </a>
-                                                    <a asp-controller="TrainingSessions" asp-action="RecordShots" asp-route-id="@session.Id" class="btn btn-outline-secondary" title="Edit">
+                                                    <a asp-controller="TrainingSessions" asp-action="RecordShots" asp-route-id="@session.Id" class="btn btn-outline-secondary" title="??????????">
                                                         <i class="bi bi-pencil"></i>
                                                     </a>
                                                     <form asp-controller="TrainingSessions" asp-action="Delete" asp-route-id="@session.Id" method="post" class="d-inline"
-                                                          onsubmit="return confirm('Are you sure you want to delete this training session? This action cannot be undone.');">
+                                                          onsubmit="return confirm('??????? ?? ???, ?? ?????? ?? ???????? ???? ???????????? ?????? ???? ???????? ?? ???? ?? ???? ????????.');">
                                                         @Html.AntiForgeryToken()
-                                                        <button type="submit" class="btn btn-outline-danger" title="Delete">
+                                                        <button type="submit" class="btn btn-outline-danger" title="??????">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
                                                     </form>
@@ -91,7 +97,7 @@
             <!-- Shooter Profile -->
             <div class="card shadow-sm mb-4">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="bi bi-person-badge me-2"></i>Shooter Profile</h5>
+                    <h5 class="mb-0"><i class="bi bi-person-badge me-2"></i>?????? ?? ????????</h5>
                 </div>
                 <div class="card-body">
                     @if (Model.ShooterProfile != null)
@@ -99,29 +105,29 @@
                         <dl class="row mb-0">
                             @if (Model.ShooterProfile.PrimaryWeapon.HasValue)
                             {
-                                <dt class="col-sm-5">Primary Weapon</dt>
+                                <dt class="col-sm-5">??????? ??????</dt>
                                 <dd class="col-sm-7">@Model.ShooterProfile.PrimaryWeapon</dd>
                             }
                             @if (Model.ShooterProfile.Category.HasValue)
                             {
-                                <dt class="col-sm-5">Category</dt>
+                                <dt class="col-sm-5">?????????</dt>
                                 <dd class="col-sm-7">@Model.ShooterProfile.Category</dd>
                             }
                             @if (!string.IsNullOrEmpty(Model.ShooterProfile.ISSFLicenseNumber))
                             {
-                                <dt class="col-sm-5">ISSF License</dt>
+                                <dt class="col-sm-5">ISSF ??????</dt>
                                 <dd class="col-sm-7">@Model.ShooterProfile.ISSFLicenseNumber</dd>
                             }
                             @if (!string.IsNullOrEmpty(Model.ShooterProfile.NationalLicenseNumber))
                             {
-                                <dt class="col-sm-5">National License</dt>
+                                <dt class="col-sm-5">?????????? ??????</dt>
                                 <dd class="col-sm-7">@Model.ShooterProfile.NationalLicenseNumber</dd>
                             }
                         </dl>
                     }
                     else
                     {
-                        <p class="text-muted mb-0">No shooter profile configured.</p>
+                        <p class="text-muted mb-0">???? ???????????? ?????? ?? ???????.</p>
                     }
                 </div>
             </div>
@@ -129,33 +135,21 @@
             <!-- Summary Stats -->
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="bi bi-bar-chart me-2"></i>Summary</h5>
+                    <h5 class="mb-0"><i class="bi bi-bar-chart me-2"></i>?????????</h5>
                 </div>
                 <div class="card-body">
                     <div class="row text-center">
                         <div class="col-6">
                             <div class="fs-3 fw-bold text-primary">@Model.TrainingSessions.Count()</div>
-                            <small class="text-muted">Total Sessions</small>
+                            <small class="text-muted">???? ?????</small>
                         </div>
                         <div class="col-6">
                             <div class="fs-3 fw-bold text-success">
                                 @(Model.TrainingSessions.Any() ? Model.TrainingSessions.Max(s => s.SessionDate).ToString("MMM") : "-")
                             </div>
-                            <small class="text-muted">Last Active</small>
+                            <small class="text-muted">???????? ?????????</small>
                         </div>
                     </div>
-
-                    @if (Model.CurrentMembership.Trainer != null)
-                    {
-                        <hr />
-                        <div class="text-center">
-                            <small class="text-muted">Your Trainer</small>
-                            <p class="mb-0 fw-bold">
-                                @(Model.CurrentMembership.Trainer.User?.FirstName ?? Model.CurrentMembership.Trainer.User?.UserName)
-                                @Model.CurrentMembership.Trainer.User?.LastName
-                            </p>
-                        </div>
-                    }
                 </div>
             </div>
         </div>

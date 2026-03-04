@@ -41,6 +41,7 @@ public class TraineeDetailsViewModel
     public ClubMember Trainee { get; set; } = null!;
     public IEnumerable<TrainingSession> TrainingSessions { get; set; } = [];
     public ShooterProfile? ShooterProfile { get; set; }
+    public ClubMember TrainerMembership { get; set; } = null!;
 }
 
 public class CreateClubViewModel
@@ -134,4 +135,99 @@ public class TrainingSessionDetailsViewModel
     public TrainingSession Session { get; set; } = null!;
     public ClubMember? CurrentMembership { get; set; }
     public bool CanEdit { get; set; }
+}
+
+// Performance Dashboard ViewModels
+public class PerformanceDashboardViewModel
+{
+    public ClubMember CurrentMembership { get; set; } = null!;
+    public IEnumerable<TrainingSession> TrainingSessions { get; set; } = [];
+    public PerformanceStatistics Statistics { get; set; } = new();
+    public string ChartDataJson { get; set; } = "{}";
+    public string HeatMapDataJson { get; set; } = "{}";
+    public int SelectedDays { get; set; } = 30;
+}
+
+public class PerformanceStatistics
+{
+    public int TotalSessions { get; set; }
+    public int TotalShots { get; set; }
+    public double AverageScore { get; set; }
+    public double BestSeriesScore { get; set; }
+    public double WorstSeriesScore { get; set; }
+    public int TotalTens { get; set; }
+    public int TotalInnerTens { get; set; }
+    public double AverageGroupSize { get; set; }
+    public double ImprovementPercent { get; set; }
+    public List<SeriesPerformance> RecentSeries { get; set; } = [];
+    public List<DailyPerformance> DailyPerformance { get; set; } = [];
+    public double ConsistencyScore { get; set; }
+}
+
+public class SeriesPerformance
+{
+    public DateTime Date { get; set; }
+    public string SessionName { get; set; } = string.Empty;
+    public int SeriesNumber { get; set; }
+    public double Score { get; set; }
+    public int ShotCount { get; set; }
+    public double AveragePerShot { get; set; }
+    public int Tens { get; set; }
+    public int InnerTens { get; set; }
+}
+
+public class DailyPerformance
+{
+    public DateTime Date { get; set; }
+    public double AverageScore { get; set; }
+    public int SessionCount { get; set; }
+    public int TotalShots { get; set; }
+}
+
+public class ShotPosition
+{
+    public double X { get; set; }
+    public double Y { get; set; }
+}
+
+public class ShotGroup
+{
+    public int GroupId { get; set; }
+    public string ValueType { get; set; } = "10-shot-series";
+    public List<ShotPosition> Shots { get; set; } = [];
+}
+
+public class ShotsData
+{
+    public List<ShotPosition> WarmupShots { get; set; } = [];
+    public List<ShotGroup> Groups { get; set; } = [];
+}
+
+public class TraineePerformanceDashboardViewModel
+{
+    public ClubMember TrainerMembership { get; set; } = null!;
+    public ClubMember Trainee { get; set; } = null!;
+    public IEnumerable<TrainingSession> TrainingSessions { get; set; } = [];
+    public PerformanceStatistics Statistics { get; set; } = new();
+    public string ChartDataJson { get; set; } = "{}";
+    public string HeatMapDataJson { get; set; } = "{}";
+    public int SelectedDays { get; set; } = 30;
+}
+
+public class TraineeSessionDetailsViewModel
+{
+    public TrainingSession Session { get; set; } = null!;
+    public ClubMember TrainerMembership { get; set; } = null!;
+    public ClubMember Trainee { get; set; } = null!;
+}
+
+public class EditClubViewModel
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public string Address { get; set; } = string.Empty;
+    public string? ContactEmail { get; set; }
+    public string? ContactPhone { get; set; }
+    public bool RequiresApproval { get; set; }
 }

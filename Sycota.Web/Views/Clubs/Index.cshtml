@@ -1,15 +1,15 @@
 @model Sycota.Web.Models.ViewModels.ClubIndexViewModel
 @{
-    ViewData["Title"] = "Clubs";
+    ViewData["Title"] = "???????";
 }
 
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="text-primary">
-            <i class="bi bi-bullseye me-2"></i>Shooting Clubs
+            <i class="bi bi-bullseye me-2"></i>????????? ???????
         </h1>
         <a asp-action="Create" class="btn btn-primary">
-            <i class="bi bi-plus-circle me-1"></i>Create Club
+            <i class="bi bi-plus-circle me-1"></i>?????? ????
         </a>
     </div>
 
@@ -17,7 +17,7 @@
     {
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             @TempData["Success"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="???????"></button>
         </div>
     }
 
@@ -25,7 +25,7 @@
     {
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             @TempData["Error"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="???????"></button>
         </div>
     }
 
@@ -33,7 +33,7 @@
     {
         <div class="alert alert-info mb-4">
             <i class="bi bi-info-circle me-2"></i>
-            You are currently a <strong>@Model.CurrentMembership.Role</strong> at 
+            ? ??????? ??? <strong>@Model.CurrentMembership.Role</strong> ? 
             <a asp-action="Details" asp-route-id="@Model.CurrentMembership.ClubId" class="alert-link">
                 @Model.CurrentMembership.Club?.Name
             </a>
@@ -44,10 +44,10 @@
     {
         <div class="text-center py-5">
             <i class="bi bi-building display-1 text-muted"></i>
-            <h3 class="mt-3 text-muted">No Clubs Found</h3>
-            <p class="text-muted">Be the first to create a shooting club!</p>
+            <h3 class="mt-3 text-muted">???? ???????? ???????</h3>
+            <p class="text-muted">?????? ???????, ????? ??????? ????????? ????!</p>
             <a asp-action="Create" class="btn btn-primary btn-lg">
-                <i class="bi bi-plus-circle me-1"></i>Create Your Club
+                <i class="bi bi-plus-circle me-1"></i>???????? ???? ????
             </a>
         </div>
     }
@@ -66,7 +66,7 @@
                                 <h5 class="card-title">@club.Name</h5>
                                 @if (isMember)
                                 {
-                                    <span class="badge bg-primary">Member</span>
+                                    <span class="badge bg-primary">????</span>
                                 }
                             </div>
                             <p class="card-text text-muted">@(club.Description.Length > 100 ? club.Description.Substring(0, 100) + "..." : club.Description)</p>
@@ -78,18 +78,18 @@
                             
                             <div class="d-flex align-items-center text-muted small">
                                 <i class="bi bi-people me-1"></i>
-                                <span>@memberCount member@(memberCount != 1 ? "s" : "")</span>
+                                <span>@memberCount @(memberCount == 1 ? "????" : "?????")</span>
                             </div>
                         </div>
                         <div class="card-footer bg-transparent border-top-0">
                             <div class="d-flex gap-2">
                                 <a asp-action="Details" asp-route-id="@club.Id" class="btn btn-outline-primary flex-grow-1">
-                                    <i class="bi bi-eye me-1"></i>View
+                                    <i class="bi bi-eye me-1"></i>???????
                                 </a>
                                 @if (!isMember && Model.CurrentMembership == null)
                                 {
                                     <a asp-action="Join" asp-route-id="@club.Id" class="btn btn-primary flex-grow-1">
-                                        <i class="bi bi-person-plus me-1"></i>Join
+                                        <i class="bi bi-person-plus me-1"></i>?????????? ??
                                     </a>
                                 }
                             </div>

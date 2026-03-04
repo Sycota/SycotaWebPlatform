@@ -1,13 +1,13 @@
 @model Sycota.Web.Models.ViewModels.CreateClubViewModel
 @{
-    ViewData["Title"] = "Create Club";
+    ViewData["Title"] = "????????? ?? ????";
 }
 
 <div class="container">
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a asp-action="Index">Clubs</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Create</li>
+            <li class="breadcrumb-item"><a asp-action="Index">???????</a></li>
+            <li class="breadcrumb-item active" aria-current="page">?????????</li>
         </ol>
     </nav>
 
@@ -16,7 +16,7 @@
             <div class="card shadow-sm">
                 <div class="card-header">
                     <h2 class="mb-0">
-                        <i class="bi bi-plus-circle me-2"></i>Create a New Club
+                        <i class="bi bi-plus-circle me-2"></i>????????? ?? ??? ????
                     </h2>
                 </div>
                 <div class="card-body">
@@ -24,33 +24,33 @@
                         @Html.AntiForgeryToken()
                         
                         <div class="mb-3">
-                            <label asp-for="Name" class="form-label">Club Name <span class="text-danger">*</span></label>
-                            <input asp-for="Name" class="form-control" placeholder="Enter club name" required />
+                            <label asp-for="Name" class="form-label">??? ?? ????? <span class="text-danger">*</span></label>
+                            <input asp-for="Name" class="form-control" placeholder="???????? ??? ?? ?????" required />
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="Description" class="form-label">Description <span class="text-danger">*</span></label>
+                            <label asp-for="Description" class="form-label">???????? <span class="text-danger">*</span></label>
                             <textarea asp-for="Description" class="form-control" rows="4" 
-                                      placeholder="Describe your club, its mission, and what makes it special" required></textarea>
+                                      placeholder="??????? ????? ??, ???????? ????? ? ????? ?? ????? ?????????" required></textarea>
                             <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="Address" class="form-label">Address <span class="text-danger">*</span></label>
-                            <input asp-for="Address" class="form-control" placeholder="Club location/address" required />
+                            <label asp-for="Address" class="form-label">????? <span class="text-danger">*</span></label>
+                            <input asp-for="Address" class="form-control" placeholder="??????????????/????? ?? ?????" required />
                             <span asp-validation-for="Address" class="text-danger"></span>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label asp-for="ContactEmail" class="form-label">Contact Email</label>
+                                <label asp-for="ContactEmail" class="form-label">????? ?? ???????</label>
                                 <input asp-for="ContactEmail" type="email" class="form-control" placeholder="club@example.com" />
                                 <span asp-validation-for="ContactEmail" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label asp-for="ContactPhone" class="form-label">Contact Phone</label>
-                                <input asp-for="ContactPhone" class="form-control" placeholder="+1 (555) 123-4567" />
+                                <label asp-for="ContactPhone" class="form-label">??????? ?? ???????</label>
+                                <input asp-for="ContactPhone" class="form-control" placeholder="+359 88 123 4567" />
                                 <span asp-validation-for="ContactPhone" class="text-danger"></span>
                             </div>
                         </div>
@@ -59,26 +59,26 @@
                             <div class="form-check form-switch">
                                 <input asp-for="RequiresApproval" class="form-check-input" type="checkbox" checked />
                                 <label asp-for="RequiresApproval" class="form-check-label">
-                                    <strong>Require Admin Approval for New Members</strong>
+                                    <strong>???????? ????????? ?? ????????????? ?? ???? ???????</strong>
                                 </label>
                             </div>
                             <div class="form-text">
                                 <i class="bi bi-shield-lock me-1"></i>
-                                When enabled, join requests will need to be approved by an admin before users become members.
+                                ?????? ? ??????????, ???????? ?? ?????????????? ?? ?????? ?? ????? ???????? ?? ?????????????, ????? ????????????? ?? ?????? ???????.
                             </div>
                         </div>
 
                         <div class="alert alert-info">
                             <i class="bi bi-info-circle me-1"></i>
-                            You will automatically be added as an <strong>Admin</strong> of this club.
+                            ??????????? ?? ?????? ??????? ???? <strong>?????????????</strong> ?? ???? ????.
                         </div>
 
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-accent">
-                                <i class="bi bi-check-circle me-1"></i>Create Club
+                                <i class="bi bi-check-circle me-1"></i>?????? ????
                             </button>
                             <a asp-action="Index" class="btn btn-outline-secondary">
-                                <i class="bi bi-x-circle me-1"></i>Cancel
+                                <i class="bi bi-x-circle me-1"></i>?????
                             </a>
                         </div>
                     </form>

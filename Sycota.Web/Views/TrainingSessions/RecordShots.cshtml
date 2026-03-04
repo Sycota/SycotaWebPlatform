@@ -3,98 +3,218 @@
     ViewData["Title"] = "Record Shots - " + Model.Session.Name;
 }
 
-<div class="container-fluid">
-    <nav aria-label="breadcrumb" class="mb-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="Index">Clubs</a></li>
-            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="MyResults" asp-route-id="@Model.ClubId">My Results</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Record Shots</li>
-        </ol>
-    </nav>
-
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1 class="h3 mb-0">
-            <i class="bi bi-bullseye me-2"></i>@Model.Session.Name
-        </h1>
-        <div>
-            <button id="saveBtn" class="btn btn-accent me-2">
-                <i class="bi bi-save me-1"></i>Save
+<div class="container-fluid px-2 px-md-3">
+    <!-- Mobile-friendly header -->
+    <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+        <div class="d-flex align-items-center">
+            <a asp-action="Details" asp-route-id="@Model.SessionId" class="btn btn-sm btn-outline-secondary me-2 d-md-none">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <h1 class="h5 h4-md mb-0 text-truncate" style="max-width: 200px;">
+                <i class="bi bi-bullseye me-1 d-none d-sm-inline"></i>@Model.Session.Name
+            </h1>
+        </div>
+        <div class="d-flex gap-1">
+            <button id="saveBtn" class="btn btn-sm btn-accent">
+                <i class="bi bi-save me-1"></i><span class="d-none d-sm-inline">Save</span>
             </button>
-            <a asp-action="Details" asp-route-id="@Model.SessionId" class="btn btn-secondary">
-                <i class="bi bi-arrow-left me-1"></i>Back to Session
+            <a asp-action="Details" asp-route-id="@Model.SessionId" class="btn btn-sm btn-secondary d-none d-md-inline-flex">
+                <i class="bi bi-arrow-left me-1"></i>Back
             </a>
         </div>
     </div>
 
-    <div class="row">
-        <!-- Target Canvas -->
-        <div class="col-lg-7">
+    <!-- Mobile: Shot Groups tabs at top for easy access -->
+    <div class="card shadow-sm mb-2 d-lg-none">
+        <div class="card-header py-2 d-flex justify-content-between align-items-center">
+            <span class="small"><i class="bi bi-list-ol me-1"></i>Groups</span>
+            <div class="dropdown">
+                <button type="button" class="btn btn-sm btn-accent dropdown-toggle py-0" data-bs-toggle="dropdown">
+                    <i class="bi bi-plus"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><h6 class="dropdown-header">Single Group</h6></li>
+                    <li><a class="dropdown-item add-group-btn" href="#" data-type="10-shot-series"><i class="bi bi-bullseye me-2"></i>10-Shot Series</a></li>
+                    <li><a class="dropdown-item add-group-btn" href="#" data-type="blind"><i class="bi bi-eye-slash me-2"></i>Blind Series</a></li>
+                    <li><a class="dropdown-item add-group-btn" href="#" data-type="practice"><i class="bi bi-flag me-2"></i>Practice</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><h6 class="dropdown-header">Competition Presets</h6></li>
+                    <li><a class="dropdown-item add-preset-btn" href="#" data-preset="ar40"><i class="bi bi-trophy me-2"></i>40-Shot (4×10)</a></li>
+                    <li><a class="dropdown-item add-preset-btn" href="#" data-preset="ar60"><i class="bi bi-trophy-fill me-2"></i>60-Shot (6×10)</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger remove-group-btn" href="#"><i class="bi bi-trash me-2"></i>Remove Group</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div id="groupTabsMobile" class="nav nav-tabs nav-fill bg-light mobile-group-tabs" role="tablist">
+                <button class="nav-link active" data-group="warmup" type="button">
+                    <i class="bi bi-thermometer-half me-1"></i><span class="d-none d-sm-inline">Warmup</span><span class="d-sm-none">W</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-2 g-lg-3">
+        <!-- Target Canvas Column -->
+        <div class="col-12 col-lg-7">
             <div class="card shadow-sm">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-crosshair me-2"></i>ISSF 10m Air Rifle Target</span>
-                    <div class="btn-group btn-group-sm">
-                        <button type="button" class="btn btn-outline-secondary" id="zoomIn" title="Zoom In">
-                            <i class="bi bi-zoom-in"></i>
-                        </button>
-                        <button type="button" class="btn btn-outline-secondary" id="zoomOut" title="Zoom Out">
-                            <i class="bi bi-zoom-out"></i>
-                        </button>
-                        <button type="button" class="btn btn-outline-secondary" id="resetZoom" title="Reset">
-                            <i class="bi bi-arrow-counterclockwise"></i>
-                        </button>
+                <div class="card-header py-2 d-flex justify-content-between align-items-center">
+                    <span class="small"><i class="bi bi-crosshair me-1"></i><span class="d-none d-sm-inline">ISSF 10m Air Rifle </span>Target</span>
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-outline-secondary btn-sm px-2 active" id="viewCurrentBtn" title="Show current group only">
+                                <i class="bi bi-bullseye"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm px-2" id="viewAllBtn" title="Show all shots">
+                                <i class="bi bi-collection"></i>
+                            </button>
+                        </div>
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-outline-secondary btn-sm px-2" id="zoomOut" title="Zoom Out">
+                                <i class="bi bi-zoom-out"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm px-2" id="resetZoom" title="Reset">
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm px-2" id="zoomIn" title="Zoom In">
+                                <i class="bi bi-zoom-in"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="card-body text-center p-2" style="background-color: #e8e8e8;">
-                    <div id="targetContainer" style="position: relative; display: inline-block;">
-                        <canvas id="targetCanvas" width="500" height="500" style="cursor: crosshair; border-radius: 8px;"></canvas>
+                <div class="card-body text-center p-1 p-md-2" style="background-color: #e8e8e8;">
+                    <div id="targetContainer" class="target-container">
+                        <canvas id="targetCanvas" width="500" height="500"></canvas>
                     </div>
-                    <div class="mt-2 small" style="color: #333;">
-                        <i class="bi bi-hand-index me-1"></i>Click on the target to place a shot. 
-                        <i class="bi bi-trash me-1 ms-2"></i>Right-click a shot to remove it.
+                    <div class="mt-1 small d-none d-md-block" style="color: #333;">
+                        <i class="bi bi-hand-index me-1"></i>Click to place shot. 
+                        <i class="bi bi-trash me-1 ms-2"></i>Right-click to remove.
+                    </div>
+                    <div class="mt-1 small d-md-none" style="color: #333;">
+                        <i class="bi bi-hand-index me-1"></i>Tap to place. Long-press to remove.
                     </div>
                 </div>
             </div>
 
-            <!-- Manual Coordinate Entry -->
-            <div class="card shadow-sm mt-3">
-                <div class="card-header">
-                    <i class="bi bi-pin-map me-2"></i>Add Shot by Coordinates
-                </div>
-                <div class="card-body">
-                    <div class="row g-2 align-items-end">
-                        <div class="col">
-                            <label class="form-label small mb-1">X (mm)</label>
-                            <input type="number" step="0.1" id="coordX" class="form-control" placeholder="0.0" />
+            <!-- Mobile: Quick stats bar -->
+            <div class="card shadow-sm mt-2 d-lg-none">
+                <div class="card-body py-2">
+                    <div class="row text-center g-0">
+                        <div class="col-3">
+                            <div class="fs-6 fw-bold text-primary" id="totalShotsMobile">0</div>
+                            <small class="text-muted" style="font-size: 0.7rem;">Shots</small>
                         </div>
-                        <div class="col">
-                            <label class="form-label small mb-1">Y (mm)</label>
-                            <input type="number" step="0.1" id="coordY" class="form-control" placeholder="0.0" />
+                        <div class="col-3">
+                            <div class="fs-6 fw-bold text-success" id="totalScoreMobile">0.0</div>
+                            <small class="text-muted" style="font-size: 0.7rem;">Score</small>
                         </div>
-                        <div class="col-auto">
-                            <button type="button" id="addCoordBtn" class="btn btn-primary">
-                                <i class="bi bi-plus-lg"></i> Add
+                        <div class="col-3">
+                            <div class="fs-6 fw-bold" style="color: #856404;" id="avgScoreMobile">0.0</div>
+                            <small class="text-muted" style="font-size: 0.7rem;">Avg</small>
+                        </div>
+                        <div class="col-3">
+                            <button type="button" class="btn btn-sm btn-outline-warning py-0 px-2" id="undoBtnMobile" disabled title="Undo">
+                                <i class="bi bi-arrow-counterclockwise"></i>
                             </button>
                         </div>
                     </div>
-                    <small class="text-muted mt-1 d-block">Center is (0, 0). Positive X is right, positive Y is down.</small>
+                </div>
+            </div>
+
+            <!-- Manual Coordinate Entry - Collapsible on mobile -->
+            <div class="card shadow-sm mt-2">
+                <div class="card-header py-2 d-flex justify-content-between align-items-center" 
+                     data-bs-toggle="collapse" data-bs-target="#coordEntryCollapse" 
+                     role="button" aria-expanded="false" style="cursor: pointer;">
+                    <span class="small"><i class="bi bi-pin-map me-1"></i>Add by Coordinates</span>
+                    <i class="bi bi-chevron-down d-lg-none"></i>
+                </div>
+                <div id="coordEntryCollapse" class="collapse show-lg">
+                    <div class="card-body py-2">
+                        <div class="row g-2 align-items-end">
+                            <div class="col">
+                                <label class="form-label small mb-1 d-none d-sm-block">X (mm)</label>
+                                <input type="number" step="0.1" id="coordX" class="form-control form-control-sm" placeholder="X (mm)" />
+                            </div>
+                            <div class="col">
+                                <label class="form-label small mb-1 d-none d-sm-block">Y (mm)</label>
+                                <input type="number" step="0.1" id="coordY" class="form-control form-control-sm" placeholder="Y (mm)" />
+                            </div>
+                            <div class="col-auto">
+                                <button type="button" id="addCoordBtn" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-plus-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile: Shots list (collapsible) -->
+            <div class="card shadow-sm mt-2 d-lg-none">
+                <div class="card-header py-2 d-flex justify-content-between align-items-center"
+                     data-bs-toggle="collapse" data-bs-target="#shotsListMobileCollapse"
+                     role="button" aria-expanded="true" style="cursor: pointer;">
+                    <span class="small"><i class="bi bi-list-ol me-1"></i>Shot List</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div id="shotsListMobileCollapse" class="collapse show">
+                    <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
+                        <div id="shotsListContainerMobile">
+                            <!-- Shots will be listed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile: Series Summary (collapsible) -->
+            <div class="card shadow-sm mt-2 d-lg-none" id="seriesSummaryPanelMobile" style="display: none;">
+                <div class="card-header py-2 d-flex justify-content-between align-items-center"
+                     data-bs-toggle="collapse" data-bs-target="#seriesSummaryMobileCollapse"
+                     role="button" aria-expanded="false" style="cursor: pointer;">
+                    <span class="small"><i class="bi bi-calculator me-1"></i>Series Summary</span>
+                    <span class="badge bg-primary" id="seriesTotalScoreMobile">0.0</span>
+                </div>
+                <div id="seriesSummaryMobileCollapse" class="collapse">
+                    <div class="card-body p-0">
+                        <table class="table table-sm mb-0">
+                            <tbody id="seriesSummaryBodyMobile">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Shot List & Controls -->
-        <div class="col-lg-5">
+        <!-- Shot List & Controls Column (Desktop) -->
+        <div class="col-lg-5 d-none d-lg-block">
             <!-- Current Group Panel -->
             <div class="card shadow-sm mb-3">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <span><i class="bi bi-list-ol me-2"></i>Shot Groups</span>
-                    <button type="button" class="btn btn-sm btn-accent" id="addGroupBtn">
-                        <i class="bi bi-plus"></i> Add Group
-                    </button>
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-sm btn-accent dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="bi bi-plus"></i> Add
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><h6 class="dropdown-header">Single Group</h6></li>
+                            <li><a class="dropdown-item add-group-btn" href="#" data-type="10-shot-series"><i class="bi bi-bullseye me-2"></i>10-Shot Series</a></li>
+                            <li><a class="dropdown-item add-group-btn" href="#" data-type="blind"><i class="bi bi-eye-slash me-2"></i>Blind Series</a></li>
+                            <li><a class="dropdown-item add-group-btn" href="#" data-type="practice"><i class="bi bi-flag me-2"></i>Practice</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><h6 class="dropdown-header">Competition Presets</h6></li>
+                            <li><a class="dropdown-item add-preset-btn" href="#" data-preset="ar40"><i class="bi bi-trophy me-2"></i>40-Shot Air Rifle (4×10)</a></li>
+                            <li><a class="dropdown-item add-preset-btn" href="#" data-preset="ar60"><i class="bi bi-trophy-fill me-2"></i>60-Shot Air Rifle (6×10)</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger remove-group-btn" href="#"><i class="bi bi-trash me-2"></i>Remove Current Group</a></li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="card-body p-0">
                     <div id="groupTabs" class="nav nav-tabs nav-fill bg-light" role="tablist" style="border-bottom: 2px solid #dee2e6;">
-                        <button class="nav-link active" data-group="warmup" type="button" style="color: #212529; font-weight: 500;">
-                            <i class="bi bi-thermometer-half me-1"></i>Warmup
+                        <button class="nav-link active" data-group="warmup" type="button">
+                            <i class="bi bi-thermometer-half me-1" style="color: inherit;"></i>Warmup
                         </button>
                     </div>
                     <div class="p-3">
@@ -106,10 +226,35 @@
                                 <option value="practice">Practice</option>
                             </select>
                         </div>
-                        <div id="shotsListContainer">
+                        <div id="shotsListContainer" style="max-height: 300px; overflow-y: auto;">
                             <!-- Shots will be listed here -->
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Series Summary Panel (for competition presets) -->
+            <div class="card shadow-sm mb-3" id="seriesSummaryPanel" style="display: none;">
+                <div class="card-header">
+                    <i class="bi bi-calculator me-2"></i>Series Summary
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-sm mb-0">
+                        <thead>
+                            <tr>
+                                <th>Series</th>
+                                <th class="text-end">Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="seriesSummaryBody">
+                        </tbody>
+                        <tfoot class="table-active">
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td class="text-end"><strong id="seriesTotalScore">0.0</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
 
@@ -157,8 +302,11 @@
                         <button type="button" class="btn btn-outline-warning" id="undoBtn" disabled>
                             <i class="bi bi-arrow-counterclockwise me-1"></i>Undo Last Shot
                         </button>
-                        <button type="button" class="btn btn-outline-danger" id="clearGroupBtn">
-                            <i class="bi bi-trash me-1"></i>Clear Current Group
+                        <button type="button" class="btn btn-outline-secondary" id="clearGroupBtn">
+                            <i class="bi bi-eraser me-1"></i>Clear Current Group
+                        </button>
+                        <button type="button" class="btn btn-outline-danger" id="removeGroupBtn">
+                            <i class="bi bi-trash me-1"></i>Remove Current Group
                         </button>
                     </div>
                 </div>
@@ -167,35 +315,157 @@
     </div>
 </div>
 
+<!-- Mobile floating action buttons -->
+<div class="mobile-fab-container d-lg-none">
+    <button type="button" class="btn btn-danger btn-fab" id="clearGroupBtnMobile" title="Clear Group">
+        <i class="bi bi-trash"></i>
+    </button>
+</div>
+
 <form id="saveForm" asp-action="SaveShots" method="post" style="display: none;">
     @Html.AntiForgeryToken()
     <input type="hidden" name="id" value="@Model.SessionId" />
     <input type="hidden" name="shotsJson" id="shotsJsonInput" />
 </form>
 
+<style>
+    /* Mobile-specific styles */
+    .target-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        max-width: 500px;
+    }
+    
+    .target-container canvas {
+        width: 100%;
+        height: auto;
+        cursor: crosshair;
+        border-radius: 8px;
+        touch-action: none; /* Prevent scrolling while touching canvas */
+    }
+    
+    /* Scrollable group tabs for mobile */
+    .mobile-group-tabs {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    .mobile-group-tabs::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .mobile-group-tabs .nav-link {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        padding: 0.4rem 0.75rem;
+        font-size: 0.85rem;
+    }
+    
+    /* Floating action button */
+    .mobile-fab-container {
+        position: fixed;
+        bottom: 80px;
+        right: 16px;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .btn-fab {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    
+    /* Collapse show on large screens */
+    @@media (min-width: 992px) {
+        .show-lg {
+            display: block !important;
+        }
+        .show-lg.collapse:not(.show) {
+            display: block !important;
+        }
+    }
+    
+    /* Mobile table adjustments */
+    @@media (max-width: 575px) {
+        .table-sm td, .table-sm th {
+            padding: 0.25rem 0.4rem;
+            font-size: 0.8rem;
+        }
+        
+        .font-monospace {
+            font-size: 0.75rem !important;
+        }
+    }
+    
+    /* Touch feedback for canvas */
+    .target-container canvas:active {
+        opacity: 0.95;
+    }
+    
+    /* Card header collapse indicator rotation */
+    [data-bs-toggle="collapse"][aria-expanded="true"] .bi-chevron-down {
+        transform: rotate(180deg);
+    }
+    
+    [data-bs-toggle="collapse"] .bi-chevron-down {
+        transition: transform 0.2s ease;
+    }
+    
+    /* Dark text for dropdown menu items */
+    .dropdown-menu .dropdown-item {
+        color: #212529;
+    }
+    
+    .dropdown-menu .dropdown-item:hover {
+        color: #000;
+        background-color: #e9ecef;
+    }
+    
+    .dropdown-menu .dropdown-header {
+        color: #495057;
+        font-weight: 600;
+    }
+</style>
+
 @section Scripts {
 <script>
 (function() {
     // ISSF 10m Air Rifle Target specifications (in mm)
-    // Ring radii: inner edge of each ring value
-    // Ring 10: 0 to 2.5mm radius (inner edge scoring)
-    // Ring 9: 2.5 to 5.0mm, etc.
-    // Black rings are 4 through 10 (center to 4th ring inclusive)
-    const RING_OUTER_RADII = [
-        { ring: 10, outerRadius: 2.5 },
-        { ring: 9, outerRadius: 5.0 },
-        { ring: 8, outerRadius: 7.5 },
-        { ring: 7, outerRadius: 10.0 },
-        { ring: 6, outerRadius: 12.5 },
-        { ring: 5, outerRadius: 15.0 },
-        { ring: 4, outerRadius: 17.5 },
-        { ring: 3, outerRadius: 20.0 },
-        { ring: 2, outerRadius: 22.5 },
-        { ring: 1, outerRadius: 25.0 }
+    // Official ISSF target has 10 scoring rings (1-10)
+    // Ring 10 (center): 0.5mm radius (1mm diameter) - the center dot
+    // Ring 9: 2.5mm radius outer edge
+    // Ring 8: 5.0mm radius outer edge
+    // Each ring is 2.5mm wide (except ring 10 which is 0.5mm radius)
+    // Pellet diameter: 4.5mm (radius 2.25mm)
+    const RING_RADII = [
+        { ring: 10, radius: 0.5 },   // Center dot
+        { ring: 9, radius: 2.5 },
+        { ring: 8, radius: 5.0 },
+        { ring: 7, radius: 7.5 },
+        { ring: 6, radius: 10.0 },
+        { ring: 5, radius: 12.5 },
+        { ring: 4, radius: 15.0 },
+        { ring: 3, radius: 17.5 },
+        { ring: 2, radius: 20.0 },
+        { ring: 1, radius: 22.5 }
     ];
     
-    const INNER_TEN_RADIUS = 0.25; // Inner 10 (10.9) radius
-    const PELLET_RADIUS = 2.25;    // 4.5mm pellet diameter / 2
+    const TARGET_OUTER_RADIUS = 22.5; // Outer edge of ring 1 (no extra ring)
+    const RING_10_RADIUS = 0.5;       // Center dot radius for scoring
+    const CENTER_DOT_RADIUS = 0.25;   // Smaller visual dot in the very center
+    const PELLET_RADIUS = 2.25;       // 4.5mm pellet diameter / 2
 
     const canvas = document.getElementById('targetCanvas');
     const ctx = canvas.getContext('2d');
@@ -212,28 +482,111 @@
 
     let currentGroup = 'warmup';
     let shotHistory = [];
+    let showAllShots = false; // Toggle for showing all shots vs current group only
+    
+    // Touch handling variables
+    let touchStartTime = 0;
+    let touchStartPos = { x: 0, y: 0 };
+    let longPressTimer = null;
+    const LONG_PRESS_DURATION = 500; // ms
 
     // Initialize
     renderGroupTabs();
     drawTarget();
     updateShotsList();
     updateStatistics();
+    setupTouchHandlers();
+    setupCollapseState();
 
-    // Canvas click handler
+    // Setup collapse aria-expanded state
+    function setupCollapseState() {
+        document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(el => {
+            const target = document.querySelector(el.dataset.bsTarget);
+            if (target) {
+                el.setAttribute('aria-expanded', target.classList.contains('show'));
+                target.addEventListener('shown.bs.collapse', () => el.setAttribute('aria-expanded', 'true'));
+                target.addEventListener('hidden.bs.collapse', () => el.setAttribute('aria-expanded', 'false'));
+            }
+        });
+    }
+
+    // Touch handlers for mobile
+    function setupTouchHandlers() {
+        canvas.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            touchStartTime = Date.now();
+            touchStartPos = getTouchPosition(touch);
+            
+            // Start long press timer
+            longPressTimer = setTimeout(function() {
+                // Long press - remove nearest shot
+                removeNearestShot(touchStartPos.x, touchStartPos.y);
+                longPressTimer = null;
+            }, LONG_PRESS_DURATION);
+        }, { passive: false });
+
+        canvas.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            
+            // Clear long press timer
+            if (longPressTimer) {
+                clearTimeout(longPressTimer);
+                longPressTimer = null;
+                
+                // Short tap - add shot
+                const touchDuration = Date.now() - touchStartTime;
+                if (touchDuration < LONG_PRESS_DURATION) {
+                    addShot(touchStartPos.x, touchStartPos.y);
+                }
+            }
+        }, { passive: false });
+
+        canvas.addEventListener('touchmove', function(e) {
+            // Cancel long press if finger moves
+            if (longPressTimer) {
+                clearTimeout(longPressTimer);
+                longPressTimer = null;
+            }
+        }, { passive: true });
+
+        canvas.addEventListener('touchcancel', function(e) {
+            if (longPressTimer) {
+                clearTimeout(longPressTimer);
+                longPressTimer = null;
+            }
+        });
+    }
+
+    function getTouchPosition(touch) {
+        const rect = canvas.getBoundingClientRect();
+        const scaleRatio = canvas.width / rect.width;
+        const touchX = (touch.clientX - rect.left) * scaleRatio;
+        const touchY = (touch.clientY - rect.top) * scaleRatio;
+        
+        const x = (touchX - offsetX) / (scale * zoom);
+        const y = (touchY - offsetY) / (scale * zoom);
+        
+        return { x, y };
+    }
+
+    // Canvas click handler (desktop)
     canvas.addEventListener('click', function(e) {
+        // Ignore if touch event
+        if (e.pointerType === 'touch') return;
+        
         const rect = canvas.getBoundingClientRect();
         const scaleRatio = canvas.width / rect.width;
         const clickX = (e.clientX - rect.left) * scaleRatio;
         const clickY = (e.clientY - rect.top) * scaleRatio;
         
-        // Convert to mm coordinates (center is 0,0)
         const x = (clickX - offsetX) / (scale * zoom);
         const y = (clickY - offsetY) / (scale * zoom);
         
         addShot(x, y);
     });
 
-    // Right-click to remove shot
+    // Right-click to remove shot (desktop)
     canvas.addEventListener('contextmenu', function(e) {
         e.preventDefault();
         const rect = canvas.getBoundingClientRect();
@@ -283,10 +636,16 @@
         }
         
         document.getElementById('undoBtn').disabled = false;
+        document.getElementById('undoBtnMobile').disabled = false;
         drawTarget();
         updateShotsList();
         updateStatistics();
         autoSave();
+        
+        // Haptic feedback on mobile if available
+        if (navigator.vibrate) {
+            navigator.vibrate(10);
+        }
     }
 
     function removeShotByIndex(index) {
@@ -296,7 +655,6 @@
             const groupIndex = parseInt(currentGroup);
             shotsData.groups[groupIndex].shots.splice(index, 1);
         }
-        // Clean up history
         shotHistory = shotHistory.filter(h => !(h.group === currentGroup && h.index === index));
         shotHistory = shotHistory.map(h => {
             if (h.group === currentGroup && h.index > index) {
@@ -310,12 +668,17 @@
         updateShotsList();
         updateStatistics();
         autoSave();
+        
+        // Haptic feedback
+        if (navigator.vibrate) {
+            navigator.vibrate([20, 50, 20]);
+        }
     }
 
     function removeNearestShot(x, y) {
         let shots = getCurrentShots();
         let nearestIndex = -1;
-        let minDist = 3; // 3mm threshold
+        let minDist = 5; // Larger threshold for touch
         
         shots.forEach((shot, i) => {
             const dist = Math.sqrt(Math.pow(shot.x - x, 2) + Math.pow(shot.y - y, 2));
@@ -342,7 +705,6 @@
     function drawTarget() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        // Background - light tan/cream like real targets
         ctx.fillStyle = '#f5f0e6';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
@@ -350,85 +712,108 @@
         ctx.translate(offsetX, offsetY);
         ctx.scale(zoom, zoom);
         
-        // Draw rings from outside in
-        // Rings 1-3: white with black lines
-        // Rings 4-10: black (4 is the outer black ring)
-        
-        // White outer area (rings 1-3)
+        // Draw the target outer boundary (ring 1 outer edge)
         ctx.beginPath();
-        ctx.arc(0, 0, 25 * scale, 0, Math.PI * 2);
+        ctx.arc(0, 0, TARGET_OUTER_RADIUS * scale, 0, Math.PI * 2);
         ctx.fillStyle = '#ffffff';
         ctx.fill();
         
-        // Draw ring lines for white area (1, 2, 3)
-        for (let ring = 1; ring <= 3; ring++) {
-            const radius = (25 - (ring - 1) * 2.5) * scale;
+        // Draw white rings (1-4) with black lines
+        for (let ring = 1; ring <= 4; ring++) {
+            const ringData = RING_RADII.find(r => r.ring === ring);
             ctx.beginPath();
-            ctx.arc(0, 0, radius, 0, Math.PI * 2);
+            ctx.arc(0, 0, ringData.radius * scale, 0, Math.PI * 2);
             ctx.strokeStyle = '#000000';
             ctx.lineWidth = 0.8;
             ctx.stroke();
         }
         
-        // Black area (rings 4-10) - filled black circle
+        // Black area (rings 5-10)
+        const ring4Data = RING_RADII.find(r => r.ring === 4);
         ctx.beginPath();
-        ctx.arc(0, 0, 17.5 * scale, 0, Math.PI * 2); // Ring 4 outer edge
+        ctx.arc(0, 0, ring4Data.radius * scale, 0, Math.PI * 2);
         ctx.fillStyle = '#000000';
         ctx.fill();
         
-        // Draw white ring lines within black area (5-9)
+        // Draw white ring lines within black area (rings 5-9)
         for (let ring = 5; ring <= 9; ring++) {
-            const radius = RING_OUTER_RADII.find(r => r.ring === ring).outerRadius * scale;
+            const ringData = RING_RADII.find(r => r.ring === ring);
             ctx.beginPath();
-            ctx.arc(0, 0, radius, 0, Math.PI * 2);
+            ctx.arc(0, 0, ringData.radius * scale, 0, Math.PI * 2);
             ctx.strokeStyle = '#ffffff';
             ctx.lineWidth = 0.5;
             ctx.stroke();
         }
         
-        // Ring 10 outline (white)
+        // Center dot - small filled white dot (no outline)
         ctx.beginPath();
-        ctx.arc(0, 0, 2.5 * scale, 0, Math.PI * 2);
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
-        
-        // Inner 10 dot (white)
-        ctx.beginPath();
-        ctx.arc(0, 0, INNER_TEN_RADIUS * scale, 0, Math.PI * 2);
+        ctx.arc(0, 0, CENTER_DOT_RADIUS * scale, 0, Math.PI * 2);
         ctx.fillStyle = '#ffffff';
         ctx.fill();
         
-        // Ring numbers in white area (1, 2, 3)
-        ctx.font = `bold ${7 * scale / 10}px Arial`;
+        // Ring numbers - only show 1-8 (no numbers for rings 9 and 10 in the center)
+        // Numbers are placed BETWEEN ring lines:
+        // "1" is between ring 1 line (22.5mm) and ring 2 line (20mm)
+        // "2" is between ring 2 line (20mm) and ring 3 line (17.5mm)
+        // etc.
+        ctx.font = `bold ${6 * scale / 10}px Arial`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
+        
+        // Ring numbers on white area (1-3)
+        // Ring 4's number falls on the black area so it needs white text
         for (let ring = 1; ring <= 3; ring++) {
-            const radius = (25 - (ring - 0.5) * 2.5) * scale;
+            const currentRingData = RING_RADII.find(r => r.ring === ring);
+            const nextRingData = RING_RADII.find(r => r.ring === ring + 1);
+            const labelOuterRadius = currentRingData.radius;
+            const labelInnerRadius = nextRingData ? nextRingData.radius : 0;
+            const labelRadius = (labelOuterRadius + labelInnerRadius) / 2 * scale;
+            
             ctx.fillStyle = '#000000';
-            ctx.fillText(String(ring), radius, 0);
-            ctx.fillText(String(ring), -radius, 0);
-            ctx.fillText(String(ring), 0, radius);
-            ctx.fillText(String(ring), 0, -radius);
+            ctx.fillText(String(ring), labelRadius, 0);
+            ctx.fillText(String(ring), -labelRadius, 0);
+            ctx.fillText(String(ring), 0, labelRadius);
+            ctx.fillText(String(ring), 0, -labelRadius);
         }
         
-        // Ring numbers in black area (4-9) - white text
-        for (let ring = 4; ring <= 9; ring++) {
-            const radius = (25 - (ring - 0.5) * 2.5) * scale;
+        // Ring numbers on black area (4-8)
+        // Ring 4 is between 15mm and 12.5mm (midpoint 13.75mm) which is in the black area
+        for (let ring = 4; ring <= 8; ring++) {
+            const currentRingData = RING_RADII.find(r => r.ring === ring);
+            const nextRingData = RING_RADII.find(r => r.ring === ring + 1);
+            const labelOuterRadius = currentRingData.radius;
+            const labelInnerRadius = nextRingData ? nextRingData.radius : 0;
+            const labelRadius = (labelOuterRadius + labelInnerRadius) / 2 * scale;
+            
             ctx.fillStyle = '#ffffff';
-            ctx.fillText(String(ring), radius, 0);
-            ctx.fillText(String(ring), -radius, 0);
-            ctx.fillText(String(ring), 0, radius);
-            ctx.fillText(String(ring), 0, -radius);
+            ctx.fillText(String(ring), labelRadius, 0);
+            ctx.fillText(String(ring), -labelRadius, 0);
+            ctx.fillText(String(ring), 0, labelRadius);
+            ctx.fillText(String(ring), 0, -labelRadius);
         }
         
-        // Draw all shots
-        drawShots(shotsData.warmupShots, '#6c757d', currentGroup === 'warmup');
-        shotsData.groups.forEach((group, i) => {
-            const colors = ['#dc3545', '#0d6efd', '#198754', '#fd7e14', '#6f42c1'];
-            const color = colors[i % colors.length];
-            drawShots(group.shots, color, currentGroup === String(i));
-        });
+        // Draw shots based on view mode
+        if (showAllShots) {
+            // Show all shots from all groups
+            drawShots(shotsData.warmupShots, '#6c757d', currentGroup === 'warmup');
+            shotsData.groups.forEach((group, i) => {
+                const colors = ['#dc3545', '#0d6efd', '#198754', '#fd7e14', '#6f42c1'];
+                const color = colors[i % colors.length];
+                drawShots(group.shots, color, currentGroup === String(i));
+            });
+        } else {
+            // Show only current group shots
+            if (currentGroup === 'warmup') {
+                drawShots(shotsData.warmupShots, '#6c757d', true);
+            } else {
+                const groupIndex = parseInt(currentGroup);
+                if (shotsData.groups[groupIndex]) {
+                    const colors = ['#dc3545', '#0d6efd', '#198754', '#fd7e14', '#6f42c1'];
+                    const color = colors[groupIndex % colors.length];
+                    drawShots(shotsData.groups[groupIndex].shots, color, true);
+                }
+            }
+        }
         
         ctx.restore();
     }
@@ -454,7 +839,6 @@
                 ctx.stroke();
             }
             
-            // Shot number - always white with dark outline for visibility
             ctx.fillStyle = '#ffffff';
             ctx.strokeStyle = '#000000';
             ctx.lineWidth = 2;
@@ -468,61 +852,85 @@
 
     // Correct ISSF scoring: decimal score based on position within ring
     // Full center (0mm) = 10.9, edge of inner 10 = 10.9
-    // Score decreases by 0.1 for each 0.25mm from center within ring 10
-    // Then continues for other rings
+    //
+    // ISSF Decimal Scoring for 10m Air Rifle
+    // Score is determined by where the INNER EDGE of the pellet lands for determining WHICH ring
+    // But for ring 10 decimal (10.0-10.9), it's based on SHOT CENTER distance from target center
+    // 
+    // For rings 1-9: based on inner edge (inward gauging)
+    // For ring 10 (10.0 to 10.9): based on SHOT CENTER distance
+    //   - 10.9 = shot center at 0mm (dead center)
+    //   - 10.0 = shot center at 2.5mm from center (the ring 10/9 boundary)
     function calculateScore(x, y) {
         const dist = Math.sqrt(x * x + y * y);
-        // Inner edge of pellet determines score
-        const effectiveRadius = Math.max(0, dist - PELLET_RADIUS);
+        // Inner edge of pellet determines which ring (inward gauging)
+        const innerEdge = Math.max(0, dist - PELLET_RADIUS);
         
-        // Inner 10 (10.9)
-        if (effectiveRadius <= INNER_TEN_RADIUS) {
-            return 10.9;
+        // Check if it's a 10 (inner edge within ring 9's boundary at 2.5mm)
+        const ring9Radius = 0.25;
+        if (innerEdge <= ring9Radius) {
+            // Score 10.0 to 10.9 based on SHOT CENTER distance
+            // At shot center = 0mm: 10.9
+            // At shot center = 2.5mm: 10.0
+            // Linear interpolation
+            const maxCenterDistForTen = 2.5;  // 2.5mm
+            const positionRatio = Math.min(dist / maxCenterDistForTen, 1);  // 0 at center, 1 at 2.5mm
+            const decimalScore = 10.9 - (positionRatio * 0.9);
+            return Math.round(decimalScore * 10) / 10;
         }
         
-        // Ring 10: 0.25mm to 2.5mm
-        // Score ranges from 10.9 to 10.0 based on position
-        if (effectiveRadius <= 2.5) {
-            // Position within ring 10 (0.25 to 2.5mm range = 2.25mm span)
-            // 10.9 at inner edge, 10.0 at outer edge
-            const positionInRing = (effectiveRadius - INNER_TEN_RADIUS) / (2.5 - INNER_TEN_RADIUS);
-            const decimalScore = 10.9 - (positionInRing * 0.9);
-            return Math.round(decimalScore * 10) / 10; // Round to 1 decimal
-        }
-        
-        // Other rings: 9 down to 1
+        // Rings 9 down to 1
         for (let ring = 9; ring >= 1; ring--) {
-            const ringData = RING_OUTER_RADII.find(r => r.ring === ring);
-            const prevRingData = RING_OUTER_RADII.find(r => r.ring === ring + 1);
-            const innerRadius = prevRingData ? prevRingData.outerRadius : 2.5;
-            const outerRadius = ringData.outerRadius;
+            const ringData = RING_RADII.find(r => r.ring === ring);
+            const prevRingData = RING_RADII.find(r => r.ring === ring + 1);
+            const innerRadius = prevRingData ? prevRingData.radius : ring9Radius;
+            const outerRadius = ringData.radius;
             
-            if (effectiveRadius <= outerRadius) {
-                // Position within this ring
-                const positionInRing = (effectiveRadius - innerRadius) / (outerRadius - innerRadius);
+            if (innerEdge <= outerRadius) {
+                // Position within this ring (0 = inner edge, 1 = outer edge)
+                const positionInRing = (innerEdge - innerRadius) / (outerRadius - innerRadius);
+                // Score from X.9 at inner edge to X.0 at outer edge
                 const decimalScore = (ring + 0.9) - (positionInRing * 0.9);
                 return Math.round(decimalScore * 10) / 10;
             }
         }
         
-        // Outside all rings
+        // Outside ring 1 (miss)
         return 0;
     }
 
     function updateShotsList() {
-        const container = document.getElementById('shotsListContainer');
+        updateShotsListForContainer('shotsListContainer');
+        updateShotsListForContainer('shotsListContainerMobile');
+    }
+
+    function updateShotsListForContainer(containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        
         const shots = getCurrentShots();
         
         if (shots.length === 0) {
-            container.innerHTML = '<p class="text-muted text-center mb-0"><i class="bi bi-bullseye me-1"></i>No shots recorded. Click on the target to add shots.</p>';
+            container.innerHTML = '<p class="text-muted text-center mb-0 small"><i class="bi bi-bullseye me-1"></i>No shots. Tap target to add.</p>';
             return;
         }
         
-        let html = '<div class="table-responsive"><table class="table table-sm mb-0" style="background: #fff;">';
-        html += '<thead style="background-color: #495057; color: #ffffff;"><tr><th>#</th><th>Position (mm)</th><th>Score</th><th></th></tr></thead><tbody>';
+        let groupType = '10-shot-series';
+        if (currentGroup !== 'warmup') {
+            const groupIndex = parseInt(currentGroup);
+            groupType = shotsData.groups[groupIndex]?.valueType || '10-shot-series';
+        }
         
+        const showTotal = groupType === '10-shot-series' && currentGroup !== 'warmup';
+        const isMobile = containerId.includes('Mobile');
+        
+        let html = '<div class="table-responsive"><table class="table table-sm mb-0" style="background: #fff;">';
+        html += '<thead><tr><th>#</th><th>Pos</th><th>Score</th><th></th></tr></thead><tbody>';
+        
+        let totalScore = 0;
         shots.forEach((shot, i) => {
             const score = calculateScore(shot.x, shot.y);
+            totalScore += score;
             let scoreClass = '';
             if (score >= 10.5) scoreClass = 'text-success fw-bold';
             else if (score >= 10) scoreClass = 'text-success';
@@ -532,20 +940,26 @@
             
             html += `<tr>
                 <td><span class="badge bg-secondary">${i + 1}</span></td>
-                <td class="small font-monospace">(${shot.x.toFixed(1)}, ${shot.y.toFixed(1)})</td>
+                <td class="small font-monospace">${shot.x.toFixed(1)},${shot.y.toFixed(1)}</td>
                 <td class="${scoreClass} fw-bold">${score.toFixed(1)}</td>
                 <td>
-                    <button type="button" class="btn btn-sm btn-outline-danger py-0 px-1 remove-shot-btn" data-index="${i}" title="Remove shot">
+                    <button type="button" class="btn btn-sm btn-outline-danger py-0 px-1 remove-shot-btn" data-index="${i}" title="Remove">
                         <i class="bi bi-x"></i>
                     </button>
                 </td>
             </tr>`;
         });
         
+        if (showTotal && shots.length > 0) {
+            html += `<tr class="table-active">
+                <td colspan="2"><strong>Total</strong></td>
+                <td colspan="2"><strong>${totalScore.toFixed(1)}</strong></td>
+            </tr>`;
+        }
+        
         html += '</tbody></table></div>';
         container.innerHTML = html;
         
-        // Add click handlers for remove buttons
         container.querySelectorAll('.remove-shot-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const index = parseInt(this.dataset.index);
@@ -564,13 +978,18 @@
             totalScore += calculateScore(shot.x, shot.y);
         });
         
+        // Desktop stats
         document.getElementById('totalShots').textContent = shots.length;
         document.getElementById('totalScore').textContent = totalScore.toFixed(1);
         document.getElementById('avgScore').textContent = shots.length > 0 ? (totalScore / shots.length).toFixed(2) : '0.0';
         
+        // Mobile stats
+        document.getElementById('totalShotsMobile').textContent = shots.length;
+        document.getElementById('totalScoreMobile').textContent = totalScore.toFixed(1);
+        document.getElementById('avgScoreMobile').textContent = shots.length > 0 ? (totalScore / shots.length).toFixed(1) : '0.0';
+        
         // Group statistics
         if (shots.length >= 2) {
-            // Calculate group size (extreme spread)
             let maxDist = 0;
             for (let i = 0; i < shots.length; i++) {
                 for (let j = i + 1; j < shots.length; j++) {
@@ -581,11 +1000,9 @@
                     maxDist = Math.max(maxDist, dist);
                 }
             }
-            // Convert mm to MOA at 10m (1 MOA ? 2.9mm at 10m)
             const moa = (maxDist / 2.9).toFixed(2);
             document.getElementById('groupMOA').textContent = moa;
             
-            // Center offset
             const avgX = shots.reduce((sum, s) => sum + s.x, 0) / shots.length;
             const avgY = shots.reduce((sum, s) => sum + s.y, 0) / shots.length;
             const centerOffset = Math.sqrt(avgX * avgX + avgY * avgY).toFixed(1);
@@ -594,30 +1011,41 @@
             document.getElementById('groupMOA').textContent = '-';
             document.getElementById('groupCenter').textContent = '-';
         }
+        
+        updateSeriesSummary();
     }
 
     function renderGroupTabs() {
-        const container = document.getElementById('groupTabs');
-        let html = `<button class="nav-link ${currentGroup === 'warmup' ? 'active' : ''}" data-group="warmup" type="button" style="color: #212529; font-weight: 500;">
-            <i class="bi bi-thermometer-half me-1"></i>Warmup (${shotsData.warmupShots.length})
+        renderGroupTabsForContainer('groupTabs', false);
+        renderGroupTabsForContainer('groupTabsMobile', true);
+    }
+
+    function renderGroupTabsForContainer(containerId, isMobile) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        
+        let html = `<button class="nav-link ${currentGroup === 'warmup' ? 'active' : ''}" data-group="warmup" type="button">
+            <i class="bi bi-thermometer-half me-1" style="color: inherit;"></i>${isMobile ? '<span class="d-none d-sm-inline">Warmup</span><span class="d-sm-none">W</span>' : 'Warmup'} (${shotsData.warmupShots.length})
         </button>`;
         
         shotsData.groups.forEach((group, i) => {
-            html += `<button class="nav-link ${currentGroup === String(i) ? 'active' : ''}" data-group="${i}" type="button" style="color: #212529; font-weight: 500;">
-                <i class="bi bi-${i + 1}-circle me-1"></i>G${i + 1} (${group.shots.length})
+            const typeIcon = group.valueType === 'blind' ? 'eye-slash' : 
+                            group.valueType === 'practice' ? 'flag' : 'bullseye';
+            const label = isMobile ? `S${i + 1}` : `S${i + 1}`;
+            html += `<button class="nav-link ${currentGroup === String(i) ? 'active' : ''}" data-group="${i}" type="button">
+                <i class="bi bi-${typeIcon} me-1" style="color: inherit;"></i>${label} (${group.shots.length})
             </button>`;
         });
         
         container.innerHTML = html;
         
-        // Add click handlers
         container.querySelectorAll('.nav-link').forEach(btn => {
             btn.addEventListener('click', function() {
-                container.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
+                // Update both containers
+                document.querySelectorAll('#groupTabs .nav-link, #groupTabsMobile .nav-link').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll(`[data-group="${this.dataset.group}"]`).forEach(b => b.classList.add('active'));
                 currentGroup = this.dataset.group;
                 
-                // Show group type selector for non-warmup groups
                 const typeSelector = document.getElementById('groupTypeSelector');
                 if (currentGroup !== 'warmup') {
                     typeSelector.style.display = 'block';
@@ -632,17 +1060,62 @@
                 updateStatistics();
             });
         });
+        
+        updateSeriesSummary();
     }
 
-    // Add group button
-    document.getElementById('addGroupBtn').addEventListener('click', function() {
+    // Add group button handlers
+    document.querySelectorAll('.add-group-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            addGroup(this.dataset.type);
+        });
+    });
+
+    // Add preset button handlers
+    document.querySelectorAll('.add-preset-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            addPreset(this.dataset.preset);
+        });
+    });
+
+    function addGroup(type) {
         const newGroup = {
             groupId: shotsData.groups.length + 1,
-            valueType: '10-shot-series',
+            valueType: type,
             shots: []
         };
         shotsData.groups.push(newGroup);
         currentGroup = String(shotsData.groups.length - 1);
+        renderGroupTabs();
+        document.getElementById('groupTypeSelector').style.display = 'block';
+        document.getElementById('groupType').value = type;
+        drawTarget();
+        updateShotsList();
+        updateStatistics();
+        autoSave();
+    }
+
+    function addPreset(preset) {
+        const seriesCount = preset === 'ar40' ? 4 : 6;
+        const presetName = preset === 'ar40' ? '40-Shot Air Rifle' : '60-Shot Air Rifle';
+        
+        if (shotsData.groups.length > 0) {
+            if (!confirm(`Add ${seriesCount} series for ${presetName}?`)) {
+                return;
+            }
+        }
+        
+        for (let i = 0; i < seriesCount; i++) {
+            shotsData.groups.push({
+                groupId: shotsData.groups.length + 1,
+                valueType: '10-shot-series',
+                shots: []
+            });
+        }
+        
+        currentGroup = String(shotsData.groups.length - seriesCount);
         renderGroupTabs();
         document.getElementById('groupTypeSelector').style.display = 'block';
         document.getElementById('groupType').value = '10-shot-series';
@@ -650,19 +1123,59 @@
         updateShotsList();
         updateStatistics();
         autoSave();
-    });
+    }
 
-    // Group type change
-    document.getElementById('groupType').addEventListener('change', function() {
-        if (currentGroup !== 'warmup') {
-            const groupIndex = parseInt(currentGroup);
-            shotsData.groups[groupIndex].valueType = this.value;
-            autoSave();
+    function updateSeriesSummary() {
+        // Desktop
+        const panel = document.getElementById('seriesSummaryPanel');
+        const tbody = document.getElementById('seriesSummaryBody');
+        const totalEl = document.getElementById('seriesTotalScore');
+        
+        // Mobile
+        const panelMobile = document.getElementById('seriesSummaryPanelMobile');
+        const tbodyMobile = document.getElementById('seriesTotalScoreMobile');
+        const totalElMobile = document.getElementById('seriesTotalScoreMobile');
+        
+        const seriesGroups = shotsData.groups.filter(g => g.valueType === '10-shot-series');
+        
+        if (seriesGroups.length === 0) {
+            panel.style.display = 'none';
+            panelMobile.style.display = 'none';
+            return;
         }
-    });
+        
+        panel.style.display = 'block';
+        panelMobile.style.display = 'block';
+        
+        let html = '';
+        let grandTotal = 0;
+        
+        shotsData.groups.forEach((group, i) => {
+            if (group.valueType !== '10-shot-series') return;
+            
+            let seriesScore = 0;
+            group.shots.forEach(shot => {
+                seriesScore += calculateScore(shot.x, shot.y);
+            });
+            grandTotal += seriesScore;
+            
+            const shotCount = group.shots.length;
+            const statusClass = shotCount === 10 ? 'text-success' : (shotCount > 0 ? 'text-warning' : 'text-muted');
+            
+            html += `<tr class="${currentGroup === String(i) ? 'table-primary' : ''}">
+                <td><i class="bi bi-bullseye me-1 ${statusClass}"></i>S${i + 1} <small class="text-muted">(${shotCount}/10)</small></td>
+                <td class="text-end fw-bold">${seriesScore.toFixed(1)}</td>
+            </tr>`;
+        });
+        
+        tbody.innerHTML = html;
+        tbodyMobile.innerHTML = html;
+        totalEl.textContent = grandTotal.toFixed(1);
+        totalElMobile.textContent = grandTotal.toFixed(1);
+    }
 
-    // Undo button
-    document.getElementById('undoBtn').addEventListener('click', function() {
+    // Undo handlers (desktop and mobile)
+    function handleUndo() {
         if (shotHistory.length > 0) {
             const last = shotHistory.pop();
             if (last.group === 'warmup') {
@@ -675,15 +1188,24 @@
             updateShotsList();
             updateStatistics();
             autoSave();
+            
             if (shotHistory.length === 0) {
-                this.disabled = true;
+                document.getElementById('undoBtn').disabled = true;
+                document.getElementById('undoBtnMobile').disabled = true;
+            }
+            
+            if (navigator.vibrate) {
+                navigator.vibrate(15);
             }
         }
-    });
+    }
 
-    // Clear group button
-    document.getElementById('clearGroupBtn').addEventListener('click', function() {
-        if (confirm('Clear all shots in the current group?')) {
+    document.getElementById('undoBtn').addEventListener('click', handleUndo);
+    document.getElementById('undoBtnMobile').addEventListener('click', handleUndo);
+
+    // Clear group handlers (desktop and mobile)
+    function handleClearGroup() {
+        if (confirm('Clear all shots in current group?')) {
             if (currentGroup === 'warmup') {
                 shotsData.warmupShots = [];
             } else {
@@ -697,6 +1219,69 @@
             updateStatistics();
             autoSave();
         }
+    }
+
+    document.getElementById('clearGroupBtn').addEventListener('click', handleClearGroup);
+    document.getElementById('clearGroupBtnMobile').addEventListener('click', handleClearGroup);
+
+    // Remove group handler
+    function handleRemoveGroup() {
+        if (currentGroup === 'warmup') {
+            alert('Cannot remove the Warmup group. You can clear it instead.');
+            return;
+        }
+        
+        const groupIndex = parseInt(currentGroup);
+        const shotCount = shotsData.groups[groupIndex]?.shots?.length || 0;
+        
+        let message = `Remove Series ${groupIndex + 1}?`;
+        if (shotCount > 0) {
+            message += ` This will delete ${shotCount} shot(s).`;
+        }
+        
+        if (confirm(message)) {
+            // Remove the group
+            shotsData.groups.splice(groupIndex, 1);
+            
+            // Update shot history to remove references to this group and adjust indices
+            shotHistory = shotHistory.filter(h => h.group !== groupIndex);
+            shotHistory = shotHistory.map(h => {
+                if (typeof h.group === 'number' && h.group > groupIndex) {
+                    h.group--;
+                }
+                return h;
+            });
+            
+            // Switch to warmup or previous group
+            if (shotsData.groups.length === 0) {
+                currentGroup = 'warmup';
+            } else if (groupIndex >= shotsData.groups.length) {
+                currentGroup = String(shotsData.groups.length - 1);
+            } else {
+                currentGroup = String(groupIndex);
+            }
+            
+            document.getElementById('groupTypeSelector').style.display = currentGroup !== 'warmup' ? 'block' : 'none';
+            
+            drawTarget();
+            renderGroupTabs();
+            updateShotsList();
+            updateStatistics();
+            autoSave();
+            
+            if (navigator.vibrate) {
+                navigator.vibrate([30, 50, 30]);
+            }
+        }
+    }
+
+    // Remove group button handlers
+    document.getElementById('removeGroupBtn')?.addEventListener('click', handleRemoveGroup);
+    document.querySelectorAll('.remove-group-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            handleRemoveGroup();
+        });
     });
 
     // Zoom controls
@@ -712,6 +1297,21 @@
 
     document.getElementById('resetZoom').addEventListener('click', function() {
         zoom = 1;
+        drawTarget();
+    });
+
+    // View toggle controls
+    document.getElementById('viewCurrentBtn').addEventListener('click', function() {
+        showAllShots = false;
+        this.classList.add('active');
+        document.getElementById('viewAllBtn').classList.remove('active');
+        drawTarget();
+    });
+
+    document.getElementById('viewAllBtn').addEventListener('click', function() {
+        showAllShots = true;
+        this.classList.add('active');
+        document.getElementById('viewCurrentBtn').classList.remove('active');
         drawTarget();
     });
 
@@ -744,6 +1344,33 @@
             });
         }, 1000);
     }
+
+    // Group type change
+    document.getElementById('groupType').addEventListener('change', function() {
+        if (currentGroup !== 'warmup') {
+            const groupIndex = parseInt(currentGroup);
+            shotsData.groups[groupIndex].valueType = this.value;
+            renderGroupTabs();
+            updateShotsList();
+            updateSeriesSummary();
+            autoSave();
+        }
+    });
+
+    // View toggle buttons
+    document.getElementById('viewCurrentBtn').addEventListener('click', function() {
+        showAllShots = false;
+        this.classList.add('active');
+        document.getElementById('viewAllBtn').classList.remove('active');
+        drawTarget();
+    });
+
+    document.getElementById('viewAllBtn').addEventListener('click', function() {
+        showAllShots = true;
+        this.classList.add('active');
+        document.getElementById('viewCurrentBtn').classList.remove('active');
+        drawTarget();
+    });
 })();
 </script>
 }

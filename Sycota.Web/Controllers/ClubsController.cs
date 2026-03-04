@@ -6,6 +6,7 @@ using Sycota.Application.Interfaces.Options;
 using Sycota.Domain.Entities;
 using Sycota.Domain.Enums;
 using Sycota.Web.Models.ViewModels;
+using System.Text.Json;
 
 namespace Sycota.Web.Controllers;
 
@@ -17,6 +18,13 @@ public class ClubsController : Controller
     private readonly IClubService _clubService;
     private readonly ITrainingSessionRepository _trainingSessionRepository;
     private readonly UserManager<ApplicationUser> _userManager;
+
+    // Constants for ISSF 10m Air Rifle scoring
+    private const double PELLET_RADIUS = 2.25;   // 4.5mm pellet diameter / 2
+    private const double RING_10_BOUNDARY = 0.25; // Inner edge boundary for a 10 score
+
+    // Ring outer radii for rings 9 down to 1
+    private static readonly double[] RingRadii = { 2.5, 5.0, 7.5, 10.0, 12.5, 15.0, 17.5, 20.0, 22.5 };
 
     public ClubsController(
         IClubRepository clubRepository,
@@ -587,10 +595,191 @@ public class ClubsController : Controller
         {
             Trainee = trainee,
             TrainingSessions = traineeTrainingSessions,
-            ShooterProfile = trainee.ShooterProfile
+            ShooterProfile = trainee.ShooterProfile,
+            TrainerMembership = membership
         };
 
         return View(viewModel);
+    }
+
+    // GET: /Clubs/TraineePerformanceDashboard/5?traineeId=10
+    public async Task<IActionResult> TraineePerformanceDashboard(int id, int traineeId, int days = 30)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id, ClubMemberIncludeOptions.All);
+        if (membership == null || !membership.CanTrain)
+        {
+            TempData["Error"] = "You must be a trainer to view trainee performance.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        var traineeResult = await _clubService.GetClubMemberAsync(traineeId, ClubMemberIncludeOptions.All);
+        if (!traineeResult.Success)
+        {
+            TempData["Error"] = traineeResult.Error;
+            return RedirectToAction(nameof(Trainees), new { id });
+        }
+
+        var trainee = traineeResult.Data;
+        if (trainee.TrainerId != membership.Id)
+        {
+            TempData["Error"] = "This competitor is not assigned to you.";
+            return RedirectToAction(nameof(Trainees), new { id });
+        }
+
+        var allSessions = await _trainingSessionRepository.GetAllTrainingSessionsByClubIdAsync(id, TrainingSessionIncludeOptions.All);
+        var cutoffDate = DateTime.UtcNow.AddDays(-days);
+        var traineeSessions = allSessions
+            .Where(ts => ts.CreatedById == trainee.UserId && ts.SessionDate >= cutoffDate)
+            .OrderBy(ts => ts.SessionDate)
+            .ToList();
+
+        var statistics = CalculatePerformanceStatistics(traineeSessions);
+        var chartData = GenerateChartData(traineeSessions, statistics);
+        var heatMapData = GenerateHeatMapData(traineeSessions);
+
+        var viewModel = new TraineePerformanceDashboardViewModel
+        {
+            TrainerMembership = membership,
+            Trainee = trainee,
+            TrainingSessions = traineeSessions,
+            Statistics = statistics,
+            ChartDataJson = JsonSerializer.Serialize(chartData),
+            HeatMapDataJson = JsonSerializer.Serialize(heatMapData),
+            SelectedDays = days
+        };
+
+        return View(viewModel);
+    }
+
+    // GET: /Clubs/TraineeSessionDetails/5?traineeId=10&sessionId=20
+    public async Task<IActionResult> TraineeSessionDetails(int id, int traineeId, int sessionId)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id, ClubMemberIncludeOptions.All);
+        if (membership == null || !membership.CanTrain)
+        {
+            TempData["Error"] = "You must be a trainer to view trainee sessions.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        var traineeResult = await _clubService.GetClubMemberAsync(traineeId, ClubMemberIncludeOptions.All);
+        if (!traineeResult.Success)
+        {
+            TempData["Error"] = traineeResult.Error;
+            return RedirectToAction(nameof(Trainees), new { id });
+        }
+
+        var trainee = traineeResult.Data;
+        if (trainee.TrainerId != membership.Id)
+        {
+            TempData["Error"] = "This competitor is not assigned to you.";
+            return RedirectToAction(nameof(Trainees), new { id });
+        }
+
+        var session = await _trainingSessionRepository.GetTrainingSessionByIdAsync(sessionId, TrainingSessionIncludeOptions.All);
+        if (session == null || session.CreatedById != trainee.UserId)
+        {
+            TempData["Error"] = "Session not found or does not belong to this trainee.";
+            return RedirectToAction(nameof(TraineeDetails), new { id, traineeId });
+        }
+
+        var viewModel = new TraineeSessionDetailsViewModel
+        {
+            Session = session,
+            TrainerMembership = membership,
+            Trainee = trainee
+        };
+
+        return View(viewModel);
+    }
+
+    // GET: /Clubs/Edit/5
+    public async Task<IActionResult> Edit(int id)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id);
+        if (membership == null || membership.Role != ClubRole.Admin)
+        {
+            TempData["Error"] = "Only admins can edit club details.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        var club = await _clubRepository.GetClubByIdAsync(id);
+        if (club == null)
+        {
+            return NotFound();
+        }
+
+        var viewModel = new EditClubViewModel
+        {
+            Id = club.Id,
+            Name = club.Name,
+            Description = club.Description,
+            Address = club.Address,
+            ContactEmail = club.ContactEmail,
+            ContactPhone = club.ContactPhone,
+            RequiresApproval = club.RequiresApproval
+        };
+
+        return View(viewModel);
+    }
+
+    // POST: /Clubs/Edit/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(EditClubViewModel model)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, model.Id);
+        if (membership == null || membership.Role != ClubRole.Admin)
+        {
+            TempData["Error"] = "Only admins can edit club details.";
+            return RedirectToAction(nameof(Details), new { id = model.Id });
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        var club = await _clubRepository.GetClubByIdAsync(model.Id);
+        if (club == null)
+        {
+            return NotFound();
+        }
+
+        club.Name = model.Name;
+        club.Description = model.Description;
+        club.Address = model.Address;
+        club.ContactEmail = model.ContactEmail;
+        club.ContactPhone = model.ContactPhone;
+        club.RequiresApproval = model.RequiresApproval;
+
+        await _clubRepository.UpdateClubAsync(club);
+
+        TempData["Success"] = "Club details updated successfully.";
+        return RedirectToAction(nameof(Details), new { id = model.Id });
     }
 
     // POST: /Clubs/Leave/5
@@ -834,5 +1023,285 @@ public class ClubsController : Controller
         }
 
         return RedirectToAction(nameof(ManageMembers), new { id });
+    }
+
+    // GET: /Clubs/PerformanceDashboard/5
+    public async Task<IActionResult> PerformanceDashboard(int id, int days = 30)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id, ClubMemberIncludeOptions.All);
+        if (membership == null)
+        {
+            TempData["Error"] = "You are not a member of this club.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        var allSessions = await _trainingSessionRepository.GetAllTrainingSessionsByClubIdAsync(id, TrainingSessionIncludeOptions.All);
+        var cutoffDate = DateTime.UtcNow.AddDays(-days);
+        var myTrainingSessions = allSessions
+            .Where(ts => ts.CreatedById == userId && ts.SessionDate >= cutoffDate)
+            .OrderBy(ts => ts.SessionDate)
+            .ToList();
+
+        var statistics = CalculatePerformanceStatistics(myTrainingSessions);
+        var chartData = GenerateChartData(myTrainingSessions, statistics);
+        var heatMapData = GenerateHeatMapData(myTrainingSessions);
+
+        var viewModel = new PerformanceDashboardViewModel
+        {
+            CurrentMembership = membership,
+            TrainingSessions = myTrainingSessions,
+            Statistics = statistics,
+            ChartDataJson = JsonSerializer.Serialize(chartData),
+            HeatMapDataJson = JsonSerializer.Serialize(heatMapData),
+            SelectedDays = days
+        };
+
+        return View(viewModel);
+    }
+
+    private PerformanceStatistics CalculatePerformanceStatistics(List<TrainingSession> sessions)
+    {
+        var statistics = new PerformanceStatistics
+        {
+            TotalSessions = sessions.Count
+        };
+
+        if (!sessions.Any())
+        {
+            return statistics;
+        }
+
+        var allSeriesPerformance = new List<SeriesPerformance>();
+        var dailyStats = new Dictionary<DateTime, (double totalScore, int totalShots, int sessionCount)>();
+
+        foreach (var session in sessions)
+        {
+            var shotsData = ParseShotsData(session.Shots);
+            if (shotsData == null) continue;
+
+            var sessionDate = session.SessionDate.Date;
+
+            // Process each group/series
+            for (int i = 0; i < shotsData.Groups.Count; i++)
+            {
+                var group = shotsData.Groups[i];
+                if (group.ValueType != "10-shot-series" || !group.Shots.Any()) continue;
+
+                double seriesScore = 0;
+                int tens = 0;
+                int innerTens = 0;
+
+                foreach (var shot in group.Shots)
+                {
+                    var score = CalculateShotScore(shot.X, shot.Y);
+                    seriesScore += score;
+                    statistics.TotalShots++;
+
+                    if (score >= 10.0)
+                    {
+                        tens++;
+                        if (score >= 10.5)
+                        {
+                            innerTens++;
+                        }
+                    }
+                }
+
+                statistics.TotalTens += tens;
+                statistics.TotalInnerTens += innerTens;
+
+                var seriesPerf = new SeriesPerformance
+                {
+                    Date = session.SessionDate,
+                    SessionName = session.Name,
+                    SeriesNumber = i + 1,
+                    Score = seriesScore,
+                    ShotCount = group.Shots.Count,
+                    AveragePerShot = group.Shots.Count > 0 ? seriesScore / group.Shots.Count : 0,
+                    Tens = tens,
+                    InnerTens = innerTens
+                };
+
+                allSeriesPerformance.Add(seriesPerf);
+
+                // Aggregate daily stats
+                if (!dailyStats.ContainsKey(sessionDate))
+                {
+                    dailyStats[sessionDate] = (0, 0, 0);
+                }
+                var current = dailyStats[sessionDate];
+                dailyStats[sessionDate] = (current.totalScore + seriesScore, current.totalShots + group.Shots.Count, current.sessionCount + 1);
+            }
+
+            // Calculate group size from all shots in the session
+            var allShots = shotsData.Groups
+                .Where(g => g.ValueType == "10-shot-series")
+                .SelectMany(g => g.Shots)
+                .ToList();
+
+            if (allShots.Count >= 2)
+            {
+                double maxDist = 0;
+                for (int i = 0; i < allShots.Count; i++)
+                {
+                    for (int j = i + 1; j < allShots.Count; j++)
+                    {
+                        var dist = Math.Sqrt(Math.Pow(allShots[i].X - allShots[j].X, 2) + Math.Pow(allShots[i].Y - allShots[j].Y, 2));
+                        maxDist = Math.Max(maxDist, dist);
+                    }
+                }
+                statistics.AverageGroupSize = (statistics.AverageGroupSize * (statistics.TotalSessions - 1) + maxDist) / statistics.TotalSessions;
+            }
+        }
+
+        // Calculate overall statistics
+        if (allSeriesPerformance.Any())
+        {
+            statistics.AverageScore = allSeriesPerformance.Average(s => s.AveragePerShot);
+            statistics.BestSeriesScore = allSeriesPerformance.Max(s => s.Score);
+            statistics.WorstSeriesScore = allSeriesPerformance.Min(s => s.Score);
+            statistics.RecentSeries = allSeriesPerformance.OrderByDescending(s => s.Date).Take(20).ToList();
+
+            // Calculate improvement (compare first half vs second half)
+            var orderedSeries = allSeriesPerformance.OrderBy(s => s.Date).ToList();
+            if (orderedSeries.Count >= 4)
+            {
+                var halfPoint = orderedSeries.Count / 2;
+                var firstHalfAvg = orderedSeries.Take(halfPoint).Average(s => s.AveragePerShot);
+                var secondHalfAvg = orderedSeries.Skip(halfPoint).Average(s => s.AveragePerShot);
+                statistics.ImprovementPercent = ((secondHalfAvg - firstHalfAvg) / firstHalfAvg) * 100;
+            }
+
+            // Calculate consistency (standard deviation)
+            var avgScore = allSeriesPerformance.Average(s => s.AveragePerShot);
+            var variance = allSeriesPerformance.Sum(s => Math.Pow(s.AveragePerShot - avgScore, 2)) / allSeriesPerformance.Count;
+            var stdDev = Math.Sqrt(variance);
+            // Consistency score: 100 = perfect consistency, lower = more variation
+            statistics.ConsistencyScore = Math.Max(0, 100 - (stdDev * 20));
+        }
+
+        // Daily performance
+        statistics.DailyPerformance = dailyStats
+            .Select(kvp => new DailyPerformance
+            {
+                Date = kvp.Key,
+                AverageScore = kvp.Value.totalShots > 0 ? kvp.Value.totalScore / kvp.Value.totalShots : 0,
+                SessionCount = kvp.Value.sessionCount,
+                TotalShots = kvp.Value.totalShots
+            })
+            .OrderBy(d => d.Date)
+            .ToList();
+
+        return statistics;
+    }
+
+    private object GenerateChartData(List<TrainingSession> sessions, PerformanceStatistics statistics)
+    {
+        var labels = statistics.DailyPerformance.Select(d => d.Date.ToString("MMM dd")).ToList();
+        var scores = statistics.DailyPerformance.Select(d => Math.Round(d.AverageScore, 2)).ToList();
+        var shotCounts = statistics.DailyPerformance.Select(d => d.TotalShots).ToList();
+
+        // Series progression
+        var seriesLabels = statistics.RecentSeries.Select(s => $"{s.Date:MMM dd} S{s.SeriesNumber}").ToList();
+        var seriesScores = statistics.RecentSeries.Select(s => Math.Round(s.Score, 1)).ToList();
+
+        return new
+        {
+            dailyLabels = labels,
+            dailyScores = scores,
+            dailyShotCounts = shotCounts,
+            seriesLabels = seriesLabels,
+            seriesScores = seriesScores,
+            tensProgression = statistics.RecentSeries.Select(s => s.Tens).ToList(),
+            innerTensProgression = statistics.RecentSeries.Select(s => s.InnerTens).ToList()
+        };
+    }
+
+    private object GenerateHeatMapData(List<TrainingSession> sessions)
+    {
+        var allShots = new List<object>();
+
+        foreach (var session in sessions)
+        {
+            var shotsData = ParseShotsData(session.Shots);
+            if (shotsData == null) continue;
+
+            foreach (var group in shotsData.Groups.Where(g => g.ValueType == "10-shot-series"))
+            {
+                foreach (var shot in group.Shots)
+                {
+                    allShots.Add(new { x = shot.X, y = shot.Y });
+                }
+            }
+        }
+
+        return new { shots = allShots };
+    }
+
+    private ShotsData? ParseShotsData(string? shotsJson)
+    {
+        if (string.IsNullOrEmpty(shotsJson))
+        {
+            return null;
+        }
+
+        try
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            return JsonSerializer.Deserialize<ShotsData>(shotsJson, options);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private double CalculateShotScore(double x, double y)
+    {
+        var dist = Math.Sqrt(x * x + y * y);
+        // Inner edge of pellet determines score (inward gauging)
+        var innerEdge = Math.Max(0, dist - PELLET_RADIUS);
+
+        // Ring 10 - inner edge must be within RING_10_BOUNDARY (0.25mm)
+        // Score 10.0 to 10.9 based on shot CENTER distance
+        if (innerEdge <= RING_10_BOUNDARY)
+        {
+            // At shot center = 0mm: 10.9
+            // At shot center = 2.5mm: 10.0
+            // Linear interpolation
+            var maxCenterDistForTen = 2.5;
+            var positionRatio = Math.Min(dist / maxCenterDistForTen, 1.0);
+            var decimalScore = 10.9 - (positionRatio * 0.9);
+            return Math.Round(decimalScore, 1);
+        }
+
+        // Rings 9 down to 1
+        double innerRadius = RING_10_BOUNDARY;
+
+        for (int ring = 9; ring >= 1; ring--)
+        {
+            var outerRadius = RingRadii[9 - ring];
+
+            if (innerEdge <= outerRadius)
+            {
+                var positionInRing = (innerEdge - innerRadius) / (outerRadius - innerRadius);
+                var decimalScore = (ring + 0.9) - (positionInRing * 0.9);
+                return Math.Round(decimalScore, 1);
+            }
+
+            innerRadius = outerRadius;
+        }
+
+        // Outside ring 1 (miss)
+        return 0;
     }
 }

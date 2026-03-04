@@ -1,14 +1,18 @@
-@model Sycota.Web.Models.ViewModels.TrainingSessionDetailsViewModel
+@model Sycota.Web.Models.ViewModels.TraineeSessionDetailsViewModel
 @{
     ViewData["Title"] = Model.Session.Name;
+    var traineeName = !string.IsNullOrEmpty(Model.Trainee.User?.FirstName) 
+        ? $"{Model.Trainee.User.FirstName} {Model.Trainee.User.LastName}" 
+        : Model.Trainee.User?.UserName;
 }
 
 <div class="container">
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="Index">???????</a></li>
-            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="Details" asp-route-id="@Model.Session.ClubId">????</a></li>
-            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="MyResults" asp-route-id="@Model.Session.ClubId">????? ?????????</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="Index">Clubs</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="Details" asp-route-id="@Model.Trainee.ClubId">@Model.Trainee.Club?.Name</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="Trainees" asp-route-id="@Model.Trainee.ClubId">Trainees</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="TraineeDetails" asp-route-id="@Model.Trainee.ClubId" asp-route-traineeId="@Model.Trainee.Id">@traineeName</a></li>
             <li class="breadcrumb-item active" aria-current="page">@Model.Session.Name</li>
         </ol>
     </nav>
@@ -23,6 +27,11 @@
                     <span class="badge bg-secondary">@Model.Session.WeaponType</span>
                 </div>
                 <div class="card-body">
+                    <div class="alert alert-info mb-3">
+                        <i class="bi bi-person me-1"></i>
+                        <strong>Trainee:</strong> @traineeName
+                    </div>
+
                     @if (!string.IsNullOrEmpty(Model.Session.Description))
                     {
                         <p class="lead">@Model.Session.Description</p>
@@ -30,16 +39,16 @@
                     
                     <div class="row mb-4">
                         <div class="col-md-4">
-                            <small class="text-muted d-block">????</small>
-                            <strong><i class="bi bi-calendar me-1"></i>@Model.Session.SessionDate.ToString("dd.MM.yyyy")</strong>
+                            <small class="text-muted d-block">Date</small>
+                            <strong><i class="bi bi-calendar me-1"></i>@Model.Session.SessionDate.ToString("MMMM dd, yyyy")</strong>
                         </div>
                         <div class="col-md-4">
-                            <small class="text-muted d-block">???</small>
+                            <small class="text-muted d-block">Time</small>
                             <strong><i class="bi bi-clock me-1"></i>@Model.Session.SessionDate.ToString("HH:mm")</strong>
                         </div>
                         <div class="col-md-4">
-                            <small class="text-muted d-block">???????</small>
-                            <strong><i class="bi bi-person me-1"></i>@Model.Session.CreatedBy?.UserName</strong>
+                            <small class="text-muted d-block">Shooter</small>
+                            <strong><i class="bi bi-person me-1"></i>@traineeName</strong>
                         </div>
                     </div>
 
@@ -47,7 +56,7 @@
                     {
                         <div class="alert alert-light">
                             <i class="bi bi-journal-text me-1"></i>
-                            <strong>???????:</strong> @Model.Session.Notes
+                            <strong>Notes:</strong> @Model.Session.Notes
                         </div>
                     }
                 </div>
@@ -56,7 +65,7 @@
             <!-- Target Visualization -->
             <div class="card shadow-sm mb-4">
                 <div class="card-header">
-                    <i class="bi bi-crosshair me-2"></i>???????????? ?? ??????????
+                    <i class="bi bi-crosshair me-2"></i>Shot Placement
                 </div>
                 <div class="card-body text-center" style="background-color: #e8e8e8;">
                     <canvas id="targetCanvas" width="400" height="400" style="border-radius: 8px;"></canvas>
@@ -66,7 +75,7 @@
             <!-- Shot Groups -->
             <div class="card shadow-sm mb-4">
                 <div class="card-header">
-                    <i class="bi bi-list-ol me-2"></i>??????? ?? ??????????
+                    <i class="bi bi-list-ol me-2"></i>Shot Details
                 </div>
                 <div class="card-body" id="shotDetails">
                     <!-- Will be populated by JavaScript -->
@@ -76,42 +85,37 @@
             <!-- AI Analysis & Chat -->
             <div class="card shadow-sm mb-5" id="aiAnalysisCard">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-robot me-2"></i>AI ???????</span>
-                    <div>
-                        <button type="button" class="btn btn-sm btn-outline-secondary me-1" id="clearChatBtn" style="display: none;" title="??????? ?????????">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                        <button type="button" class="btn btn-sm btn-outline-primary" id="analyzeBtn">
-                            <i class="bi bi-lightning-charge me-1"></i>?????????? ???????
-                        </button>
-                    </div>
+                    <span><i class="bi bi-robot me-2"></i>AI Coach</span>
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="analyzeBtn">
+                        <i class="bi bi-lightning-charge me-1"></i>Analyze Session
+                    </button>
                 </div>
                 <div class="card-body">
                     <!-- Loading indicator for initial load -->
                     <div id="chatLoading" class="text-center py-3">
                         <div class="spinner-border spinner-border-sm text-secondary" role="status">
-                            <span class="visually-hidden">?????????...</span>
+                            <span class="visually-hidden">Loading...</span>
                         </div>
-                        <small class="text-muted ms-2">????????? ?? ??????? ?? ????...</small>
+                        <small class="text-muted ms-2">Loading chat history...</small>
                     </div>
                     
                     <!-- Chat Messages -->
                     <div id="chatMessages" class="mb-3" style="max-height: 400px; overflow-y: auto; display: none;">
                         <div class="text-center text-muted py-4" id="chatPlaceholder">
                             <i class="bi bi-chat-dots display-4"></i>
-                            <p class="mt-2">???????? "?????????? ???????" ?? AI-???????? ????????? ?? ?????? ??????????? ? ?????????, ??? ??????? ?????? ??-????.</p>
+                            <p class="mt-2">Click "Analyze Session" to get AI-powered insights about @traineeName's shooting performance, or ask a question below.</p>
                         </div>
                     </div>
                     
                     <!-- Chat Input -->
                     <div class="input-group">
-                        <input type="text" class="form-control" id="chatInput" placeholder="??????? ?????? ?? AI ????????..." maxlength="500">
+                        <input type="text" class="form-control" id="chatInput" placeholder="Ask the AI coach a question..." maxlength="500">
                         <button class="btn btn-primary" type="button" id="sendBtn" disabled>
                             <i class="bi bi-send"></i>
                         </button>
                     </div>
                     <small class="text-muted mt-1 d-block">
-                        <i class="bi bi-info-circle me-1"></i>??????? ?? ???????, ?????? ??? ???????? ?????? ?? ??????????. ????????? ?? ???? ?? ???????.
+                        <i class="bi bi-info-circle me-1"></i>Ask about technique, patterns, or get training advice for your trainee. Chat history is saved.
                     </small>
                 </div>
             </div>
@@ -121,28 +125,28 @@
             <!-- Statistics Card -->
             <div class="card shadow-sm mb-4">
                 <div class="card-header">
-                    <i class="bi bi-graph-up me-2"></i>??????????
+                    <i class="bi bi-graph-up me-2"></i>Statistics
                 </div>
                 <div class="card-body">
                     <div class="row text-center mb-3">
                         <div class="col-6">
                             <div class="fs-3 fw-bold text-primary" id="totalShots">0</div>
-                            <small class="text-muted">???? ????????</small>
+                            <small class="text-muted">Total Shots</small>
                         </div>
                         <div class="col-6">
                             <div class="fs-3 fw-bold text-success" id="totalScore">0.0</div>
-                            <small class="text-muted">??? ????????</small>
+                            <small class="text-muted">Total Score</small>
                         </div>
                     </div>
                     <hr />
                     <div class="row text-center">
                         <div class="col-6">
                             <div class="fs-5 fw-bold" id="avgScore">0.0</div>
-                            <small class="text-muted">??????</small>
+                            <small class="text-muted">Average</small>
                         </div>
                         <div class="col-6">
                             <div class="fs-5 fw-bold" id="tenCount">0</div>
-                            <small class="text-muted">10-?? / 10.9</small>
+                            <small class="text-muted">10s / 10.9s</small>
                         </div>
                     </div>
                 </div>
@@ -151,30 +155,20 @@
             <!-- Actions Card -->
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <i class="bi bi-lightning me-2"></i>????????
+                    <i class="bi bi-lightning me-2"></i>Actions
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
-                        @if (Model.CanEdit)
-                        {
-                            <a asp-action="RecordShots" asp-route-id="@Model.Session.Id" class="btn btn-accent">
-                                <i class="bi bi-pencil me-1"></i>?????????? ??????????
-                            </a>
-                        }
-                        <a asp-controller="Clubs" asp-action="MyResults" asp-route-id="@Model.Session.ClubId" class="btn btn-secondary">
-                            <i class="bi bi-arrow-left me-1"></i>????? ??? ???????????
+                        <a asp-controller="Clubs" asp-action="TraineePerformanceDashboard" 
+                           asp-route-id="@Model.Trainee.ClubId" asp-route-traineeId="@Model.Trainee.Id" 
+                           class="btn btn-primary">
+                            <i class="bi bi-speedometer2 me-1"></i>Performance Dashboard
                         </a>
-                        @if (Model.CanEdit)
-                        {
-                            <hr />
-                            <form asp-action="Delete" asp-route-id="@Model.Session.Id" method="post"
-                                  onsubmit="return confirm('??????? ?? ???, ?? ?????? ?? ???????? ???? ???????????? ?????? ???? ???????? ?? ???? ?? ???? ????????.');">
-                                @Html.AntiForgeryToken()
-                                <button type="submit" class="btn btn-danger w-100">
-                                    <i class="bi bi-trash me-1"></i>?????? ?????????????? ?????
-                                </button>
-                            </form>
-                        }
+                        <a asp-controller="Clubs" asp-action="TraineeDetails" 
+                           asp-route-id="@Model.Trainee.ClubId" asp-route-traineeId="@Model.Trainee.Id" 
+                           class="btn btn-secondary">
+                            <i class="bi bi-arrow-left me-1"></i>Back to Trainee
+                        </a>
                     </div>
                 </div>
             </div>
@@ -423,15 +417,15 @@
         let html = '';
         
         if (shotsData.warmupShots && shotsData.warmupShots.length > 0) {
-            html += '<h6><i class="bi bi-thermometer-half me-1"></i>????????</h6>';
+            html += '<h6><i class="bi bi-thermometer-half me-1"></i>Warmup Shots</h6>';
             html += renderShotTable(shotsData.warmupShots, false);
         }
         
         const seriesGroups = (shotsData.groups || []).filter(g => g.valueType === '10-shot-series');
         
         if (seriesGroups.length > 0) {
-            html += '<h6 class="mt-3"><i class="bi bi-calculator me-1"></i>????????? ?? ???????</h6>';
-            html += '<table class="table table-sm" style="background: #fff;"><thead><tr><th>?????</th><th class="text-end">????????</th></tr></thead><tbody>';
+            html += '<h6 class="mt-3"><i class="bi bi-calculator me-1"></i>Series Summary</h6>';
+            html += '<table class="table table-sm" style="background: #fff;"><thead><tr><th>Series</th><th class="text-end">Score</th></tr></thead><tbody>';
             
             let grandTotal = 0;
             let seriesIndex = 0;
@@ -445,33 +439,33 @@
                 grandTotal += seriesScore;
                 const shotCount = (group.shots || []).length;
                 const statusClass = shotCount === 10 ? 'text-success' : (shotCount > 0 ? 'text-warning' : 'text-muted');
-                html += `<tr><td><i class="bi bi-bullseye me-1 ${statusClass}"></i>????? ${seriesIndex} <small class="text-muted">(${shotCount}/10)</small></td><td class="text-end fw-bold">${seriesScore.toFixed(1)}</td></tr>`;
+                html += `<tr><td><i class="bi bi-bullseye me-1 ${statusClass}"></i>Series ${seriesIndex} <small class="text-muted">(${shotCount}/10)</small></td><td class="text-end fw-bold">${seriesScore.toFixed(1)}</td></tr>`;
             });
             
-            html += `</tbody><tfoot class="table-active"><tr><td><strong>????</strong></td><td class="text-end"><strong>${grandTotal.toFixed(1)}</strong></td></tr></tfoot></table>`;
+            html += `</tbody><tfoot class="table-active"><tr><td><strong>Total</strong></td><td class="text-end"><strong>${grandTotal.toFixed(1)}</strong></td></tr></tfoot></table>`;
         }
         
         (shotsData.groups || []).forEach((group, i) => {
             if (group.shots && group.shots.length > 0) {
                 const typeIcon = group.valueType === 'blind' ? 'eye-slash' : 
                                 group.valueType === 'practice' ? 'flag' : 'bullseye';
-                const typeName = group.valueType === 'blind' ? '?? ?????' : 
-                                group.valueType === 'practice' ? '??????????' : '10-????????? ?????';
-                html += `<h6 class="mt-3"><i class="bi bi-${typeIcon} me-1"></i>????? ${i + 1} <span class="badge bg-secondary">${typeName}</span></h6>`;
+                const typeName = group.valueType === 'blind' ? 'Blind' : 
+                                group.valueType === 'practice' ? 'Practice' : '10-Shot Series';
+                html += `<h6 class="mt-3"><i class="bi bi-${typeIcon} me-1"></i>Series ${i + 1} <span class="badge bg-secondary">${typeName}</span></h6>`;
                 const showTotal = group.valueType === '10-shot-series';
                 html += renderShotTable(group.shots, showTotal);
             }
         });
         
         if (!html) {
-            html = '<p class="text-muted text-center"><i class="bi bi-bullseye me-1"></i>??? ??? ???? ???????? ????????.</p>';
+            html = '<p class="text-muted text-center"><i class="bi bi-bullseye me-1"></i>No shots recorded yet.</p>';
         }
         
         container.innerHTML = html;
     }
 
     function renderShotTable(shots, showTotal = false) {
-        let html = '<table class="table table-sm" style="background: #fff;"><thead><tr><th>#</th><th>??????? (??)</th><th>????????</th></tr></thead><tbody>';
+        let html = '<table class="table table-sm" style="background: #fff;"><thead><tr><th>#</th><th>Position (mm)</th><th>Score</th></tr></thead><tbody>';
         let total = 0;
         
         shots.forEach((shot, i) => {
@@ -487,7 +481,7 @@
         });
         
         if (showTotal && shots.length > 0) {
-            html += `<tr class="table-active"><td colspan="2"><strong>???? ?? ???????</strong></td><td><strong>${total.toFixed(1)}</strong></td></tr>`;
+            html += `<tr class="table-active"><td colspan="2"><strong>Series Total</strong></td><td><strong>${total.toFixed(1)}</strong></td></tr>`;
         }
         
         html += '</tbody></table>';
@@ -505,7 +499,7 @@
         
         const labelDiv = document.createElement('div');
         labelDiv.className = 'message-label';
-        labelDiv.textContent = role === 'user' ? '???' : 'AI ???????';
+        labelDiv.textContent = role === 'user' ? 'You (Trainer)' : 'AI Coach';
         
         const contentDiv = document.createElement('div');
         contentDiv.className = 'message-content';
@@ -516,9 +510,6 @@
         container.appendChild(messageDiv);
         
         container.scrollTop = container.scrollHeight;
-        
-        // Show clear button if we have messages
-        document.getElementById('clearChatBtn').style.display = 'inline-block';
     }
     
     function showTypingIndicator() {
@@ -558,10 +549,10 @@
                     addChatMessage(msg.role, msg.content);
                 });
                 
-                // Hide analyze button text if already analyzed
+                // Update analyze button text if already analyzed
                 const hasAnalysis = data.messages.some(m => m.role === 'assistant');
                 if (hasAnalysis) {
-                    document.getElementById('analyzeBtn').innerHTML = '<i class="bi bi-arrow-clockwise me-1"></i>???????? ??????';
+                    document.getElementById('analyzeBtn').innerHTML = '<i class="bi bi-arrow-clockwise me-1"></i>Re-analyze';
                 }
             }
         } catch (error) {
@@ -586,18 +577,17 @@
             hideTypingIndicator();
             
             if (response.ok && data.analysis) {
-                // Only add to local history if it's not cached (new analysis)
                 if (!data.cached) {
                     chatHistory.push({ role: 'assistant', content: data.analysis });
                 }
                 addChatMessage('assistant', data.analysis);
-                document.getElementById('analyzeBtn').innerHTML = '<i class="bi bi-arrow-clockwise me-1"></i>???????? ??????';
+                document.getElementById('analyzeBtn').innerHTML = '<i class="bi bi-arrow-clockwise me-1"></i>Re-analyze';
             } else {
-                addChatMessage('assistant', `?????????, ?? ????? ?? ?????????? ???????: ${data.error || '?????????? ??????'}`);
+                addChatMessage('assistant', `Sorry, I couldn't analyze the session: ${data.error || 'Unknown error'}`);
             }
         } catch (error) {
             hideTypingIndicator();
-            addChatMessage('assistant', '?????????, ???????? ?????? ??? ??????????? ? AI ????????. ????, ???????? ?????? ??-?????.');
+            addChatMessage('assistant', 'Sorry, there was an error connecting to the AI service. Please try again later.');
         }
         
         setLoading(false);
@@ -629,48 +619,19 @@
                 chatHistory.push({ role: 'assistant', content: data.response });
                 addChatMessage('assistant', data.response);
             } else {
-                addChatMessage('assistant', `?????????, ?? ????? ?? ????????: ${data.error || '?????????? ??????'}`);
+                addChatMessage('assistant', `Sorry, I couldn't respond: ${data.error || 'Unknown error'}`);
             }
         } catch (error) {
             hideTypingIndicator();
-            addChatMessage('assistant', '?????????, ???????? ?????? ??? ??????????? ? AI ????????. ????, ???????? ?????? ??-?????.');
+            addChatMessage('assistant', 'Sorry, there was an error connecting to the AI service. Please try again later.');
         }
         
         setLoading(false);
     }
     
-    async function clearChatHistory() {
-        if (!confirm('??????? ?? ???, ?? ?????? ?? ????????? ????????? ?? ????? ???? ?? ???? ?? ???? ????????.')) {
-            return;
-        }
-        
-        try {
-            const response = await fetch(`/api/AiAnalysis/history/${sessionId}`, {
-                method: 'DELETE'
-            });
-            
-            if (response.ok) {
-                // Clear UI
-                chatHistory = [];
-                const container = document.getElementById('chatMessages');
-                container.innerHTML = `
-                    <div class="text-center text-muted py-4" id="chatPlaceholder">
-                        <i class="bi bi-chat-dots display-4"></i>
-                        <p class="mt-2">???????? "?????????? ???????" ?? AI-???????? ????????? ?? ?????? ??????????? ? ?????????, ??? ??????? ?????? ??-????.</p>
-                    </div>
-                `;
-                document.getElementById('clearChatBtn').style.display = 'none';
-                document.getElementById('analyzeBtn').innerHTML = '<i class="bi bi-lightning-charge me-1"></i>?????????? ???????';
-            }
-        } catch (error) {
-            console.error('Failed to clear chat history:', error);
-        }
-    }
-    
     // Event Listeners
     document.getElementById('analyzeBtn').addEventListener('click', analyzeSession);
     document.getElementById('sendBtn').addEventListener('click', sendChatMessage);
-    document.getElementById('clearChatBtn').addEventListener('click', clearChatHistory);
     
     document.getElementById('chatInput').addEventListener('keypress', function(e) {
         if (e.key === 'Enter' && !e.shiftKey) {
