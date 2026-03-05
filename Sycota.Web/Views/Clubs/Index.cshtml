@@ -1,15 +1,17 @@
 ﻿@model Sycota.Web.Models.ViewModels.ClubIndexViewModel
 @{
     ViewData["Title"] = "Клубове";
+    ViewData["Description"] = "Разгледайте стрелкови клубове в SYCOTAᐩ. Присъединете се към клуб или създайте свой собствен за прецизна стрелба.";
+    ViewData["Keywords"] = "стрелкови клубове, ISSF клубове, въздушна пушка клуб, състезателна стрелба, България";
 }
 
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="text-primary">
-            <i class="bi bi-bullseye me-2"></i>Стрелкови клубове
+            <i class="bi bi-bullseye me-2" aria-hidden="true"></i>Стрелкови Клубове
         </h1>
         <a asp-action="Create" class="btn btn-primary">
-            <i class="bi bi-plus-circle me-1"></i>Създай клуб
+            <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>Създай Клуб
         </a>
     </div>
 
@@ -32,7 +34,7 @@
     @if (Model.CurrentMembership != null)
     {
         <div class="alert alert-info mb-4">
-            <i class="bi bi-info-circle me-2"></i>
+            <i class="bi bi-info-circle me-2" aria-hidden="true"></i>
             В момента сте <strong>@Model.CurrentMembership.Role</strong> в 
             <a asp-action="Details" asp-route-id="@Model.CurrentMembership.ClubId" class="alert-link">
                 @Model.CurrentMembership.Club?.Name
@@ -42,61 +44,63 @@
 
     @if (!Model.Clubs.Any())
     {
-        <div class="text-center py-5">
-            <i class="bi bi-building display-1 text-muted"></i>
-            <h3 class="mt-3 text-muted">Няма налични клубове</h3>
+        <section class="text-center py-5" aria-labelledby="no-clubs-title">
+            <i class="bi bi-building display-1 text-muted" aria-hidden="true"></i>
+            <h2 id="no-clubs-title" class="mt-3 text-muted">Няма Намерени Клубове</h2>
             <p class="text-muted">Бъдете първият, който създава стрелкови клуб!</p>
             <a asp-action="Create" class="btn btn-primary btn-lg">
-                <i class="bi bi-plus-circle me-1"></i>Създайте свой клуб
+                <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>Създайте Своя Клуб
             </a>
-        </div>
+        </section>
     }
     else
     {
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            @foreach (var club in Model.Clubs)
-            {
-                var memberCount = club.Members?.Count ?? 0;
-                var isMember = Model.CurrentMembership?.ClubId == club.Id;
+        <section aria-label="Списък с клубове">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                @foreach (var club in Model.Clubs)
+                {
+                    var memberCount = club.Members?.Count ?? 0;
+                    var isMember = Model.CurrentMembership?.ClubId == club.Id;
 
-                <div class="col">
-                    <div class="card h-100 shadow-sm @(isMember ? "border-primary" : "")">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <h5 class="card-title">@club.Name</h5>
-                                @if (isMember)
-                                {
-                                    <span class="badge bg-primary">Член</span>
-                                }
+                    <div class="col">
+                        <article class="card h-100 shadow-sm @(isMember ? "border-primary" : "")">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <h2 class="card-title h5">@club.Name</h2>
+                                    @if (isMember)
+                                    {
+                                        <span class="badge bg-primary">Член</span>
+                                    }
+                                </div>
+                                <p class="card-text text-muted">@(club.Description.Length > 100 ? club.Description.Substring(0, 100) + "..." : club.Description)</p>
+                                
+                                <div class="d-flex align-items-center text-muted small mb-2">
+                                    <i class="bi bi-geo-alt me-1" aria-hidden="true"></i>
+                                    <span>@club.Address</span>
+                                </div>
+                                
+                                <div class="d-flex align-items-center text-muted small">
+                                    <i class="bi bi-people me-1" aria-hidden="true"></i>
+                                    <span>@memberCount @(memberCount == 1 ? "член" : "члена")</span>
+                                </div>
                             </div>
-                            <p class="card-text text-muted">@(club.Description.Length > 100 ? club.Description.Substring(0, 100) + "..." : club.Description)</p>
-                            
-                            <div class="d-flex align-items-center text-muted small mb-2">
-                                <i class="bi bi-geo-alt me-1"></i>
-                                <span>@club.Address</span>
-                            </div>
-                            
-                            <div class="d-flex align-items-center text-muted small">
-                                <i class="bi bi-people me-1"></i>
-                                <span>@memberCount @(memberCount == 1 ? "член" : "члена")</span>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-transparent border-top-0">
-                            <div class="d-flex gap-2">
-                                <a asp-action="Details" asp-route-id="@club.Id" class="btn btn-outline-primary flex-grow-1">
-                                    <i class="bi bi-eye me-1"></i>Детайли
-                                </a>
-                                @if (!isMember && Model.CurrentMembership == null)
-                                {
-                                    <a asp-action="Join" asp-route-id="@club.Id" class="btn btn-primary flex-grow-1">
-                                        <i class="bi bi-person-plus me-1"></i>Присъедини се
+                            <div class="card-footer bg-transparent border-top-0">
+                                <div class="d-flex gap-2">
+                                    <a asp-action="Details" asp-route-id="@club.Id" class="btn btn-outline-primary flex-grow-1">
+                                        <i class="bi bi-eye me-1" aria-hidden="true"></i>Преглед
                                     </a>
-                                }
+                                    @if (!isMember && Model.CurrentMembership == null)
+                                    {
+                                        <a asp-action="Join" asp-route-id="@club.Id" class="btn btn-primary flex-grow-1">
+                                            <i class="bi bi-person-plus me-1" aria-hidden="true"></i>Присъедини се
+                                        </a>
+                                    }
+                                </div>
                             </div>
-                        </div>
+                        </article>
                     </div>
-                </div>
-            }
-        </div>
+                }
+            </div>
+        </section>
     }
 </div>

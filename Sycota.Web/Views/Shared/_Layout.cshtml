@@ -3,19 +3,90 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
     <title>@ViewData["Title"] - SYCOTAᐩ</title>
+    <meta name="title" content="@ViewData["Title"] - SYCOTAᐩ" />
+    <meta name="description" content="@(ViewData["Description"] ?? "SYCOTAᐩ - Водещата платформа за прецизна стрелба в България. Управление на стрелкови клубове, проследяване на резултати, AI анализ и тренировки.")" />
+    <meta name="keywords" content="@(ViewData["Keywords"] ?? "стрелба, прецизна стрелба, стрелкови клуб, ISSF, въздушна пушка, състезания, тренировки, България")" />
+    <meta name="author" content="SYCOTAᐩ" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="@(ViewData["CanonicalUrl"] ?? $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}")" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="@Context.Request.Scheme://@Context.Request.Host@Context.Request.Path" />
+    <meta property="og:title" content="@ViewData["Title"] - SYCOTAᐩ" />
+    <meta property="og:description" content="@(ViewData["Description"] ?? "SYCOTAᐩ - Водещата платформа за прецизна стрелба в България. Управление на стрелкови клубове, проследяване на резултати и AI анализ.")" />
+    <meta property="og:image" content="@Context.Request.Scheme://@Context.Request.Host/images/og-image.png" />
+    <meta property="og:locale" content="bg_BG" />
+    <meta property="og:site_name" content="SYCOTAᐩ" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="@Context.Request.Scheme://@Context.Request.Host@Context.Request.Path" />
+    <meta name="twitter:title" content="@ViewData["Title"] - SYCOTAᐩ" />
+    <meta name="twitter:description" content="@(ViewData["Description"] ?? "SYCOTAᐩ - Водещата платформа за прецизна стрелба в България.")" />
+    <meta name="twitter:image" content="@Context.Request.Scheme://@Context.Request.Host/images/og-image.png" />
+    
+    <!-- Favicon & App Icons -->
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="~/images/apple-touch-icon.png" />
+    <link rel="manifest" href="~/manifest.json" />
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#2c391f" />
+    <meta name="msapplication-TileColor" content="#2c391f" />
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "WebSite",
+        "name": "SYCOTAᐩ",
+        "alternateName": "SYCOTA Plus",
+        "url": "@Context.Request.Scheme://@Context.Request.Host",
+        "description": "Водещата платформа за прецизна стрелба в България",
+        "inLanguage": "bg-BG",
+        "potentialAction": {
+            "@@type": "SearchAction",
+            "target": "@Context.Request.Scheme://@Context.Request.Host/Clubs?search={search_term_string}",
+            "query-input": "required name=search_term_string"
+        },
+        "publisher": {
+            "@@type": "Organization",
+            "name": "SYCOTAᐩ",
+            "url": "@Context.Request.Scheme://@Context.Request.Host"
+        }
+    }
+    </script>
+    
+    @if (ViewData["StructuredData"] != null)
+    {
+        <script type="application/ld+json">
+            @Html.Raw(ViewData["StructuredData"])
+        </script>
+    }
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+    
+    <!-- Stylesheets -->
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Sycota.Web.styles.css" asp-append-version="true" />
+    
+    @await RenderSectionAsync("Head", required: false)
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3" aria-label="Основна навигация">
             <div class="container-fluid">
                 <a class="navbar-brand sycota-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <i class="bi bi-bullseye me-1"></i>SYCOTAᐩ
+                    <i class="bi bi-bullseye me-1" aria-hidden="true"></i>SYCOTAᐩ
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Превключване на навигацията">
@@ -25,20 +96,20 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">
-                                <i class="bi bi-house me-1"></i>Начало
+                                <i class="bi bi-house me-1" aria-hidden="true"></i>Начало
                             </a>
                         </li>
                         @if (User.Identity?.IsAuthenticated == true)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="" asp-controller="Clubs" asp-action="Index">
-                                    <i class="bi bi-bullseye me-1"></i>Клубове
+                                    <i class="bi bi-bullseye me-1" aria-hidden="true"></i>Клубове
                                 </a>
                             </li>
                         }
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">
-                                <i class="bi bi-shield-check me-1"></i>Поверителност
+                                <i class="bi bi-shield-check me-1" aria-hidden="true"></i>Поверителност
                             </a>
                         </li>
                     </ul>
@@ -52,14 +123,14 @@
             @if (TempData["Success"] != null)
             {
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+                    <i class="bi bi-check-circle me-2" aria-hidden="true"></i>@TempData["Success"]
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Затвори"></button>
                 </div>
             }
             @if (TempData["Error"] != null)
             {
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="bi bi-exclamation-circle me-2"></i>@TempData["Error"]
+                    <i class="bi bi-exclamation-circle me-2" aria-hidden="true"></i>@TempData["Error"]
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Затвори"></button>
                 </div>
             }
@@ -69,9 +140,11 @@
 
     <footer class="border-top footer text-muted py-3">
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                 <span class="sycota-brand">&copy; 2025 SYCOTAᐩ - Платформа за Прецизна Стрелба</span>
-                <a asp-area="" asp-controller="Home" asp-action="Privacy">Поверителност</a>
+                <nav aria-label="Връзки в долния колонтитул">
+                    <a asp-area="" asp-controller="Home" asp-action="Privacy">Поверителност</a>
+                </nav>
             </div>
         </div>
     </footer>
