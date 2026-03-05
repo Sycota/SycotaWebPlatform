@@ -1,17 +1,17 @@
-@model Sycota.Web.Models.ViewModels.CreateInvitationViewModel
+﻿@model Sycota.Web.Models.ViewModels.CreateInvitationViewModel
 @{
-    ViewData["Title"] = "Invite Member - " + ViewBag.ClubName;
+    ViewData["Title"] = "Покана в клуб - " + ViewBag.ClubName;
 }
 
 <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6">
         <div class="card">
             <div class="card-header">
-                <h4 class="mb-0"><i class="bi bi-envelope-plus me-2"></i>Invite New Member</h4>
+                <h4 class="mb-0"><i class="bi bi-envelope-plus me-2"></i>Покани нов член</h4>
             </div>
             <div class="card-body">
                 <p class="text-muted mb-4">
-                    Send an invitation to join <strong>@ViewBag.ClubName</strong>. The recipient will receive a unique link to join the club.
+                    Изпратете покана за присъединяване към <strong>@ViewBag.ClubName</strong>. Получателят ще получи уникален линк за присъединяване към клуба.
                 </p>
 
                 <form asp-action="Invite" method="post">
@@ -19,57 +19,57 @@
                     <input type="hidden" asp-for="ClubId" />
 
                     <div class="mb-3">
-                        <label asp-for="Email" class="form-label">Email Address</label>
+                        <label asp-for="Email" class="form-label">Имейл адрес</label>
                         <input asp-for="Email" type="email" class="form-control" placeholder="name@example.com" required />
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="OfferedRole" class="form-label">Role</label>
+                        <label asp-for="OfferedRole" class="form-label">Роля</label>
                         <select asp-for="OfferedRole" class="form-select" id="roleSelect">
-                            <option value="@Sycota.Domain.Enums.ClubRole.Competitor">Competitor</option>
-                            <option value="@Sycota.Domain.Enums.ClubRole.Trainer">Trainer</option>
-                            <option value="@Sycota.Domain.Enums.ClubRole.Admin">Admin</option>
+                            <option value="@Sycota.Domain.Enums.ClubRole.Competitor">Състезател</option>
+                            <option value="@Sycota.Domain.Enums.ClubRole.Trainer">Треньор</option>
+                            <option value="@Sycota.Domain.Enums.ClubRole.Admin">Администратор</option>
                         </select>
                         <span asp-validation-for="OfferedRole" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3" id="trainerSection">
-                        <label asp-for="TrainerId" class="form-label">Assign Trainer (for Competitors)</label>
+                        <label asp-for="TrainerId" class="form-label">Назначен треньор (за състезатели)</label>
                         <select asp-for="TrainerId" class="form-select">
-                            <option value="">-- No trainer assigned --</option>
+                            <option value="">-- Без назначен треньор --</option>
                             @foreach (var trainer in Model.AvailableTrainers)
                             {
                                 <option value="@trainer.Id">@trainer.User.UserName</option>
                             }
                         </select>
                         <span asp-validation-for="TrainerId" class="text-danger"></span>
-                        <small class="text-muted">Only applicable for Competitor role</small>
+                        <small class="text-muted">Прилага се само за роля състезател</small>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="Message" class="form-label">Personal Message (optional)</label>
-                        <textarea asp-for="Message" class="form-control" rows="3" placeholder="Add a personal message to the invitation..."></textarea>
+                        <label asp-for="Message" class="form-label">Лично съобщение (по избор)</label>
+                        <textarea asp-for="Message" class="form-control" rows="3" placeholder="Добавете лично съобщение към поканата..."></textarea>
                         <span asp-validation-for="Message" class="text-danger"></span>
                     </div>
 
                     <div class="mb-4">
-                        <label asp-for="ExpirationDays" class="form-label">Invitation Valid For</label>
+                        <label asp-for="ExpirationDays" class="form-label">Валидна за (дни)</label>
                         <select asp-for="ExpirationDays" class="form-select">
-                            <option value="1">1 day</option>
-                            <option value="3">3 days</option>
-                            <option value="7" selected>7 days</option>
-                            <option value="14">14 days</option>
-                            <option value="30">30 days</option>
+                            <option value="1">1 ден</option>
+                            <option value="3">3 дни</option>
+                            <option value="7" selected>7 дни</option>
+                            <option value="14">14 дни</option>
+                            <option value="30">30 дни</option>
                         </select>
                     </div>
 
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-accent">
-                            <i class="bi bi-send me-1"></i>Send Invitation
+                            <i class="bi bi-send me-1"></i>Изпрати покана
                         </button>
                         <a asp-action="ManageRequests" asp-route-id="@Model.ClubId" class="btn btn-secondary">
-                            <i class="bi bi-arrow-left me-1"></i>Back
+                            <i class="bi bi-arrow-left me-1"></i>Назад
                         </a>
                     </div>
                 </form>

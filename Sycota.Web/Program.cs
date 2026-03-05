@@ -1,3 +1,4 @@
+using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sycota.Infrastructure.Data;
@@ -5,6 +6,9 @@ using Sycota.Domain.Entities;
 using Sycota.Application.Interfaces;
 using Sycota.Application.Services;
 using Sycota.Infrastructure.Repository;
+
+// Register code pages encoding provider for proper Cyrillic support
+Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
 var builder = WebApplication.CreateBuilder(args);
 

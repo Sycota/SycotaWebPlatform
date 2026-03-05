@@ -1,6 +1,6 @@
-@model Sycota.Web.Models.ViewModels.AcceptInvitationViewModel
+﻿@model Sycota.Web.Models.ViewModels.AcceptInvitationViewModel
 @{
-    ViewData["Title"] = "Accept Invitation";
+    ViewData["Title"] = "Приемане на покана";
     Layout = "_Layout";
 }
 
@@ -8,24 +8,24 @@
     <div class="col-md-8 col-lg-6">
         <div class="card">
             <div class="card-header text-center">
-                <h4 class="mb-0"><i class="bi bi-envelope-open me-2"></i>Club Invitation</h4>
+                <h4 class="mb-0"><i class="bi bi-envelope-open me-2"></i>Покана в клуб</h4>
             </div>
             <div class="card-body text-center">
                 <div class="mb-4">
                     <i class="bi bi-bullseye display-1 text-primary"></i>
                 </div>
 
-                <h2 class="mb-3">You've been invited to join</h2>
+                <h2 class="mb-3">Поканени сте да се присъедините към</h2>
                 <h3 class="text-primary mb-4">@Model.Invitation.Club.Name</h3>
 
                 <div class="bg-light p-3 rounded mb-4">
                     <div class="row">
                         <div class="col-6">
-                            <small class="text-muted">Role</small>
+                            <small class="text-muted">Роля</small>
                             <p class="mb-0"><span class="badge bg-secondary">@Model.Invitation.OfferedRole</span></p>
                         </div>
                         <div class="col-6">
-                            <small class="text-muted">Invited by</small>
+                            <small class="text-muted">Поканен от</small>
                             <p class="mb-0">@Model.Invitation.CreatedBy.UserName</p>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
                         <hr />
                         <div class="row">
                             <div class="col-12">
-                                <small class="text-muted">Assigned Trainer</small>
+                                <small class="text-muted">Назначен треньор</small>
                                 <p class="mb-0">@Model.Invitation.AssignedTrainer.User.UserName</p>
                             </div>
                         </div>
@@ -51,7 +51,7 @@
 
                 <p class="text-muted mb-4">
                     <i class="bi bi-clock me-1"></i>
-                    This invitation expires on @Model.Invitation.ExpiresAt.ToString("f")
+                    Тази покана изтича на @Model.Invitation.ExpiresAt.ToString("dd.MM.yyyy HH:mm")
                 </p>
 
                 @if (User.Identity?.IsAuthenticated == true)
@@ -62,10 +62,10 @@
                         <input type="hidden" name="confirm" value="true" />
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-accent btn-lg">
-                                <i class="bi bi-check-lg me-1"></i>Accept Invitation
+                                <i class="bi bi-check-lg me-1"></i>Приеми поканата
                             </button>
                             <a asp-action="Index" class="btn btn-secondary">
-                                Decline
+                                Откажи
                             </a>
                         </div>
                     </form>
@@ -74,14 +74,14 @@
                 {
                     <div class="alert alert-warning">
                         <i class="bi bi-exclamation-triangle me-2"></i>
-                        You need to be logged in to accept this invitation.
+                        Трябва да сте влезли в акаунта си, за да приемете тази покана.
                     </div>
                     <div class="d-grid gap-2">
                         <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString" class="btn btn-primary btn-lg">
-                            <i class="bi bi-box-arrow-in-right me-1"></i>Log In
+                            <i class="bi bi-box-arrow-in-right me-1"></i>Вход
                         </a>
                         <a asp-area="Identity" asp-page="/Account/Register" asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString" class="btn btn-outline-primary">
-                            <i class="bi bi-person-plus me-1"></i>Create Account
+                            <i class="bi bi-person-plus me-1"></i>Създай акаунт
                         </a>
                     </div>
                 }

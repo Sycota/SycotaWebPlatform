@@ -1,14 +1,14 @@
-@model Sycota.Web.Models.ViewModels.EditClubViewModel
+﻿@model Sycota.Web.Models.ViewModels.EditClubViewModel
 @{
-    ViewData["Title"] = "Edit Club";
+    ViewData["Title"] = "Редактиране на клуб";
 }
 
 <div class="container">
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a asp-action="Index">Clubs</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Клубове</a></li>
             <li class="breadcrumb-item"><a asp-action="Details" asp-route-id="@Model.Id">@Model.Name</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Edit</li>
+            <li class="breadcrumb-item active" aria-current="page">Редактиране</li>
         </ol>
     </nav>
 
@@ -17,7 +17,7 @@
             <div class="card shadow-sm">
                 <div class="card-header bg-warning text-dark">
                     <h2 class="mb-0">
-                        <i class="bi bi-pencil me-2"></i>Edit Club Details
+                        <i class="bi bi-pencil me-2"></i>Редактиране на клуб
                     </h2>
                 </div>
                 <div class="card-body">
@@ -26,32 +26,32 @@
                         <input type="hidden" asp-for="Id" />
 
                         <div class="mb-3">
-                            <label asp-for="Name" class="form-label">Club Name <span class="text-danger">*</span></label>
+                            <label asp-for="Name" class="form-label">Име на клуба <span class="text-danger">*</span></label>
                             <input asp-for="Name" class="form-control" required />
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="Description" class="form-label">Description</label>
-                            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Describe your shooting club..."></textarea>
+                            <label asp-for="Description" class="form-label">Описание</label>
+                            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Опишете вашия стрелкови клуб..."></textarea>
                             <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="Address" class="form-label">Address <span class="text-danger">*</span></label>
-                            <input asp-for="Address" class="form-control" required placeholder="Club location/address" />
+                            <label asp-for="Address" class="form-label">Адрес <span class="text-danger">*</span></label>
+                            <input asp-for="Address" class="form-control" required placeholder="Местоположение/адрес на клуба" />
                             <span asp-validation-for="Address" class="text-danger"></span>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label asp-for="ContactEmail" class="form-label">Contact Email</label>
-                                <input asp-for="ContactEmail" type="email" class="form-control" placeholder="contact@club.com" />
+                                <label asp-for="ContactEmail" class="form-label">Имейл за контакт</label>
+                                <input asp-for="ContactEmail" type="email" class="form-control" placeholder="club@example.com" />
                                 <span asp-validation-for="ContactEmail" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label asp-for="ContactPhone" class="form-label">Contact Phone</label>
-                                <input asp-for="ContactPhone" class="form-control" placeholder="+1 234 567 890" />
+                                <label asp-for="ContactPhone" class="form-label">Телефон за контакт</label>
+                                <input asp-for="ContactPhone" class="form-control" placeholder="+359 88 123 4567" />
                                 <span asp-validation-for="ContactPhone" class="text-danger"></span>
                             </div>
                         </div>
@@ -60,11 +60,11 @@
                             <div class="form-check form-switch">
                                 <input asp-for="RequiresApproval" class="form-check-input" type="checkbox" role="switch" />
                                 <label asp-for="RequiresApproval" class="form-check-label">
-                                    <strong>Require Approval for New Members</strong>
+                                    <strong>Изисква одобрение за присъединяване от нови членове</strong>
                                 </label>
                             </div>
                             <small class="text-muted">
-                                When enabled, new members must be approved by an admin before joining.
+                                Когато е включено, заявките за влизане в клуба ще трябва да бъдат одобрени, преди потребителите да станат членове.
                             </small>
                         </div>
 
@@ -72,10 +72,10 @@
 
                         <div class="d-flex justify-content-between">
                             <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary">
-                                <i class="bi bi-x-circle me-1"></i>Cancel
+                                <i class="bi bi-x-circle me-1"></i>Отказ
                             </a>
                             <button type="submit" class="btn btn-warning">
-                                <i class="bi bi-check-circle me-1"></i>Save Changes
+                                <i class="bi bi-check-circle me-1"></i>Запази промените
                             </button>
                         </div>
                     </form>

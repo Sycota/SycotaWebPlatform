@@ -1,21 +1,21 @@
-@model Sycota.Web.Models.ViewModels.ManageMembersViewModel
+﻿@model Sycota.Web.Models.ViewModels.ManageMembersViewModel
 @{
-    ViewData["Title"] = "Manage Members - " + Model.Club.Name;
+    ViewData["Title"] = "Управление на членове - " + Model.Club.Name;
 }
 
 <div class="container">
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a asp-action="Index">Clubs</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Клубове</a></li>
             <li class="breadcrumb-item"><a asp-action="Details" asp-route-id="@Model.Club.Id">@Model.Club.Name</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Manage Members</li>
+            <li class="breadcrumb-item active" aria-current="page">Управление на членове</li>
         </ol>
     </nav>
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1><i class="bi bi-people-fill me-2"></i>Manage Members</h1>
+        <h1><i class="bi bi-people-fill me-2"></i>Управление на членове</h1>
         <a asp-action="Details" asp-route-id="@Model.Club.Id" class="btn btn-secondary">
-            <i class="bi bi-arrow-left me-1"></i>Back to Club
+            <i class="bi bi-arrow-left me-1"></i>Към клуба
         </a>
     </div>
 
@@ -24,26 +24,26 @@
         <div class="col-12 mb-4">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-person-fill me-2"></i>Competitors (@Model.Competitors.Count())</span>
-                    <span class="badge bg-info">@Model.Competitors.Count(c => c.TrainerId == null) unassigned</span>
+                    <span><i class="bi bi-person-fill me-2"></i>Състезатели (@Model.Competitors.Count())</span>
+                    <span class="badge bg-info">@Model.Competitors.Count(c => c.TrainerId == null) без треньор</span>
                 </div>
                 <div class="card-body">
                     @if (!Model.Competitors.Any())
                     {
-                        <p class="text-muted mb-0"><i class="bi bi-info-circle me-2"></i>No competitors in this club yet.</p>
+                        <p class="text-muted mb-0"><i class="bi bi-info-circle me-2"></i>Все още няма състезатели в този клуб.</p>
                     }
                     else
                     {
                         <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Competitor</th>
-                                        <th>Assigned Trainer</th>
-                                        <th>Joined</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Състезател</th>
+                                    <th>Назначен треньор</th>
+                                    <th>Присъединил се</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
                                 <tbody>
                                     @foreach (var competitor in Model.Competitors)
                                     {
@@ -70,19 +70,19 @@
                                                 else
                                                 {
                                                     <span class="text-muted fst-italic">
-                                                        <i class="bi bi-dash-circle me-1"></i>Not assigned
+                                                        <i class="bi bi-dash-circle me-1"></i>Не е назначен
                                                     </span>
                                                 }
                                             </td>
-                                            <td>@competitor.JoinedAt.ToString("MMM dd, yyyy")</td>
+                                            <td>@competitor.JoinedAt.ToString("dd.MM.yyyy")</td>
                                             <td>
                                                 <a asp-action="AssignTrainer" asp-route-id="@Model.Club.Id" asp-route-competitorId="@competitor.Id" 
                                                    class="btn btn-sm btn-outline-primary me-1">
-                                                    <i class="bi bi-person-lines-fill"></i> Assign Trainer
+                                                    <i class="bi bi-person-lines-fill"></i> Назначи треньор
                                                 </a>
                                                 <form asp-action="RemoveMember" asp-route-id="@Model.Club.Id" asp-route-memberId="@competitor.Id" 
                                                       method="post" class="d-inline"
-                                                      onsubmit="return confirm('Are you sure you want to remove this member from the club?');">
+                                                      onsubmit="return confirm('Сигурни ли сте, че искате да премахнете този член от клуба?');">
                                                     @Html.AntiForgeryToken()
                                                     <button type="submit" class="btn btn-sm btn-outline-danger">
                                                         <i class="bi bi-person-x"></i>
@@ -103,12 +103,12 @@
         <div class="col-lg-6 mb-4">
             <div class="card">
                 <div class="card-header">
-                    <i class="bi bi-person-badge me-2"></i>Trainers (@Model.Trainers.Count())
+                    <i class="bi bi-person-badge me-2"></i>Треньори (@Model.Trainers.Count())
                 </div>
                 <div class="card-body">
                     @if (!Model.Trainers.Any())
                     {
-                        <p class="text-muted mb-0"><i class="bi bi-info-circle me-2"></i>No trainers in this club yet.</p>
+                        <p class="text-muted mb-0"><i class="bi bi-info-circle me-2"></i>Все още няма треньори в този клуб.</p>
                     }
                     else
                     {
@@ -125,10 +125,10 @@
                                         <br /><small class="text-muted">@trainer.User?.Email</small>
                                     </div>
                                     <div class="text-end">
-                                        <span class="badge bg-info me-2">@assignedCount trainees</span>
+                                        <span class="badge bg-info me-2">@assignedCount обучаеми</span>
                                         <form asp-action="RemoveMember" asp-route-id="@Model.Club.Id" asp-route-memberId="@trainer.Id" 
                                               method="post" class="d-inline"
-                                              onsubmit="return confirm('Removing this trainer will unassign all their competitors. Continue?');">
+                                              onsubmit="return confirm('Премахването на този треньор ще премахне връзките му със състезатели. Продължавате?');">
                                             @Html.AntiForgeryToken()
                                             <button type="submit" class="btn btn-sm btn-outline-danger">
                                                 <i class="bi bi-person-x"></i>
@@ -147,12 +147,12 @@
         <div class="col-lg-6 mb-4">
             <div class="card">
                 <div class="card-header">
-                    <i class="bi bi-shield-fill me-2"></i>Admins (@Model.Admins.Count())
+                    <i class="bi bi-shield-fill me-2"></i>Администратори (@Model.Admins.Count())
                 </div>
                 <div class="card-body">
                     @if (!Model.Admins.Any())
                     {
-                        <p class="text-muted mb-0"><i class="bi bi-info-circle me-2"></i>No admins in this club.</p>
+                        <p class="text-muted mb-0"><i class="bi bi-info-circle me-2"></i>Няма администратори в този клуб.</p>
                     }
                     else
                     {
@@ -170,11 +170,11 @@
                                             <br /><small class="text-muted">@admin.User?.Email</small>
                                         </div>
                                         <div>
-                                            <span class="badge bg-danger me-2">Admin</span>
+                                            <span class="badge bg-danger me-2">Админ</span>
                                             @if (admin.IsAlsoTrainer)
                                             {
                                                 <span class="badge bg-warning text-dark">
-                                                    <i class="bi bi-person-badge"></i> Trainer (@assignedCount)
+                                                    <i class="bi bi-person-badge"></i> Треньор (@assignedCount)
                                                 </span>
                                             }
                                         </div>
@@ -185,13 +185,13 @@
                                             @if (admin.IsAlsoTrainer)
                                             {
                                                 <button type="submit" class="btn btn-sm btn-outline-secondary">
-                                                    <i class="bi bi-toggle-on me-1"></i>Disable Trainer Role
+                                                    <i class="bi bi-toggle-on me-1"></i>Премахни като треньор
                                                 </button>
                                             }
                                             else
                                             {
                                                 <button type="submit" class="btn btn-sm btn-outline-warning">
-                                                    <i class="bi bi-toggle-off me-1"></i>Enable Trainer Role
+                                                    <i class="bi bi-toggle-off me-1"></i>Добави като треньор
                                                 </button>
                                             }
                                         </form>
@@ -203,7 +203,7 @@
                 </div>
                 <div class="card-footer bg-light">
                     <small class="text-muted">
-                        <i class="bi bi-info-circle me-1"></i>Admins can enable trainer role to be assigned competitors while keeping admin privileges.
+                        <i class="bi bi-info-circle me-1"></i>Администраторите могат да действат също като треньори, за да им бъдат назначени състезатели, използвайки превключвателите по-горе.
                     </small>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 @model Sycota.Web.Models.ViewModels.RecordShotsViewModel
 @{
-    ViewData["Title"] = "Record Shots - " + Model.Session.Name;
+    ViewData["Title"] = "????????? ?? ???????? - " + Model.Session.Name;
 }
 
 <div class="container-fluid px-2 px-md-3">
@@ -16,10 +16,10 @@
         </div>
         <div class="d-flex gap-1">
             <button id="saveBtn" class="btn btn-sm btn-accent">
-                <i class="bi bi-save me-1"></i><span class="d-none d-sm-inline">Save</span>
+                <i class="bi bi-save me-1"></i><span class="d-none d-sm-inline">??????</span>
             </button>
             <a asp-action="Details" asp-route-id="@Model.SessionId" class="btn btn-sm btn-secondary d-none d-md-inline-flex">
-                <i class="bi bi-arrow-left me-1"></i>Back
+                <i class="bi bi-arrow-left me-1"></i>?????
             </a>
         </div>
     </div>
@@ -27,29 +27,29 @@
     <!-- Mobile: Shot Groups tabs at top for easy access -->
     <div class="card shadow-sm mb-2 d-lg-none">
         <div class="card-header py-2 d-flex justify-content-between align-items-center">
-            <span class="small"><i class="bi bi-list-ol me-1"></i>Groups</span>
+            <span class="small"><i class="bi bi-list-ol me-1"></i>?????</span>
             <div class="dropdown">
                 <button type="button" class="btn btn-sm btn-accent dropdown-toggle py-0" data-bs-toggle="dropdown">
                     <i class="bi bi-plus"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><h6 class="dropdown-header">Single Group</h6></li>
-                    <li><a class="dropdown-item add-group-btn" href="#" data-type="10-shot-series"><i class="bi bi-bullseye me-2"></i>10-Shot Series</a></li>
-                    <li><a class="dropdown-item add-group-btn" href="#" data-type="blind"><i class="bi bi-eye-slash me-2"></i>Blind Series</a></li>
-                    <li><a class="dropdown-item add-group-btn" href="#" data-type="practice"><i class="bi bi-flag me-2"></i>Practice</a></li>
+                    <li><h6 class="dropdown-header">???????? ?????</h6></li>
+                    <li><a class="dropdown-item add-group-btn" href="#" data-type="10-shot-series"><i class="bi bi-bullseye me-2"></i>10-????????? ?????</a></li>
+                    <li><a class="dropdown-item add-group-btn" href="#" data-type="blind"><i class="bi bi-eye-slash me-2"></i>?? ?????</a></li>
+                    <li><a class="dropdown-item add-group-btn" href="#" data-type="practice"><i class="bi bi-flag me-2"></i>????????</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><h6 class="dropdown-header">Competition Presets</h6></li>
-                    <li><a class="dropdown-item add-preset-btn" href="#" data-preset="ar40"><i class="bi bi-trophy me-2"></i>40-Shot (4×10)</a></li>
-                    <li><a class="dropdown-item add-preset-btn" href="#" data-preset="ar60"><i class="bi bi-trophy-fill me-2"></i>60-Shot (6×10)</a></li>
+                    <li><h6 class="dropdown-header">???????????? ?????????</h6></li>
+                    <li><a class="dropdown-item add-preset-btn" href="#" data-preset="ar40"><i class="bi bi-trophy me-2"></i>40-????????? (4×10)</a></li>
+                    <li><a class="dropdown-item add-preset-btn" href="#" data-preset="ar60"><i class="bi bi-trophy-fill me-2"></i>60-????????? (6×10)</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-danger remove-group-btn" href="#"><i class="bi bi-trash me-2"></i>Remove Group</a></li>
+                    <li><a class="dropdown-item text-danger remove-group-btn" href="#"><i class="bi bi-trash me-2"></i>???????? ?????</a></li>
                 </ul>
             </div>
         </div>
         <div class="card-body p-0">
             <div id="groupTabsMobile" class="nav nav-tabs nav-fill bg-light mobile-group-tabs" role="tablist">
                 <button class="nav-link active" data-group="warmup" type="button">
-                    <i class="bi bi-thermometer-half me-1"></i><span class="d-none d-sm-inline">Warmup</span><span class="d-sm-none">W</span>
+                    <i class="bi bi-thermometer-half me-1"></i><span class="d-none d-sm-inline">?????????</span><span class="d-sm-none">?</span>
                 </button>
             </div>
         </div>
@@ -60,7 +60,7 @@
         <div class="col-12 col-lg-7">
             <div class="card shadow-sm">
                 <div class="card-header py-2 d-flex justify-content-between align-items-center">
-                    <span class="small"><i class="bi bi-crosshair me-1"></i><span class="d-none d-sm-inline">ISSF 10m Air Rifle </span>Target</span>
+                    <span class="small"><i class="bi bi-crosshair me-1"></i><span class="d-none d-sm-inline">ISSF 10? ???????? ????? </span>??????</span>
                     <div class="d-flex align-items-center gap-2">
                         <div class="btn-group btn-group-sm">
                             <button type="button" class="btn btn-outline-secondary btn-sm px-2 active" id="viewCurrentBtn" title="Show current group only">
@@ -88,11 +88,11 @@
                         <canvas id="targetCanvas" width="500" height="500"></canvas>
                     </div>
                     <div class="mt-1 small d-none d-md-block" style="color: #333;">
-                        <i class="bi bi-hand-index me-1"></i>Click to place shot. 
-                        <i class="bi bi-trash me-1 ms-2"></i>Right-click to remove.
+                        <i class="bi bi-hand-index me-1"></i>???????? ?? ????????? ?? ???????. 
+                        <i class="bi bi-trash me-1 ms-2"></i>????? ????? ?? ??????????.
                     </div>
                     <div class="mt-1 small d-md-none" style="color: #333;">
-                        <i class="bi bi-hand-index me-1"></i>Tap to place. Long-press to remove.
+                        <i class="bi bi-hand-index me-1"></i>????????? ?? ?????????. ????? ????????? ?? ??????????.
                     </div>
                 </div>
             </div>
@@ -103,18 +103,18 @@
                     <div class="row text-center g-0">
                         <div class="col-3">
                             <div class="fs-6 fw-bold text-primary" id="totalShotsMobile">0</div>
-                            <small class="text-muted" style="font-size: 0.7rem;">Shots</small>
+                            <small class="text-muted" style="font-size: 0.7rem;">????????</small>
                         </div>
                         <div class="col-3">
                             <div class="fs-6 fw-bold text-success" id="totalScoreMobile">0.0</div>
-                            <small class="text-muted" style="font-size: 0.7rem;">Score</small>
+                            <small class="text-muted" style="font-size: 0.7rem;">????????</small>
                         </div>
                         <div class="col-3">
                             <div class="fs-6 fw-bold" style="color: #856404;" id="avgScoreMobile">0.0</div>
-                            <small class="text-muted" style="font-size: 0.7rem;">Avg</small>
+                            <small class="text-muted" style="font-size: 0.7rem;">??????</small>
                         </div>
                         <div class="col-3">
-                            <button type="button" class="btn btn-sm btn-outline-warning py-0 px-2" id="undoBtnMobile" disabled title="Undo">
+                            <button type="button" class="btn btn-sm btn-outline-warning py-0 px-2" id="undoBtnMobile" disabled title="??????????">
                                 <i class="bi bi-arrow-counterclockwise"></i>
                             </button>
                         </div>
@@ -127,7 +127,7 @@
                 <div class="card-header py-2 d-flex justify-content-between align-items-center" 
                      data-bs-toggle="collapse" data-bs-target="#coordEntryCollapse" 
                      role="button" aria-expanded="false" style="cursor: pointer;">
-                    <span class="small"><i class="bi bi-pin-map me-1"></i>Add by Coordinates</span>
+                    <span class="small"><i class="bi bi-pin-map me-1"></i>?????? ?? ??????????</span>
                     <i class="bi bi-chevron-down d-lg-none"></i>
                 </div>
                 <div id="coordEntryCollapse" class="collapse show-lg">
@@ -156,7 +156,7 @@
                 <div class="card-header py-2 d-flex justify-content-between align-items-center"
                      data-bs-toggle="collapse" data-bs-target="#shotsListMobileCollapse"
                      role="button" aria-expanded="true" style="cursor: pointer;">
-                    <span class="small"><i class="bi bi-list-ol me-1"></i>Shot List</span>
+                    <span class="small"><i class="bi bi-list-ol me-1"></i>?????? ? ????????</span>
                     <i class="bi bi-chevron-down"></i>
                 </div>
                 <div id="shotsListMobileCollapse" class="collapse show">
@@ -173,7 +173,7 @@
                 <div class="card-header py-2 d-flex justify-content-between align-items-center"
                      data-bs-toggle="collapse" data-bs-target="#seriesSummaryMobileCollapse"
                      role="button" aria-expanded="false" style="cursor: pointer;">
-                    <span class="small"><i class="bi bi-calculator me-1"></i>Series Summary</span>
+                    <span class="small"><i class="bi bi-calculator me-1"></i>????????? ?? ???????</span>
                     <span class="badge bg-primary" id="seriesTotalScoreMobile">0.0</span>
                 </div>
                 <div id="seriesSummaryMobileCollapse" class="collapse">
@@ -192,38 +192,38 @@
             <!-- Current Group Panel -->
             <div class="card shadow-sm mb-3">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-list-ol me-2"></i>Shot Groups</span>
+                    <span><i class="bi bi-list-ol me-2"></i>????? ????????</span>
                     <div class="dropdown">
                         <button type="button" class="btn btn-sm btn-accent dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="bi bi-plus"></i> Add
+                            <i class="bi bi-plus"></i> ??????
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><h6 class="dropdown-header">Single Group</h6></li>
-                            <li><a class="dropdown-item add-group-btn" href="#" data-type="10-shot-series"><i class="bi bi-bullseye me-2"></i>10-Shot Series</a></li>
-                            <li><a class="dropdown-item add-group-btn" href="#" data-type="blind"><i class="bi bi-eye-slash me-2"></i>Blind Series</a></li>
-                            <li><a class="dropdown-item add-group-btn" href="#" data-type="practice"><i class="bi bi-flag me-2"></i>Practice</a></li>
+                            <li><h6 class="dropdown-header">???????? ?????</h6></li>
+                            <li><a class="dropdown-item add-group-btn" href="#" data-type="10-shot-series"><i class="bi bi-bullseye me-2"></i>10-????????? ?????</a></li>
+                            <li><a class="dropdown-item add-group-btn" href="#" data-type="blind"><i class="bi bi-eye-slash me-2"></i>?? ?????</a></li>
+                            <li><a class="dropdown-item add-group-btn" href="#" data-type="practice"><i class="bi bi-flag me-2"></i>????????</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><h6 class="dropdown-header">Competition Presets</h6></li>
-                            <li><a class="dropdown-item add-preset-btn" href="#" data-preset="ar40"><i class="bi bi-trophy me-2"></i>40-Shot Air Rifle (4×10)</a></li>
-                            <li><a class="dropdown-item add-preset-btn" href="#" data-preset="ar60"><i class="bi bi-trophy-fill me-2"></i>60-Shot Air Rifle (6×10)</a></li>
+                            <li><h6 class="dropdown-header">???????????? ?????????</h6></li>
+                            <li><a class="dropdown-item add-preset-btn" href="#" data-preset="ar40"><i class="bi bi-trophy me-2"></i>40-????????? ???????? ????? (4×10)</a></li>
+                            <li><a class="dropdown-item add-preset-btn" href="#" data-preset="ar60"><i class="bi bi-trophy-fill me-2"></i>60-????????? ???????? ????? (6×10)</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger remove-group-btn" href="#"><i class="bi bi-trash me-2"></i>Remove Current Group</a></li>
+                            <li><a class="dropdown-item text-danger remove-group-btn" href="#"><i class="bi bi-trash me-2"></i>???????? ???????? ?????</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="card-body p-0">
                     <div id="groupTabs" class="nav nav-tabs nav-fill bg-light" role="tablist" style="border-bottom: 2px solid #dee2e6;">
                         <button class="nav-link active" data-group="warmup" type="button">
-                            <i class="bi bi-thermometer-half me-1" style="color: inherit;"></i>Warmup
+                            <i class="bi bi-thermometer-half me-1" style="color: inherit;"></i>?????????
                         </button>
                     </div>
                     <div class="p-3">
                         <div class="mb-3" id="groupTypeSelector" style="display: none;">
-                            <label class="form-label small">Group Type</label>
+                            <label class="form-label small">??? ?????</label>
                             <select id="groupType" class="form-select form-select-sm">
-                                <option value="10-shot-series">10-Shot Series</option>
-                                <option value="blind">Blind (no feedback)</option>
-                                <option value="practice">Practice</option>
+                                <option value="10-shot-series">10-????????? ?????</option>
+                                <option value="blind">?? ????? (??? ??????? ??????)</option>
+                                <option value="practice">????????</option>
                             </select>
                         </div>
                         <div id="shotsListContainer" style="max-height: 300px; overflow-y: auto;">
@@ -236,21 +236,21 @@
             <!-- Series Summary Panel (for competition presets) -->
             <div class="card shadow-sm mb-3" id="seriesSummaryPanel" style="display: none;">
                 <div class="card-header">
-                    <i class="bi bi-calculator me-2"></i>Series Summary
+                    <i class="bi bi-calculator me-2"></i>????????? ?? ???????
                 </div>
                 <div class="card-body p-0">
                     <table class="table table-sm mb-0">
                         <thead>
                             <tr>
-                                <th>Series</th>
-                                <th class="text-end">Score</th>
+                                <th>?????</th>
+                                <th class="text-end">????????</th>
                             </tr>
                         </thead>
                         <tbody id="seriesSummaryBody">
                         </tbody>
                         <tfoot class="table-active">
                             <tr>
-                                <td><strong>Total</strong></td>
+                                <td><strong>????</strong></td>
                                 <td class="text-end"><strong id="seriesTotalScore">0.0</strong></td>
                             </tr>
                         </tfoot>

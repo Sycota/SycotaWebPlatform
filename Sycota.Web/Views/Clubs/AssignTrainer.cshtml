@@ -1,14 +1,14 @@
-@model Sycota.Web.Models.ViewModels.AssignTrainerViewModel
+﻿@model Sycota.Web.Models.ViewModels.AssignTrainerViewModel
 @{
-    ViewData["Title"] = "Assign Trainer";
+    ViewData["Title"] = "Назначаване на треньор";
 }
 
 <div class="container">
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a asp-action="Index">Clubs</a></li>
-            <li class="breadcrumb-item"><a asp-action="ManageMembers" asp-route-id="@Model.ClubId">Manage Members</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Assign Trainer</li>
+            <li class="breadcrumb-item"><a asp-action="Index">Клубове</a></li>
+            <li class="breadcrumb-item"><a asp-action="ManageMembers" asp-route-id="@Model.ClubId">Управление на членове</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Назначаване на треньор</li>
         </ol>
     </nav>
 
@@ -16,14 +16,14 @@
         <div class="col-lg-6">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="mb-0"><i class="bi bi-person-lines-fill me-2"></i>Assign Trainer</h4>
+                    <h4 class="mb-0"><i class="bi bi-person-lines-fill me-2"></i>Назначаване на треньор</h4>
                 </div>
                 <div class="card-body">
                     <div class="alert alert-info mb-4">
                         <div class="d-flex align-items-center">
                             <i class="bi bi-person-fill fs-3 me-3"></i>
                             <div>
-                                <strong>Competitor:</strong><br />
+                                <strong>Състезател:</strong><br />
                                 <span class="fs-5">@Model.CompetitorName</span>
                             </div>
                         </div>
@@ -32,7 +32,7 @@
                     @if (!string.IsNullOrEmpty(Model.CurrentTrainerName))
                     {
                         <div class="mb-4">
-                            <small class="text-muted">Currently assigned to:</small>
+                            <small class="text-muted">Текущо назначен на:</small>
                             <div class="d-flex align-items-center mt-1">
                                 <span class="badge bg-warning text-dark fs-6">
                                     <i class="bi bi-person-badge me-1"></i>@Model.CurrentTrainerName
@@ -48,9 +48,9 @@
                         <input type="hidden" asp-for="CompetitorName" />
 
                         <div class="mb-4">
-                            <label asp-for="SelectedTrainerId" class="form-label">Select Trainer</label>
+                            <label asp-for="SelectedTrainerId" class="form-label">Изберете треньор</label>
                             <select asp-for="SelectedTrainerId" class="form-select form-select-lg">
-                                <option value="">-- No trainer (remove assignment) --</option>
+                                <option value="">-- Без треньор (премахни назначението) --</option>
                                 @foreach (var trainer in Model.AvailableTrainers)
                                 {
                                     var trainerName = !string.IsNullOrEmpty(trainer.User?.FirstName) 
@@ -58,12 +58,12 @@
                                         : trainer.User?.UserName;
                                     var isCurrentTrainer = trainer.Id == Model.CurrentTrainerId;
                                     <option value="@trainer.Id" selected="@isCurrentTrainer">
-                                        @trainerName @(isCurrentTrainer ? "(current)" : "")
+                                        @trainerName @(isCurrentTrainer ? "(текущ)" : "")
                                     </option>
                                 }
                             </select>
                             <div class="form-text">
-                                Select a trainer to assign to this competitor, or select "No trainer" to remove the current assignment.
+                                Изберете треньор за този състезател или изберете "Без треньор", за да премахнете текущото назначение.
                             </div>
                         </div>
 
@@ -71,8 +71,8 @@
                         {
                             <div class="alert alert-warning">
                                 <i class="bi bi-exclamation-triangle me-2"></i>
-                                <strong>No trainers available</strong><br />
-                                <small>There are no trainers in this club yet. Invite trainers to the club first.</small>
+                                <strong>Няма налични треньори</strong><br />
+                                <small>Все още няма треньори в този клуб. Може да добавите треньори от админ.</small>
                             </div>
                         }
 
@@ -81,15 +81,15 @@
                                 <i class="bi bi-check-lg me-1"></i>
                                 @if (Model.CurrentTrainerId.HasValue)
                                 {
-                                    @:Update Assignment
+                                    @:Смени назначението
                                 }
                                 else
                                 {
-                                    @:Assign Trainer
+                                    @:Назначи треньор
                                 }
                             </button>
                             <a asp-action="ManageMembers" asp-route-id="@Model.ClubId" class="btn btn-secondary">
-                                <i class="bi bi-arrow-left me-1"></i>Cancel
+                                <i class="bi bi-arrow-left me-1"></i>Назад
                             </a>
                         </div>
                     </form>
@@ -100,7 +100,7 @@
             {
                 <div class="card mt-4">
                     <div class="card-header">
-                        <i class="bi bi-info-circle me-2"></i>Available Trainers
+                        <i class="bi bi-info-circle me-2"></i>Налични треньори
                     </div>
                     <div class="card-body">
                         <div class="list-group list-group-flush">
@@ -115,12 +115,12 @@
                                         <strong>@trainerName</strong>
                                         @if (isCurrentTrainer)
                                         {
-                                            <span class="badge bg-success ms-2">Current</span>
+                                            <span class="badge bg-success ms-2">Текущ</span>
                                         }
                                         <br /><small class="text-muted">@trainer.User?.Email</small>
                                     </div>
                                     <span class="badge bg-info">
-                                        @trainer.Competitors.Count trainees
+                                        @trainer.Competitors.Count обучаеми
                                     </span>
                                 </div>
                             }

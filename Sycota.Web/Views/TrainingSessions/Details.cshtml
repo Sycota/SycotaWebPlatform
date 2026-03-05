@@ -1,4 +1,4 @@
-@model Sycota.Web.Models.ViewModels.TrainingSessionDetailsViewModel
+﻿@model Sycota.Web.Models.ViewModels.TrainingSessionDetailsViewModel
 @{
     ViewData["Title"] = Model.Session.Name;
 }
@@ -6,9 +6,9 @@
 <div class="container">
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="Index">???????</a></li>
-            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="Details" asp-route-id="@Model.Session.ClubId">????</a></li>
-            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="MyResults" asp-route-id="@Model.Session.ClubId">????? ?????????</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="Index">Клубове</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="Details" asp-route-id="@Model.Session.ClubId">Клуб</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="MyResults" asp-route-id="@Model.Session.ClubId">Моите резултати</a></li>
             <li class="breadcrumb-item active" aria-current="page">@Model.Session.Name</li>
         </ol>
     </nav>
@@ -30,15 +30,15 @@
                     
                     <div class="row mb-4">
                         <div class="col-md-4">
-                            <small class="text-muted d-block">????</small>
+                            <small class="text-muted d-block">Дата</small>
                             <strong><i class="bi bi-calendar me-1"></i>@Model.Session.SessionDate.ToString("dd.MM.yyyy")</strong>
                         </div>
                         <div class="col-md-4">
-                            <small class="text-muted d-block">???</small>
+                            <small class="text-muted d-block">Час</small>
                             <strong><i class="bi bi-clock me-1"></i>@Model.Session.SessionDate.ToString("HH:mm")</strong>
                         </div>
                         <div class="col-md-4">
-                            <small class="text-muted d-block">???????</small>
+                            <small class="text-muted d-block">Стрелец</small>
                             <strong><i class="bi bi-person me-1"></i>@Model.Session.CreatedBy?.UserName</strong>
                         </div>
                     </div>
@@ -47,7 +47,7 @@
                     {
                         <div class="alert alert-light">
                             <i class="bi bi-journal-text me-1"></i>
-                            <strong>???????:</strong> @Model.Session.Notes
+                            <strong>Бележки:</strong> @Model.Session.Notes
                         </div>
                     }
                 </div>
@@ -56,7 +56,7 @@
             <!-- Target Visualization -->
             <div class="card shadow-sm mb-4">
                 <div class="card-header">
-                    <i class="bi bi-crosshair me-2"></i>???????????? ?? ??????????
+                    <i class="bi bi-crosshair me-2"></i>Визуализация на мишената
                 </div>
                 <div class="card-body text-center" style="background-color: #e8e8e8;">
                     <canvas id="targetCanvas" width="400" height="400" style="border-radius: 8px;"></canvas>
@@ -66,7 +66,7 @@
             <!-- Shot Groups -->
             <div class="card shadow-sm mb-4">
                 <div class="card-header">
-                    <i class="bi bi-list-ol me-2"></i>??????? ?? ??????????
+                    <i class="bi bi-list-ol me-2"></i>Детайли за изстрелите
                 </div>
                 <div class="card-body" id="shotDetails">
                     <!-- Will be populated by JavaScript -->
@@ -76,13 +76,13 @@
             <!-- AI Analysis & Chat -->
             <div class="card shadow-sm mb-5" id="aiAnalysisCard">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-robot me-2"></i>AI ???????</span>
+                    <span><i class="bi bi-robot me-2"></i>AI Анализ</span>
                     <div>
-                        <button type="button" class="btn btn-sm btn-outline-secondary me-1" id="clearChatBtn" style="display: none;" title="??????? ?????????">
+                        <button type="button" class="btn btn-sm btn-outline-secondary me-1" id="clearChatBtn" style="display: none;" title="Изчисти историята">
                             <i class="bi bi-trash"></i>
                         </button>
                         <button type="button" class="btn btn-sm btn-outline-primary" id="analyzeBtn">
-                            <i class="bi bi-lightning-charge me-1"></i>?????????? ???????
+                            <i class="bi bi-lightning-charge me-1"></i>Генерирай анализ
                         </button>
                     </div>
                 </div>
@@ -90,28 +90,28 @@
                     <!-- Loading indicator for initial load -->
                     <div id="chatLoading" class="text-center py-3">
                         <div class="spinner-border spinner-border-sm text-secondary" role="status">
-                            <span class="visually-hidden">?????????...</span>
+                            <span class="visually-hidden">Зареждане...</span>
                         </div>
-                        <small class="text-muted ms-2">????????? ?? ??????? ?? ????...</small>
+                        <small class="text-muted ms-2">Зареждане на история на чата...</small>
                     </div>
                     
                     <!-- Chat Messages -->
                     <div id="chatMessages" class="mb-3" style="max-height: 400px; overflow-y: auto; display: none;">
                         <div class="text-center text-muted py-4" id="chatPlaceholder">
                             <i class="bi bi-chat-dots display-4"></i>
-                            <p class="mt-2">???????? "?????????? ???????" ?? AI-???????? ????????? ?? ?????? ??????????? ? ?????????, ??? ??????? ?????? ??-????.</p>
+                            <p class="mt-2">Натиснете "Генерирай анализ" за AI-захранван преглед на вашето представяне и препоръки, как можете да стреляте по-добре.</p>
                         </div>
                     </div>
                     
                     <!-- Chat Input -->
                     <div class="input-group">
-                        <input type="text" class="form-control" id="chatInput" placeholder="??????? ?????? ?? AI ????????..." maxlength="500">
+                        <input type="text" class="form-control" id="chatInput" placeholder="Задайте въпрос на AI асистента..." maxlength="500">
                         <button class="btn btn-primary" type="button" id="sendBtn" disabled>
                             <i class="bi bi-send"></i>
                         </button>
                     </div>
                     <small class="text-muted mt-1 d-block">
-                        <i class="bi bi-info-circle me-1"></i>??????? ?? ???????, ?????? ??? ???????? ?????? ?? ??????????. ????????? ?? ???? ?? ???????.
+                        <i class="bi bi-info-circle me-1"></i>Питайте за техника, какво да подобрите или анализ на групирането. Историята се пази за справка.
                     </small>
                 </div>
             </div>
@@ -121,28 +121,28 @@
             <!-- Statistics Card -->
             <div class="card shadow-sm mb-4">
                 <div class="card-header">
-                    <i class="bi bi-graph-up me-2"></i>??????????
+                    <i class="bi bi-graph-up me-2"></i>Статистика
                 </div>
                 <div class="card-body">
                     <div class="row text-center mb-3">
                         <div class="col-6">
                             <div class="fs-3 fw-bold text-primary" id="totalShots">0</div>
-                            <small class="text-muted">???? ????????</small>
+                            <small class="text-muted">Брой изстрели</small>
                         </div>
                         <div class="col-6">
                             <div class="fs-3 fw-bold text-success" id="totalScore">0.0</div>
-                            <small class="text-muted">??? ????????</small>
+                            <small class="text-muted">Общ резултат</small>
                         </div>
                     </div>
                     <hr />
                     <div class="row text-center">
                         <div class="col-6">
                             <div class="fs-5 fw-bold" id="avgScore">0.0</div>
-                            <small class="text-muted">??????</small>
+                            <small class="text-muted">Средно</small>
                         </div>
                         <div class="col-6">
                             <div class="fs-5 fw-bold" id="tenCount">0</div>
-                            <small class="text-muted">10-?? / 10.9</small>
+                            <small class="text-muted">10-ки / 10.9</small>
                         </div>
                     </div>
                 </div>
@@ -151,27 +151,27 @@
             <!-- Actions Card -->
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <i class="bi bi-lightning me-2"></i>????????
+                    <i class="bi bi-lightning me-2"></i>Действия
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
                         @if (Model.CanEdit)
                         {
                             <a asp-action="RecordShots" asp-route-id="@Model.Session.Id" class="btn btn-accent">
-                                <i class="bi bi-pencil me-1"></i>?????????? ??????????
+                                <i class="bi bi-pencil me-1"></i>Редактирай изстрелите
                             </a>
                         }
                         <a asp-controller="Clubs" asp-action="MyResults" asp-route-id="@Model.Session.ClubId" class="btn btn-secondary">
-                            <i class="bi bi-arrow-left me-1"></i>????? ??? ???????????
+                            <i class="bi bi-arrow-left me-1"></i>Назад към резултатите
                         </a>
                         @if (Model.CanEdit)
                         {
                             <hr />
                             <form asp-action="Delete" asp-route-id="@Model.Session.Id" method="post"
-                                  onsubmit="return confirm('??????? ?? ???, ?? ?????? ?? ???????? ???? ???????????? ?????? ???? ???????? ?? ???? ?? ???? ????????.');">
+                                  onsubmit="return confirm('Сигурни ли сте, че искате да изтриете тази тренировъчна сесия? Всички изстрели от нея ще бъдат изгубени.');">
                                 @Html.AntiForgeryToken()
                                 <button type="submit" class="btn btn-danger w-100">
-                                    <i class="bi bi-trash me-1"></i>?????? ?????????????? ?????
+                                    <i class="bi bi-trash me-1"></i>Изтрий тренировъчната сесия
                                 </button>
                             </form>
                         }
@@ -423,15 +423,15 @@
         let html = '';
         
         if (shotsData.warmupShots && shotsData.warmupShots.length > 0) {
-            html += '<h6><i class="bi bi-thermometer-half me-1"></i>????????</h6>';
+            html += '<h6><i class="bi bi-thermometer-half me-1"></i>Загряване</h6>';
             html += renderShotTable(shotsData.warmupShots, false);
         }
         
         const seriesGroups = (shotsData.groups || []).filter(g => g.valueType === '10-shot-series');
         
         if (seriesGroups.length > 0) {
-            html += '<h6 class="mt-3"><i class="bi bi-calculator me-1"></i>????????? ?? ???????</h6>';
-            html += '<table class="table table-sm" style="background: #fff;"><thead><tr><th>?????</th><th class="text-end">????????</th></tr></thead><tbody>';
+            html += '<h6 class="mt-3"><i class="bi bi-calculator me-1"></i>Обобщение на сериите</h6>';
+            html += '<table class="table table-sm" style="background: #fff;"><thead><tr><th>Серия</th><th class="text-end">Резултат</th></tr></thead><tbody>';
             
             let grandTotal = 0;
             let seriesIndex = 0;
@@ -445,33 +445,33 @@
                 grandTotal += seriesScore;
                 const shotCount = (group.shots || []).length;
                 const statusClass = shotCount === 10 ? 'text-success' : (shotCount > 0 ? 'text-warning' : 'text-muted');
-                html += `<tr><td><i class="bi bi-bullseye me-1 ${statusClass}"></i>????? ${seriesIndex} <small class="text-muted">(${shotCount}/10)</small></td><td class="text-end fw-bold">${seriesScore.toFixed(1)}</td></tr>`;
+                html += `<tr><td><i class="bi bi-bullseye me-1 ${statusClass}"></i>Серия ${seriesIndex} <small class="text-muted">(${shotCount}/10)</small></td><td class="text-end fw-bold">${seriesScore.toFixed(1)}</td></tr>`;
             });
             
-            html += `</tbody><tfoot class="table-active"><tr><td><strong>????</strong></td><td class="text-end"><strong>${grandTotal.toFixed(1)}</strong></td></tr></tfoot></table>`;
+            html += `</tbody><tfoot class="table-active"><tr><td><strong>Общо</strong></td><td class="text-end"><strong>${grandTotal.toFixed(1)}</strong></td></tr></tfoot></table>`;
         }
         
         (shotsData.groups || []).forEach((group, i) => {
             if (group.shots && group.shots.length > 0) {
                 const typeIcon = group.valueType === 'blind' ? 'eye-slash' : 
                                 group.valueType === 'practice' ? 'flag' : 'bullseye';
-                const typeName = group.valueType === 'blind' ? '?? ?????' : 
-                                group.valueType === 'practice' ? '??????????' : '10-????????? ?????';
-                html += `<h6 class="mt-3"><i class="bi bi-${typeIcon} me-1"></i>????? ${i + 1} <span class="badge bg-secondary">${typeName}</span></h6>`;
+                const typeName = group.valueType === 'blind' ? 'На сляпо' : 
+                                group.valueType === 'practice' ? 'Практика' : '10-изстрелна серия';
+                html += `<h6 class="mt-3"><i class="bi bi-${typeIcon} me-1"></i>Серия ${i + 1} <span class="badge bg-secondary">${typeName}</span></h6>`;
                 const showTotal = group.valueType === '10-shot-series';
                 html += renderShotTable(group.shots, showTotal);
             }
         });
         
         if (!html) {
-            html = '<p class="text-muted text-center"><i class="bi bi-bullseye me-1"></i>??? ??? ???? ???????? ????????.</p>';
+            html = '<p class="text-muted text-center"><i class="bi bi-bullseye me-1"></i>Все още няма записани изстрели.</p>';
         }
         
         container.innerHTML = html;
     }
 
     function renderShotTable(shots, showTotal = false) {
-        let html = '<table class="table table-sm" style="background: #fff;"><thead><tr><th>#</th><th>??????? (??)</th><th>????????</th></tr></thead><tbody>';
+        let html = '<table class="table table-sm" style="background: #fff;"><thead><tr><th>#</th><th>Позиция (мм)</th><th>Резултат</th></tr></thead><tbody>';
         let total = 0;
         
         shots.forEach((shot, i) => {
@@ -487,7 +487,7 @@
         });
         
         if (showTotal && shots.length > 0) {
-            html += `<tr class="table-active"><td colspan="2"><strong>???? ?? ???????</strong></td><td><strong>${total.toFixed(1)}</strong></td></tr>`;
+            html += `<tr class="table-active"><td colspan="2"><strong>Общо за серията</strong></td><td><strong>${total.toFixed(1)}</strong></td></tr>`;
         }
         
         html += '</tbody></table>';
@@ -505,7 +505,7 @@
         
         const labelDiv = document.createElement('div');
         labelDiv.className = 'message-label';
-        labelDiv.textContent = role === 'user' ? '???' : 'AI ???????';
+        labelDiv.textContent = role === 'user' ? 'Вие' : 'AI Анализатор';
         
         const contentDiv = document.createElement('div');
         contentDiv.className = 'message-content';
@@ -561,7 +561,7 @@
                 // Hide analyze button text if already analyzed
                 const hasAnalysis = data.messages.some(m => m.role === 'assistant');
                 if (hasAnalysis) {
-                    document.getElementById('analyzeBtn').innerHTML = '<i class="bi bi-arrow-clockwise me-1"></i>???????? ??????';
+                    document.getElementById('analyzeBtn').innerHTML = '<i class="bi bi-arrow-clockwise me-1"></i>Прегенерирай анализ';
                 }
             }
         } catch (error) {
@@ -591,13 +591,13 @@
                     chatHistory.push({ role: 'assistant', content: data.analysis });
                 }
                 addChatMessage('assistant', data.analysis);
-                document.getElementById('analyzeBtn').innerHTML = '<i class="bi bi-arrow-clockwise me-1"></i>???????? ??????';
+                document.getElementById('analyzeBtn').innerHTML = '<i class="bi bi-arrow-clockwise me-1"></i>Прегенерирай анализ';
             } else {
-                addChatMessage('assistant', `?????????, ?? ????? ?? ?????????? ???????: ${data.error || '?????????? ??????'}`);
+                addChatMessage('assistant', `Съжалявам, не успях да генерирам анализа: ${data.error || 'Неизвестна грешка'}`);
             }
         } catch (error) {
             hideTypingIndicator();
-            addChatMessage('assistant', '?????????, ???????? ?????? ??? ??????????? ? AI ????????. ????, ???????? ?????? ??-?????.');
+            addChatMessage('assistant', 'Съжалявам, възникна грешка при свързване с AI сървъра. Моля, опитайте отново по-късно.');
         }
         
         setLoading(false);
@@ -629,18 +629,18 @@
                 chatHistory.push({ role: 'assistant', content: data.response });
                 addChatMessage('assistant', data.response);
             } else {
-                addChatMessage('assistant', `?????????, ?? ????? ?? ????????: ${data.error || '?????????? ??????'}`);
+                addChatMessage('assistant', `Съжалявам, не успях да отговоря: ${data.error || 'Неизвестна грешка'}`);
             }
         } catch (error) {
             hideTypingIndicator();
-            addChatMessage('assistant', '?????????, ???????? ?????? ??? ??????????? ? AI ????????. ????, ???????? ?????? ??-?????.');
+            addChatMessage('assistant', 'Съжалявам, възникна грешка при свързване с AI сървъра. Моля, опитайте отново по-късно.');
         }
         
         setLoading(false);
     }
     
     async function clearChatHistory() {
-        if (!confirm('??????? ?? ???, ?? ?????? ?? ????????? ????????? ?? ????? ???? ?? ???? ?? ???? ????????.')) {
+        if (!confirm('Сигурни ли сте, че искате да изчистите историята на чата завинаги? Това не може да бъде възстановено.')) {
             return;
         }
         
@@ -656,11 +656,11 @@
                 container.innerHTML = `
                     <div class="text-center text-muted py-4" id="chatPlaceholder">
                         <i class="bi bi-chat-dots display-4"></i>
-                        <p class="mt-2">???????? "?????????? ???????" ?? AI-???????? ????????? ?? ?????? ??????????? ? ?????????, ??? ??????? ?????? ??-????.</p>
+                        <p class="mt-2">Натиснете "Генерирай анализ" за AI-захранван преглед на вашето представяне и препоръки, как можете да стреляте по-добре.</p>
                     </div>
                 `;
                 document.getElementById('clearChatBtn').style.display = 'none';
-                document.getElementById('analyzeBtn').innerHTML = '<i class="bi bi-lightning-charge me-1"></i>?????????? ???????';
+                document.getElementById('analyzeBtn').innerHTML = '<i class="bi bi-lightning-charge me-1"></i>Генерирай анализ';
             }
         } catch (error) {
             console.error('Failed to clear chat history:', error);

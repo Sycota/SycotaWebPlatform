@@ -1,14 +1,14 @@
-@model Sycota.Web.Models.ViewModels.CreateTrainingSessionViewModel
+﻿@model Sycota.Web.Models.ViewModels.CreateTrainingSessionViewModel
 @{
-    ViewData["Title"] = "???? ???????????? ?????";
+    ViewData["Title"] = "Нова тренировъчна сесия";
 }
 
 <div class="container">
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="Index">???????</a></li>
-            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="MyResults" asp-route-id="@Model.ClubId">????? ?????????</a></li>
-            <li class="breadcrumb-item active" aria-current="page">???? ?????</li>
+            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="Index">Клубове</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="MyResults" asp-route-id="@Model.ClubId">Моите резултати</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Нова сесия</li>
         </ol>
     </nav>
 
@@ -17,7 +17,7 @@
             <div class="card shadow-sm">
                 <div class="card-header">
                     <h2 class="mb-0">
-                        <i class="bi bi-plus-circle me-2"></i>???? ???????????? ?????
+                        <i class="bi bi-plus-circle me-2"></i>Нова тренировъчна сесия
                     </h2>
                 </div>
                 <div class="card-body">
@@ -26,26 +26,26 @@
                         <input type="hidden" asp-for="ClubId" />
 
                         <div class="mb-3">
-                            <label asp-for="Name" class="form-label">??? ?? ??????? <span class="text-danger">*</span></label>
-                            <input asp-for="Name" class="form-control" placeholder="????., ???????? ??????????, ?????????? ?? ??????????" required />
+                            <label asp-for="Name" class="form-label">Име на сесията <span class="text-danger">*</span></label>
+                            <input asp-for="Name" class="form-control" placeholder="Напр., Сутрешна тренировка, Подготовка за състезание" required />
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="Description" class="form-label">????????</label>
+                            <label asp-for="Description" class="form-label">Описание</label>
                             <textarea asp-for="Description" class="form-control" rows="3" 
-                                      placeholder="?????????????? ??????? ?? ???? ?????"></textarea>
+                                      placeholder="Допълнителни детайли за тази сесия"></textarea>
                             <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label asp-for="SessionDate" class="form-label">???? ? ??? <span class="text-danger">*</span></label>
+                                <label asp-for="SessionDate" class="form-label">Дата и час <span class="text-danger">*</span></label>
                                 <input asp-for="SessionDate" type="datetime-local" class="form-control" required />
                                 <span asp-validation-for="SessionDate" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label asp-for="WeaponType" class="form-label">??? ?????? <span class="text-danger">*</span></label>
+                                <label asp-for="WeaponType" class="form-label">Тип оръжие <span class="text-danger">*</span></label>
                                 <select asp-for="WeaponType" class="form-select" asp-items="Html.GetEnumSelectList<Sycota.Domain.Enums.ISSFWeaponType>()">
                                 </select>
                                 <span asp-validation-for="WeaponType" class="text-danger"></span>
@@ -53,23 +53,23 @@
                         </div>
 
                         <div class="mb-4">
-                            <label asp-for="Notes" class="form-label">???????????? ???????</label>
+                            <label asp-for="Notes" class="form-label">Допълнителни бележки</label>
                             <textarea asp-for="Notes" class="form-control" rows="2" 
-                                      placeholder="???????, ?????????? ?????????? ? ??."></textarea>
+                                      placeholder="Условия, усещания, настроение и др."></textarea>
                             <span asp-validation-for="Notes" class="text-danger"></span>
                         </div>
 
                         <div class="alert alert-info">
                             <i class="bi bi-info-circle me-1"></i>
-                            ???? ???? ????????? ???????, ?? ?????? ?? ????????? ?????????? ?? ????? ???????????? ??????.
+                            След като създадете сесията, ще можете да записвате изстрелите си върху тренировъчна мишена.
                         </div>
 
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-accent">
-                                <i class="bi bi-arrow-right-circle me-1"></i>?????? ? ?????? ????????
+                                <i class="bi bi-arrow-right-circle me-1"></i>Създай и запиши изстрели
                             </button>
                             <a asp-controller="Clubs" asp-action="MyResults" asp-route-id="@Model.ClubId" class="btn btn-outline-secondary">
-                                <i class="bi bi-x-circle me-1"></i>?????
+                                <i class="bi bi-x-circle me-1"></i>Отказ
                             </a>
                         </div>
                     </form>

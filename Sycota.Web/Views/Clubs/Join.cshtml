@@ -1,15 +1,15 @@
-@model Sycota.Web.Models.ViewModels.JoinClubViewModel
+﻿@model Sycota.Web.Models.ViewModels.JoinClubViewModel
 @{
-    ViewData["Title"] = "Join Club";
+    ViewData["Title"] = "Присъединяване към клуб";
     var requiresApproval = (bool?)ViewBag.RequiresApproval ?? true;
 }
 
 <div class="container">
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a asp-action="Index">Clubs</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Клубове</a></li>
             <li class="breadcrumb-item"><a asp-action="Details" asp-route-id="@Model.ClubId">@ViewBag.ClubName</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Join</li>
+            <li class="breadcrumb-item active" aria-current="page">Присъединяване</li>
         </ol>
     </nav>
 
@@ -21,11 +21,11 @@
                         <i class="bi bi-person-plus me-2"></i>
                         @if (requiresApproval)
                         {
-                            @:Request to Join @ViewBag.ClubName
+                            @:Заявка за присъединяване към @ViewBag.ClubName
                         }
                         else
                         {
-                            @:Join @ViewBag.ClubName
+                            @:Присъединяване към @ViewBag.ClubName
                         }
                     </h2>
                 </div>
@@ -34,8 +34,8 @@
                     {
                         <div class="alert alert-warning mb-4">
                             <i class="bi bi-shield-lock me-2"></i>
-                            <strong>Approval Required</strong><br />
-                            <small>This club requires admin approval before you can join. Your request will be reviewed.</small>
+                            <strong>Изисква се одобрение</strong><br />
+                            <small>Този клуб изисква одобрение за присъединяване преди членуването. Вашата заявка ще бъде прегледана.</small>
                         </div>
                     }
 
@@ -44,20 +44,20 @@
                         <input type="hidden" asp-for="ClubId" />
 
                         <div class="mb-4">
-                            <label asp-for="RequestedRole" class="form-label">Select Your Role <span class="text-danger">*</span></label>
+                            <label asp-for="RequestedRole" class="form-label">Желана роля в клуба <span class="text-danger">*</span></label>
                             <select asp-for="RequestedRole" class="form-select" id="roleSelect">
-                                <option value="@Sycota.Domain.Enums.ClubRole.Competitor">Competitor - Participate in training sessions</option>
-                                <option value="@Sycota.Domain.Enums.ClubRole.Trainer">Trainer - Train and mentor competitors</option>
+                                <option value="@Sycota.Domain.Enums.ClubRole.Competitor">Състезател - участие в тренировъчни сесии</option>
+                                <option value="@Sycota.Domain.Enums.ClubRole.Trainer">Треньор - управление и провеждане на тренировки</option>
                             </select>
                             <div class="form-text">
-                                Choose the role that best describes your participation in this club.
+                                Изберете ролята, която най-добре описва вашата функция в този клуб.
                             </div>
                         </div>
 
                         <div class="mb-4" id="trainerSelection" style="display: none;">
-                            <label asp-for="TrainerId" class="form-label">Select Your Trainer</label>
+                            <label asp-for="TrainerId" class="form-label">Изберете вашия треньор</label>
                             <select asp-for="TrainerId" class="form-select">
-                                <option value="">-- No trainer (optional) --</option>
+                                <option value="">-- Без треньор (по избор) --</option>
                                 @foreach (var trainer in Model.AvailableTrainers)
                                 {
                                     var trainerName = !string.IsNullOrEmpty(trainer.User?.FirstName) 
@@ -67,27 +67,27 @@
                                 }
                             </select>
                             <div class="form-text">
-                                Select a trainer who will guide your progress.
+                                Изберете треньор, който ще наблюдава вашия напредък.
                             </div>
                         </div>
 
                         @if (requiresApproval)
                         {
                             <div class="mb-4">
-                                <label asp-for="Message" class="form-label">Message to Admin (optional)</label>
+                                <label asp-for="Message" class="form-label">Съобщение за присъединяване (по избор)</label>
                                 <textarea asp-for="Message" class="form-control" rows="3" 
-                                          placeholder="Introduce yourself or explain why you'd like to join..."></textarea>
+                                          placeholder="Представете се или обяснете защо искате да се присъедините..."></textarea>
                                 <div class="form-text">
-                                    Add a personal message to help the admin review your request.
+                                    Добавете кратко съобщение, за да увеличите шансовете за одобрение на вашата заявка.
                                 </div>
                             </div>
                         }
 
                         <div class="alert alert-info">
-                            <h6 class="alert-heading"><i class="bi bi-info-circle me-1"></i>Role Information</h6>
+                            <h6 class="alert-heading"><i class="bi bi-info-circle me-1"></i>Информация за ролите</h6>
                             <hr />
-                            <p class="mb-1"><strong>Competitor:</strong> Participate in training sessions, track your results, and work with trainers.</p>
-                            <p class="mb-0"><strong>Trainer:</strong> Create training sessions, manage competitors, and track their progress.</p>
+                            <p class="mb-1"><strong>Състезател:</strong> Участие в тренировъчни сесии, запис на резултатите си и проследяване на напредъка.</p>
+                            <p class="mb-0"><strong>Треньор:</strong> Управление на тренировъчни сесии, наблюдение на състезатели и преглед на техния напредък.</p>
                         </div>
 
                         <div class="d-flex gap-2">
@@ -95,15 +95,15 @@
                                 <i class="bi bi-check-circle me-1"></i>
                                 @if (requiresApproval)
                                 {
-                                    @:Submit Request
+                                    @:Изпрати заявка
                                 }
                                 else
                                 {
-                                    @:Join Club
+                                    @:Присъедини се
                                 }
                             </button>
                             <a asp-action="Details" asp-route-id="@Model.ClubId" class="btn btn-outline-secondary">
-                                <i class="bi bi-x-circle me-1"></i>Cancel
+                                <i class="bi bi-x-circle me-1"></i>Отказ
                             </a>
                         </div>
                     </form>

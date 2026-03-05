@@ -1,19 +1,19 @@
-@model Sycota.Web.Models.ViewModels.NotificationsViewModel
+﻿@model Sycota.Web.Models.ViewModels.NotificationsViewModel
 @{
-    ViewData["Title"] = "Notifications";
+    ViewData["Title"] = "????????";
 }
 
 <div class="container">
-    <h1 class="mb-4"><i class="bi bi-bell me-2"></i>Notifications</h1>
+    <h1 class="mb-4"><i class="bi bi-bell me-2"></i>????????</h1>
 
     <div class="row">
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-envelope me-2"></i>Club Invitations</span>
+                    <span><i class="bi bi-envelope me-2"></i>?????? ?? ???????</span>
                     @if (Model.TotalCount > 0)
                     {
-                        <span class="badge bg-danger">@Model.TotalCount pending</span>
+                        <span class="badge bg-danger">@Model.TotalCount ??????</span>
                     }
                 </div>
                 <div class="card-body">
@@ -21,8 +21,8 @@
                     {
                         <div class="text-center py-5">
                             <i class="bi bi-envelope-open display-1 text-muted"></i>
-                            <p class="text-muted mt-3">No pending invitations</p>
-                            <p class="text-muted">When someone invites you to join a club, it will appear here.</p>
+                            <p class="text-muted mt-3">???? ?????? ??????</p>
+                            <p class="text-muted">?????? ????? ?? ?????? ?? ?? ???????????? ??? ????, ???? ?? ?? ????? ???.</p>
                         </div>
                     }
                     else
@@ -37,7 +37,7 @@
                                                 <i class="bi bi-bullseye text-primary me-2 fs-4"></i>
                                                 <div>
                                                     <h5 class="mb-0">@invitation.Club.Name</h5>
-                                                    <small class="text-muted">Invited by @invitation.CreatedBy.UserName</small>
+                                                    <small class="text-muted">??????? ?? @invitation.CreatedBy.UserName</small>
                                                 </div>
                                             </div>
                                             
@@ -46,7 +46,7 @@
                                                 @if (invitation.AssignedTrainer != null)
                                                 {
                                                     <span class="text-muted">
-                                                        <i class="bi bi-person me-1"></i>Trainer: @invitation.AssignedTrainer.User.UserName
+                                                        <i class="bi bi-person me-1"></i>???????: @invitation.AssignedTrainer.User.UserName
                                                     </span>
                                                 }
                                             </div>
@@ -61,10 +61,10 @@
 
                                             <div class="d-flex align-items-center text-muted small">
                                                 <span class="me-3">
-                                                    <i class="bi bi-calendar me-1"></i>Sent @invitation.CreatedAt.ToString("MMM dd, yyyy")
+                                                    <i class="bi bi-calendar me-1"></i>????????? ?? @invitation.CreatedAt.ToString("dd.MM.yyyy")
                                                 </span>
                                                 <span class="@(invitation.ExpiresAt < DateTime.UtcNow.AddDays(2) ? "text-danger" : "")">
-                                                    <i class="bi bi-clock me-1"></i>Expires @invitation.ExpiresAt.ToString("MMM dd, yyyy")
+                                                    <i class="bi bi-clock me-1"></i>?????? ?? @invitation.ExpiresAt.ToString("dd.MM.yyyy")
                                                 </span>
                                             </div>
                                         </div>
@@ -72,7 +72,7 @@
                                         <div class="ms-3">
                                             <a asp-controller="Clubs" asp-action="AcceptInvitation" asp-route-code="@invitation.InvitationCode" 
                                                class="btn btn-accent">
-                                                <i class="bi bi-check-lg me-1"></i>View & Accept
+                                                <i class="bi bi-check-lg me-1"></i>??? ? ??????
                                             </a>
                                         </div>
                                     </div>
@@ -87,22 +87,22 @@
         <div class="col-lg-4">
             <div class="card">
                 <div class="card-header">
-                    <i class="bi bi-info-circle me-2"></i>About Invitations
+                    <i class="bi bi-info-circle me-2"></i>?? ????????
                 </div>
                 <div class="card-body">
                     <p class="text-muted small">
-                        Club admins can invite you to join their club by sending an invitation to your email address.
+                        ???????????????? ?? ??????? ????? ?? ?? ??????? ?? ?? ???????????? ??? ?????? ????, ???? ???????? ?????? ?? ????? ????? ?????.
                     </p>
                     <p class="text-muted small">
-                        Each invitation includes:
+                        ????? ?????? ???????:
                     </p>
                     <ul class="text-muted small">
-                        <li>The club you're invited to</li>
-                        <li>Your assigned role (Competitor, Trainer, or Admin)</li>
-                        <li>Optionally, an assigned trainer</li>
+                        <li>??????, ? ????? ??? ????????</li>
+                        <li>?????? ?????????? ???? (??????????, ??????? ??? ?????????????)</li>
+                        <li>?? ????? - ????????? ???????</li>
                     </ul>
                     <p class="text-muted small mb-0">
-                        Invitations expire after a set period. Make sure to accept before they expire!
+                        ???????? ??????? ???? ????????? ??????. ??????? ??, ?? ???????? ????? ?? ???????!
                     </p>
                 </div>
             </div>
