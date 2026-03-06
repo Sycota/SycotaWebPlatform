@@ -29,7 +29,7 @@ namespace Sycota.Application.Services
         {
             if (!await ClubExistsAsync(clubId))
             {
-                return ServiceResult<IEnumerable<ClubMember>>.Fail($"Club with id {clubId} was not found.");
+                return ServiceResult<IEnumerable<ClubMember>>.Fail($"Клуб с id {clubId} не беше намерен.");
             }
 
             var members = await _clubMemberRepository.GetAllClubMembersByClubIdAsync(clubId, include);
@@ -40,7 +40,7 @@ namespace Sycota.Application.Services
         {
             if (!await ClubExistsAsync(clubId))
             {
-                return ServiceResult<IEnumerable<ClubMember>>.Fail($"Club with id {clubId} was not found.");
+                return ServiceResult<IEnumerable<ClubMember>>.Fail($"Клуб с id {clubId} не беше намерен.");
             }
 
             var trainers = await _clubMemberRepository.GetAllTrainersByClubIdAsync(clubId, include);
@@ -51,7 +51,7 @@ namespace Sycota.Application.Services
         {
             if (!await ClubExistsAsync(clubId))
             {
-                return ServiceResult<IEnumerable<ClubMember>>.Fail($"Club with id {clubId} was not found.");
+                return ServiceResult<IEnumerable<ClubMember>>.Fail($"Клуб с id {clubId} не беше намерен.");
             }
 
             var competitors = await _clubMemberRepository.GetAllCompetitorsByClubIdAsync(clubId, include);
@@ -62,7 +62,7 @@ namespace Sycota.Application.Services
         {
             if (!await ClubExistsAsync(clubId))
             {
-                return ServiceResult<IEnumerable<ClubMember>>.Fail($"Club with id {clubId} was not found.");
+                return ServiceResult<IEnumerable<ClubMember>>.Fail($"Клуб с id {clubId} не беше намерен.");
             }
 
             var admins = await _clubMemberRepository.GetAllAdminsByClubIdAsync(clubId, include);
@@ -79,7 +79,7 @@ namespace Sycota.Application.Services
 
             if (!trainerResult.Data.CanTrain)
             {
-                return ServiceResult<IEnumerable<ClubMember>>.Fail("Provided member is not a trainer.");
+                return ServiceResult<IEnumerable<ClubMember>>.Fail("Посоченият член не е треньор.");
             }
 
             var competitors = await _clubMemberRepository.GetCompetitorsByTrainerIdAsync(trainerId, include);
@@ -91,7 +91,7 @@ namespace Sycota.Application.Services
             var member = await _clubMemberRepository.GetClubMemberByIdAsync(clubMemberId, include);
             if (member is null)
             {
-                return ServiceResult<ClubMember>.Fail($"Club member with id {clubMemberId} was not found.");
+                return ServiceResult<ClubMember>.Fail($"Член на клуб с id {clubMemberId} не беше намерен.");
             }
 
             return ServiceResult<ClubMember>.Ok(member);
@@ -101,17 +101,17 @@ namespace Sycota.Application.Services
         {
             if (string.IsNullOrWhiteSpace(userId))
             {
-                return ServiceResult.Fail("User id is required.");
+                return ServiceResult.Fail("Идентификаторът на потребителя е задължителен.");
             }
 
             if (!await ClubExistsAsync(clubId))
             {
-                return ServiceResult.Fail($"Club with id {clubId} was not found.");
+                return ServiceResult.Fail($"Клуб с id {clubId} не беше намерен.");
             }
 
             if (await UserMembershipExistsAsync(userId, clubId) is { Success: true, Data: true })
             {
-                return ServiceResult.Fail("User is already a member of this club.");
+                return ServiceResult.Fail("Потребителят вече е член на този клуб.");
             }
 
             if (trainerId.HasValue)
@@ -124,12 +124,12 @@ namespace Sycota.Application.Services
 
                 if (!trainerResult.Data.CanTrain)
                 {
-                    return ServiceResult.Fail("Provided trainer id does not belong to a trainer.");
+                    return ServiceResult.Fail("Посоченият идентификатор на треньор не принадлежи на треньор.");
                 }
 
                 if (trainerResult.Data.ClubId != clubId)
                 {
-                    return ServiceResult.Fail("Trainer must belong to the same club as the member being added.");
+                    return ServiceResult.Fail("Треньорът трябва да принадлежи на същия клуб като добавяния член.");
                 }
             }
 
@@ -149,7 +149,7 @@ namespace Sycota.Application.Services
             }
             catch (Exception ex)
             {
-                return ServiceResult.Fail($"Unable to add club member: {ex.Message}");
+                return ServiceResult.Fail($"Неуспешно добавяне на член на клуба: {ex.Message}");
             }
         }
 
@@ -173,7 +173,7 @@ namespace Sycota.Application.Services
 
                 if (!trainerResult.Data.CanTrain || trainerResult.Data.ClubId != existing.ClubId)
                 {
-                    return ServiceResult.Fail("Trainer must be a trainer within the same club.");
+                    return ServiceResult.Fail("Треньорът трябва да е треньор в същия клуб.");
                 }
             }
 
@@ -189,7 +189,7 @@ namespace Sycota.Application.Services
             }
             catch (Exception ex)
             {
-                return ServiceResult.Fail($"Unable to update club member: {ex.Message}");
+                return ServiceResult.Fail($"Неуспешно обновяване на член на клуба: {ex.Message}");
             }
         }
 
@@ -208,7 +208,7 @@ namespace Sycota.Application.Services
             }
             catch (Exception ex)
             {
-                return ServiceResult.Fail($"Unable to remove club member: {ex.Message}");
+                return ServiceResult.Fail($"Неуспешно премахване на член на клуба: {ex.Message}");
             }
         }
 
@@ -229,7 +229,7 @@ namespace Sycota.Application.Services
             var competitor = competitorResult.Data;
             if (competitor.Role != ClubRole.Competitor)
             {
-                return ServiceResult.Fail("Can only assign trainers to competitors.");
+                return ServiceResult.Fail("Треньори могат да се назначават само на състезатели.");
             }
 
             if (trainerId.HasValue)
@@ -243,12 +243,12 @@ namespace Sycota.Application.Services
                 var trainer = trainerResult.Data;
                 if (!trainer.CanTrain)
                 {
-                    return ServiceResult.Fail("Selected member is not a trainer.");
+                    return ServiceResult.Fail("Избраният член не е треньор.");
                 }
 
                 if (trainer.ClubId != competitor.ClubId)
                 {
-                    return ServiceResult.Fail("Trainer and competitor must be in the same club.");
+                    return ServiceResult.Fail("Треньорът и състезателят трябва да са в един и същ клуб.");
                 }
             }
 
@@ -260,7 +260,7 @@ namespace Sycota.Application.Services
             }
             catch (Exception ex)
             {
-                return ServiceResult.Fail($"Unable to assign trainer: {ex.Message}");
+                return ServiceResult.Fail($"Неуспешно назначаване на треньор: {ex.Message}");
             }
         }
 
@@ -268,7 +268,7 @@ namespace Sycota.Application.Services
         {
             if (!await ClubExistsAsync(clubId))
             {
-                return ServiceResult<IEnumerable<ClubMember>>.Fail($"Club with id {clubId} was not found.");
+                return ServiceResult<IEnumerable<ClubMember>>.Fail($"Клуб с id {clubId} не беше намерен.");
             }
 
             var allCompetitors = await _clubMemberRepository.GetAllCompetitorsByClubIdAsync(clubId, include);
@@ -287,7 +287,7 @@ namespace Sycota.Application.Services
             var member = memberResult.Data;
             if (member.Role != ClubRole.Admin)
             {
-                return ServiceResult.Fail("Only admins can be set as trainers using this method.");
+                return ServiceResult.Fail("Само администратори могат да бъдат задавани като треньори чрез този метод.");
             }
 
             try
@@ -298,7 +298,7 @@ namespace Sycota.Application.Services
             }
             catch (Exception ex)
             {
-                return ServiceResult.Fail($"Unable to update admin trainer status: {ex.Message}");
+                return ServiceResult.Fail($"Неуспешно обновяване на треньорския статус на администратора: {ex.Message}");
             }
         }
 
@@ -313,24 +313,24 @@ namespace Sycota.Application.Services
         {
             if (string.IsNullOrWhiteSpace(userId))
             {
-                return ServiceResult.Fail("User id is required.");
+                return ServiceResult.Fail("Идентификаторът на потребителя е задължителен.");
             }
 
             var club = await _clubRepository.GetClubByIdAsync(clubId);
             if (club is null)
             {
-                return ServiceResult.Fail($"Club with id {clubId} was not found.");
+                return ServiceResult.Fail($"Клуб с id {clubId} не беше намерен.");
             }
 
             if (await UserMembershipExistsAsync(userId, clubId) is { Success: true, Data: true })
             {
-                return ServiceResult.Fail("User is already a member of this club.");
+                return ServiceResult.Fail("Потребителят вече е член на този клуб.");
             }
 
             var existingRequest = await _joinRequestRepository.GetPendingByUserAndClubAsync(userId, clubId);
             if (existingRequest is not null)
             {
-                return ServiceResult.Fail("You already have a pending request to join this club.");
+                return ServiceResult.Fail("Вече имате чакаща заявка за присъединяване към този клуб.");
             }
 
             if (trainerId.HasValue)
@@ -338,7 +338,7 @@ namespace Sycota.Application.Services
                 var trainerResult = await GetClubMemberAsync(trainerId.Value);
                 if (!trainerResult.Success || trainerResult.Data.Role != ClubRole.Trainer || trainerResult.Data.ClubId != clubId)
                 {
-                    return ServiceResult.Fail("Invalid trainer selected.");
+                    return ServiceResult.Fail("Невалиден избор на треньор.");
                 }
             }
 
@@ -360,7 +360,7 @@ namespace Sycota.Application.Services
             }
             catch (Exception ex)
             {
-                return ServiceResult.Fail($"Unable to create join request: {ex.Message}");
+                return ServiceResult.Fail($"Неуспешно създаване на заявка за присъединяване: {ex.Message}");
             }
         }
 
@@ -368,7 +368,7 @@ namespace Sycota.Application.Services
         {
             if (!await ClubExistsAsync(clubId))
             {
-                return ServiceResult<IEnumerable<ClubJoinRequest>>.Fail($"Club with id {clubId} was not found.");
+                return ServiceResult<IEnumerable<ClubJoinRequest>>.Fail($"Клуб с id {clubId} не беше намерен.");
             }
 
             var requests = await _joinRequestRepository.GetByClubIdAsync(clubId, MembershipRequestStatus.Pending);
@@ -380,7 +380,7 @@ namespace Sycota.Application.Services
             var request = await _joinRequestRepository.GetByIdAsync(requestId);
             if (request is null)
             {
-                return ServiceResult<ClubJoinRequest>.Fail($"Join request with id {requestId} was not found.");
+                return ServiceResult<ClubJoinRequest>.Fail($"Заявка за присъединяване с id {requestId} не беше намерена.");
             }
 
             return ServiceResult<ClubJoinRequest>.Ok(request);
@@ -397,7 +397,7 @@ namespace Sycota.Application.Services
             var request = requestResult.Data;
             if (request.Status != MembershipRequestStatus.Pending)
             {
-                return ServiceResult.Fail("This request has already been processed.");
+                return ServiceResult.Fail("Тази заявка вече е обработена.");
             }
 
             try
@@ -419,7 +419,7 @@ namespace Sycota.Application.Services
             }
             catch (Exception ex)
             {
-                return ServiceResult.Fail($"Unable to approve join request: {ex.Message}");
+                return ServiceResult.Fail($"Неуспешно одобряване на заявката за присъединяване: {ex.Message}");
             }
         }
 
@@ -434,7 +434,7 @@ namespace Sycota.Application.Services
             var request = requestResult.Data;
             if (request.Status != MembershipRequestStatus.Pending)
             {
-                return ServiceResult.Fail("This request has already been processed.");
+                return ServiceResult.Fail("Тази заявка вече е обработена.");
             }
 
             try
@@ -449,7 +449,7 @@ namespace Sycota.Application.Services
             }
             catch (Exception ex)
             {
-                return ServiceResult.Fail($"Unable to reject join request: {ex.Message}");
+                return ServiceResult.Fail($"Неуспешно отхвърляне на заявката за присъединяване: {ex.Message}");
             }
         }
 
@@ -464,18 +464,18 @@ namespace Sycota.Application.Services
         {
             if (string.IsNullOrWhiteSpace(email))
             {
-                return ServiceResult.Fail("Email is required.");
+                return ServiceResult.Fail("Имейлът е задължителен.");
             }
 
             if (!await ClubExistsAsync(clubId))
             {
-                return ServiceResult.Fail($"Club with id {clubId} was not found.");
+                return ServiceResult.Fail($"Клуб с id {clubId} не беше намерен.");
             }
 
             var existingInvitation = await _invitationRepository.GetPendingByEmailAndClubAsync(email, clubId);
             if (existingInvitation is not null)
             {
-                return ServiceResult.Fail("An active invitation already exists for this email.");
+                return ServiceResult.Fail("Вече съществува активна покана за този имейл.");
             }
 
             if (trainerId.HasValue)
@@ -483,7 +483,7 @@ namespace Sycota.Application.Services
                 var trainerResult = await GetClubMemberAsync(trainerId.Value);
                 if (!trainerResult.Success || trainerResult.Data.Role != ClubRole.Trainer || trainerResult.Data.ClubId != clubId)
                 {
-                    return ServiceResult.Fail("Invalid trainer selected.");
+                    return ServiceResult.Fail("Невалиден избор на треньор.");
                 }
             }
 
@@ -507,7 +507,7 @@ namespace Sycota.Application.Services
             }
             catch (Exception ex)
             {
-                return ServiceResult.Fail($"Unable to create invitation: {ex.Message}");
+                return ServiceResult.Fail($"Неуспешно създаване на покана: {ex.Message}");
             }
         }
 
@@ -515,7 +515,7 @@ namespace Sycota.Application.Services
         {
             if (!await ClubExistsAsync(clubId))
             {
-                return ServiceResult<IEnumerable<ClubInvitation>>.Fail($"Club with id {clubId} was not found.");
+                return ServiceResult<IEnumerable<ClubInvitation>>.Fail($"Клуб с id {clubId} не беше намерен.");
             }
 
             var invitations = await _invitationRepository.GetByClubIdAsync(clubId, MembershipRequestStatus.Pending);
@@ -526,7 +526,7 @@ namespace Sycota.Application.Services
         {
             if (string.IsNullOrWhiteSpace(email))
             {
-                return ServiceResult<IEnumerable<ClubInvitation>>.Fail("Email is required.");
+                return ServiceResult<IEnumerable<ClubInvitation>>.Fail("Имейлът е задължителен.");
             }
 
             var invitations = await _invitationRepository.GetByEmailAsync(email, MembershipRequestStatus.Pending);
@@ -537,13 +537,13 @@ namespace Sycota.Application.Services
         {
             if (string.IsNullOrWhiteSpace(code))
             {
-                return ServiceResult<ClubInvitation>.Fail("Invitation code is required.");
+                return ServiceResult<ClubInvitation>.Fail("Кодът на поканата е задължителен.");
             }
 
             var invitation = await _invitationRepository.GetByCodeAsync(code);
             if (invitation is null)
             {
-                return ServiceResult<ClubInvitation>.Fail("Invalid invitation code.");
+                return ServiceResult<ClubInvitation>.Fail("Невалиден код на покана.");
             }
 
             return ServiceResult<ClubInvitation>.Ok(invitation);
@@ -561,17 +561,17 @@ namespace Sycota.Application.Services
 
             if (invitation.Status != MembershipRequestStatus.Pending)
             {
-                return ServiceResult.Fail("This invitation has already been used or cancelled.");
+                return ServiceResult.Fail("Тази покана вече е използвана или отменена.");
             }
 
             if (invitation.ExpiresAt < DateTime.UtcNow)
             {
-                return ServiceResult.Fail("This invitation has expired.");
+                return ServiceResult.Fail("Тази покана е изтекла.");
             }
 
             if (await UserMembershipExistsAsync(userId, invitation.ClubId) is { Success: true, Data: true })
             {
-                return ServiceResult.Fail("You are already a member of this club.");
+                return ServiceResult.Fail("Вече сте член на този клуб.");
             }
 
             try
@@ -593,7 +593,7 @@ namespace Sycota.Application.Services
             }
             catch (Exception ex)
             {
-                return ServiceResult.Fail($"Unable to accept invitation: {ex.Message}");
+                return ServiceResult.Fail($"Неуспешно приемане на поканата: {ex.Message}");
             }
         }
 
@@ -602,12 +602,12 @@ namespace Sycota.Application.Services
             var invitation = await _invitationRepository.GetByIdAsync(invitationId);
             if (invitation is null)
             {
-                return ServiceResult.Fail($"Invitation with id {invitationId} was not found.");
+                return ServiceResult.Fail($"Покана с id {invitationId} не беше намерена.");
             }
 
             if (invitation.Status != MembershipRequestStatus.Pending)
             {
-                return ServiceResult.Fail("This invitation has already been used or cancelled.");
+                return ServiceResult.Fail("Тази покана вече е използвана или отменена.");
             }
 
             try
@@ -618,7 +618,7 @@ namespace Sycota.Application.Services
             }
             catch (Exception ex)
             {
-                return ServiceResult.Fail($"Unable to cancel invitation: {ex.Message}");
+                return ServiceResult.Fail($"Неуспешно отменяне на поканата: {ex.Message}");
             }
         }
     }

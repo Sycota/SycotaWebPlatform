@@ -63,7 +63,7 @@
                                         <div class="mb-2">
                                             @if (trainee.ShooterProfile.PrimaryWeapon.HasValue)
                                             {
-                                                <span class="badge bg-secondary me-1">@trainee.ShooterProfile.PrimaryWeapon</span>
+                                                <span class="badge bg-secondary me-1">@trainee.ShooterProfile.PrimaryWeapon.Value.GetDisplayName()</span>
                                             }
                                             @if (trainee.ShooterProfile.Category.HasValue)
                                             {

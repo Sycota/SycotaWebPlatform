@@ -1,6 +1,6 @@
 ﻿@model Sycota.Web.Models.ViewModels.TraineePerformanceDashboardViewModel
 @{
-    ViewData["Title"] = "Trainee Performance Dashboard";
+    ViewData["Title"] = "Табло за представяне на обучаем";
     var selectedDays = Model.SelectedDays;
     var traineeName = !string.IsNullOrEmpty(Model.Trainee.User?.FirstName) 
         ? $"{Model.Trainee.User.FirstName} {Model.Trainee.User.LastName}" 
@@ -10,26 +10,26 @@
 <div class="container-fluid mb-5">
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a asp-action="Index">Clubs</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Клубове</a></li>
             <li class="breadcrumb-item"><a asp-action="Details" asp-route-id="@Model.Trainee.ClubId">@Model.Trainee.Club?.Name</a></li>
-            <li class="breadcrumb-item"><a asp-action="Trainees" asp-route-id="@Model.Trainee.ClubId">Trainees</a></li>
+            <li class="breadcrumb-item"><a asp-action="Trainees" asp-route-id="@Model.Trainee.ClubId">Обучаеми</a></li>
             <li class="breadcrumb-item"><a asp-action="TraineeDetails" asp-route-id="@Model.Trainee.ClubId" asp-route-traineeId="@Model.Trainee.Id">@traineeName</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Performance Dashboard</li>
+            <li class="breadcrumb-item active" aria-current="page">Табло за представяне</li>
         </ol>
     </nav>
 
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
         <h2 class="mb-0">
-            <i class="bi bi-speedometer2 me-2"></i>@traineeName's Performance
+            <i class="bi bi-speedometer2 me-2"></i>Представяне на @traineeName
         </h2>
         <div class="d-flex align-items-center gap-2">
-            <label class="form-label mb-0 small">Time Period:</label>
+            <label class="form-label mb-0 small">Период:</label>
             <div class="btn-group btn-group-sm" role="group">
-                <a asp-action="TraineePerformanceDashboard" asp-route-id="@Model.Trainee.ClubId" asp-route-traineeId="@Model.Trainee.Id" asp-route-days="7" class="btn @(selectedDays == 7 ? "btn-primary" : "btn-outline-secondary")">7d</a>
-                <a asp-action="TraineePerformanceDashboard" asp-route-id="@Model.Trainee.ClubId" asp-route-traineeId="@Model.Trainee.Id" asp-route-days="14" class="btn @(selectedDays == 14 ? "btn-primary" : "btn-outline-secondary")">14d</a>
-                <a asp-action="TraineePerformanceDashboard" asp-route-id="@Model.Trainee.ClubId" asp-route-traineeId="@Model.Trainee.Id" asp-route-days="30" class="btn @(selectedDays == 30 ? "btn-primary" : "btn-outline-secondary")">30d</a>
-                <a asp-action="TraineePerformanceDashboard" asp-route-id="@Model.Trainee.ClubId" asp-route-traineeId="@Model.Trainee.Id" asp-route-days="90" class="btn @(selectedDays == 90 ? "btn-primary" : "btn-outline-secondary")">90d</a>
-                <a asp-action="TraineePerformanceDashboard" asp-route-id="@Model.Trainee.ClubId" asp-route-traineeId="@Model.Trainee.Id" asp-route-days="365" class="btn @(selectedDays == 365 ? "btn-primary" : "btn-outline-secondary")">1y</a>
+                <a asp-action="TraineePerformanceDashboard" asp-route-id="@Model.Trainee.ClubId" asp-route-traineeId="@Model.Trainee.Id" asp-route-days="7" class="btn @(selectedDays == 7 ? "btn-primary" : "btn-outline-secondary")">7 дни</a>
+                <a asp-action="TraineePerformanceDashboard" asp-route-id="@Model.Trainee.ClubId" asp-route-traineeId="@Model.Trainee.Id" asp-route-days="14" class="btn @(selectedDays == 14 ? "btn-primary" : "btn-outline-secondary")">14 дни</a>
+                <a asp-action="TraineePerformanceDashboard" asp-route-id="@Model.Trainee.ClubId" asp-route-traineeId="@Model.Trainee.Id" asp-route-days="30" class="btn @(selectedDays == 30 ? "btn-primary" : "btn-outline-secondary")">30 дни</a>
+                <a asp-action="TraineePerformanceDashboard" asp-route-id="@Model.Trainee.ClubId" asp-route-traineeId="@Model.Trainee.Id" asp-route-days="90" class="btn @(selectedDays == 90 ? "btn-primary" : "btn-outline-secondary")">90 дни</a>
+                <a asp-action="TraineePerformanceDashboard" asp-route-id="@Model.Trainee.ClubId" asp-route-traineeId="@Model.Trainee.Id" asp-route-days="365" class="btn @(selectedDays == 365 ? "btn-primary" : "btn-outline-secondary")">1 год</a>
             </div>
         </div>
     </div>
@@ -39,10 +39,10 @@
         <div class="card shadow-sm">
             <div class="card-body text-center py-5">
                 <i class="bi bi-graph-up display-1 text-muted"></i>
-                <h4 class="mt-3 text-muted">No Training Data Available</h4>
-                <p class="text-muted">This trainee hasn't recorded any training sessions in the selected time period.</p>
+                <h4 class="mt-3 text-muted">Няма данни за анализиране</h4>
+                <p class="text-muted">Този обучаем няма записани тренировъчни сесии в избрания период.</p>
                 <a asp-action="TraineeDetails" asp-route-id="@Model.Trainee.ClubId" asp-route-traineeId="@Model.Trainee.Id" class="btn btn-secondary mt-2">
-                    <i class="bi bi-arrow-left me-1"></i>Back to Trainee Details
+                    <i class="bi bi-arrow-left me-1"></i>Назад към обучаемия
                 </a>
             </div>
         </div>
@@ -55,7 +55,7 @@
                 <div class="card shadow-sm h-100">
                     <div class="card-body text-center">
                         <div class="fs-2 fw-bold text-primary">@Model.Statistics.TotalSessions</div>
-                        <small class="text-muted">Sessions</small>
+                        <small class="text-muted">Сесии</small>
                     </div>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                 <div class="card shadow-sm h-100">
                     <div class="card-body text-center">
                         <div class="fs-2 fw-bold text-success">@Model.Statistics.TotalShots</div>
-                        <small class="text-muted">Total Shots</small>
+                        <small class="text-muted">Брой изстрели</small>
                     </div>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                 <div class="card shadow-sm h-100">
                     <div class="card-body text-center">
                         <div class="fs-2 fw-bold" style="color: #856404;">@Model.Statistics.AverageScore.ToString("F2")</div>
-                        <small class="text-muted">Avg Score/Shot</small>
+                        <small class="text-muted">Средно/изстрел</small>
                     </div>
                 </div>
             </div>
@@ -85,7 +85,7 @@
                         <div class="fs-2 fw-bold @improvementClass">
                             <i class="bi @improvementIcon"></i>@Math.Abs(Model.Statistics.ImprovementPercent).ToString("F1")%
                         </div>
-                        <small class="text-muted">Improvement</small>
+                        <small class="text-muted">Подобрение</small>
                     </div>
                 </div>
             </div>
@@ -96,17 +96,17 @@
             <div class="col-md-4">
                 <div class="card shadow-sm h-100">
                     <div class="card-header">
-                        <i class="bi bi-bullseye me-2"></i>Best & Worst Series
+                        <i class="bi bi-bullseye me-2"></i>Най-добра и най-лоша серия
                     </div>
                     <div class="card-body">
                         <div class="row text-center">
                             <div class="col-6">
                                 <div class="fs-3 fw-bold text-success">@Model.Statistics.BestSeriesScore.ToString("F1")</div>
-                                <small class="text-muted">Best Series</small>
+                                <small class="text-muted">Най-добра серия</small>
                             </div>
                             <div class="col-6">
                                 <div class="fs-3 fw-bold text-danger">@Model.Statistics.WorstSeriesScore.ToString("F1")</div>
-                                <small class="text-muted">Worst Series</small>
+                                <small class="text-muted">Най-лоша серия</small>
                             </div>
                         </div>
                     </div>
@@ -115,17 +115,17 @@
             <div class="col-md-4">
                 <div class="card shadow-sm h-100">
                     <div class="card-header">
-                        <i class="bi bi-10-circle me-2"></i>10s Analysis
+                        <i class="bi bi-10-circle me-2"></i>Анализ на 10-ките
                     </div>
                     <div class="card-body">
                         <div class="row text-center">
                             <div class="col-6">
                                 <div class="fs-3 fw-bold text-primary">@Model.Statistics.TotalTens</div>
-                                <small class="text-muted">Total 10s</small>
+                                <small class="text-muted">Брой 10-ки</small>
                             </div>
                             <div class="col-6">
                                 <div class="fs-3 fw-bold" style="color: #6f42c1;">@Model.Statistics.TotalInnerTens</div>
-                                <small class="text-muted">Inner 10s</small>
+                                <small class="text-muted">Вътрешни 10-ки</small>
                             </div>
                         </div>
                         @if (Model.Statistics.TotalShots > 0)
@@ -134,14 +134,14 @@
                             var innerTensPercent = (Model.Statistics.TotalInnerTens * 100.0 / Model.Statistics.TotalShots);
                             <div class="progress mt-3" style="height: 20px;">
                                 <div class="progress-bar" role="progressbar" style="width: @innerTensPercent%; background-color: #6f42c1;" 
-                                     title="Inner 10s: @innerTensPercent.ToString("F1")%">
+                                     title="Вътрешни 10-ки: @innerTensPercent.ToString("F1")%">
                                     @if (innerTensPercent > 5)
                                     {
                                         <span>@innerTensPercent.ToString("F0")%</span>
                                     }
                                 </div>
                                 <div class="progress-bar bg-primary" role="progressbar" style="width: @((tensPercent - innerTensPercent))%;"
-                                     title="10s: @((tensPercent - innerTensPercent).ToString("F1"))%">
+                                     title="10-ки: @((tensPercent - innerTensPercent).ToString("F1"))%">
                                     @if ((tensPercent - innerTensPercent) > 5)
                                     {
                                         <span>@((tensPercent - innerTensPercent).ToString("F0"))%</span>
@@ -149,7 +149,7 @@
                                 </div>
                             </div>
                             <div class="text-center mt-2">
-                                <small class="text-muted">@tensPercent.ToString("F1")% of shots are 10s</small>
+                                <small class="text-muted">@tensPercent.ToString("F1")% от изстрелите са 10-ки</small>
                             </div>
                         }
                     </div>
@@ -158,7 +158,7 @@
             <div class="col-md-4">
                 <div class="card shadow-sm h-100">
                     <div class="card-header">
-                        <i class="bi bi-activity me-2"></i>Consistency Score
+                        <i class="bi bi-activity me-2"></i>Индекс на стабилност
                     </div>
                     <div class="card-body text-center">
                         <div class="position-relative d-inline-block">
@@ -182,15 +182,15 @@
                         <p class="text-muted mb-0 mt-2">
                             @if (Model.Statistics.ConsistencyScore >= 80)
                             {
-                                <span class="text-success">Excellent consistency!</span>
+                                <span class="text-success">Отлична стабилност!</span>
                             }
                             else if (Model.Statistics.ConsistencyScore >= 60)
                             {
-                                <span class="text-warning">Good, keep improving</span>
+                                <span class="text-warning">Добре, продължавайте да се подобрявате</span>
                             }
                             else
                             {
-                                <span class="text-danger">Work on consistency</span>
+                                <span class="text-danger">Работете върху стабилността</span>
                             }
                         </p>
                     </div>
@@ -203,10 +203,10 @@
             <div class="col-lg-8">
                 <div class="card shadow-sm">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <span><i class="bi bi-graph-up me-2"></i>Score Progression</span>
+                        <span><i class="bi bi-graph-up me-2"></i>Прогресия на резултатите</span>
                         <div class="btn-group btn-group-sm">
-                            <button type="button" class="btn btn-outline-secondary active" id="chartDailyBtn">Daily</button>
-                            <button type="button" class="btn btn-outline-secondary" id="chartSeriesBtn">By Series</button>
+                            <button type="button" class="btn btn-outline-secondary active" id="chartDailyBtn">Дневна</button>
+                            <button type="button" class="btn btn-outline-secondary" id="chartSeriesBtn">По серии</button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -217,12 +217,12 @@
             <div class="col-lg-4">
                 <div class="card shadow-sm h-100">
                     <div class="card-header">
-                        <i class="bi bi-bullseye me-2"></i>Shot Placement Heat Map
+                        <i class="bi bi-bullseye me-2"></i>Топлинна карта на попаденията
                     </div>
                     <div class="card-body text-center">
                         <canvas id="heatMapCanvas" width="280" height="280" style="max-width: 100%;"></canvas>
                         <p class="text-muted small mt-2 mb-0">
-                            Aggregated shot placement from all sessions
+                            Агрегирани попадения от всички сесии
                         </p>
                     </div>
                 </div>
@@ -234,7 +234,7 @@
             <div class="col-12">
                 <div class="card shadow-sm">
                     <div class="card-header">
-                        <i class="bi bi-bar-chart me-2"></i>10s Progression (Per Series)
+                        <i class="bi bi-bar-chart me-2"></i>Прогресия на 10-ките (по серии)
                     </div>
                     <div class="card-body">
                         <canvas id="tensProgressionChart" height="150"></canvas>
@@ -246,20 +246,20 @@
         <!-- Recent Series Table -->
         <div class="card shadow-sm mb-4">
             <div class="card-header">
-                <i class="bi bi-table me-2"></i>Recent Series Performance
+                <i class="bi bi-table me-2"></i>Скорошни серии
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead style="background-color: #495057; color: #ffffff;">
                             <tr>
-                                <th>Date</th>
-                                <th>Session</th>
-                                <th>Series</th>
-                                <th class="text-end">Score</th>
-                                <th class="text-end">Avg/Shot</th>
-                                <th class="text-end">10s</th>
-                                <th class="text-end">Inner 10s</th>
+                                <th>Дата</th>
+                                <th>Сесия</th>
+                                <th>Серия</th>
+                                <th class="text-end">Резултат</th>
+                                <th class="text-end">Средно/изстрел</th>
+                                <th class="text-end">10-ки</th>
+                                <th class="text-end">Вътр. 10-ки</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -267,9 +267,9 @@
                             {
                                 var rowClass = series.Score >= 100 ? "table-success" : series.Score < 90 ? "table-warning" : "";
                                 <tr class="@rowClass">
-                                    <td>@series.Date.ToString("MMM dd")</td>
+                                    <td>@series.Date.ToString("dd.MM")</td>
                                     <td>@series.SessionName</td>
-                                    <td>Series @series.SeriesNumber</td>
+                                    <td>Серия @series.SeriesNumber</td>
                                     <td class="text-end fw-bold">@series.Score.ToString("F1")</td>
                                     <td class="text-end">@series.AveragePerShot.ToString("F2")</td>
                                     <td class="text-end">
@@ -289,7 +289,7 @@
 
     <div class="mt-3">
         <a asp-action="TraineeDetails" asp-route-id="@Model.Trainee.ClubId" asp-route-traineeId="@Model.Trainee.Id" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left me-1"></i>Back to Trainee Details
+            <i class="bi bi-arrow-left me-1"></i>Назад към обучаемия
         </a>
     </div>
 </div>
@@ -312,7 +312,7 @@
             data: {
                 labels: chartData.dailyLabels || [],
                 datasets: [{
-                    label: 'Average Score/Shot',
+                    label: 'Среден резултат/изстрел',
                     data: chartData.dailyScores || [],
                     borderColor: '#0d6efd',
                     backgroundColor: 'rgba(13, 110, 253, 0.1)',
@@ -333,7 +333,7 @@
                         beginAtZero: false,
                         min: 8,
                         max: 11,
-                        title: { display: true, text: 'Score per Shot' }
+                        title: { display: true, text: 'Резултат на изстрел' }
                     }
                 }
             }
@@ -347,7 +347,7 @@
             data: {
                 labels: chartData.seriesLabels || [],
                 datasets: [{
-                    label: 'Series Score',
+                    label: 'Резултат на серия',
                     data: chartData.seriesScores || [],
                     backgroundColor: chartData.seriesScores?.map(score => 
                         score >= 100 ? '#198754' : score >= 95 ? '#0d6efd' : '#ffc107'
@@ -366,7 +366,7 @@
                         beginAtZero: false,
                         min: 80,
                         max: 109,
-                        title: { display: true, text: 'Series Score' }
+                        title: { display: true, text: 'Резултат на серия' }
                     }
                 }
             }
@@ -398,13 +398,13 @@
                 labels: chartData.seriesLabels,
                 datasets: [
                     {
-                        label: 'Inner 10s',
+                        label: 'Вътрешни 10-ки',
                         data: chartData.innerTensProgression || [],
                         backgroundColor: '#6f42c1',
                         stack: 'Stack 0'
                     },
                     {
-                        label: '10s',
+                        label: '10-ки',
                         data: (chartData.tensProgression || []).map((t, i) => t - (chartData.innerTensProgression?.[i] || 0)),
                         backgroundColor: '#0d6efd',
                         stack: 'Stack 0'
@@ -422,7 +422,7 @@
                     y: { 
                         stacked: true,
                         max: 10,
-                        title: { display: true, text: '10s per Series' }
+                        title: { display: true, text: '10-ки на серия' }
                     }
                 }
             }

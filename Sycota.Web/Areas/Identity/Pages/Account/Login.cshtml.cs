@@ -61,15 +61,16 @@ namespace Sycota.Web.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-            [Required]
-            [Display(Name = "Username")]
+            [Required(ErrorMessage = "Потребителското име е задължително.")]
+            [Display(Name = "Потребителско име")]
             public string Username { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Паролата е задължителна.")]
             [DataType(DataType.Password)]
+            [Display(Name = "Парола")]
             public string Password { get; set; }
 
-            [Display(Name = "Remember me?")]
+            [Display(Name = "Запомни ме")]
             public bool RememberMe { get; set; }
         }
 
@@ -117,7 +118,7 @@ namespace Sycota.Web.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Невалиден опит за вход.");
                     return Page();
                 }
             }

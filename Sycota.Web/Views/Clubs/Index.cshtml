@@ -35,7 +35,7 @@
     {
         <div class="alert alert-info mb-4">
             <i class="bi bi-info-circle me-2" aria-hidden="true"></i>
-            В момента сте <strong>@Model.CurrentMembership.Role</strong> в 
+            В момента сте <strong>@Model.CurrentMembership.Role.GetDisplayName()</strong> в 
             <a asp-action="Details" asp-route-id="@Model.CurrentMembership.ClubId" class="alert-link">
                 @Model.CurrentMembership.Club?.Name
             </a>

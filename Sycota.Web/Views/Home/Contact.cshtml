@@ -28,7 +28,8 @@
                         </div>
                         <div>
                             <h6 class="mb-1">Имейл</h6>
-                            <a href="mailto:georgi.georgiev.highschool@buditel.bg" class="text-decoration-none small">georgi.georgiev.highschool@buditel.bg</a>
+                            <a href="mailto:georgi.georgiev.highschool@buditel.bg" class="text-decoration-none small d-block">georgi.georgiev.highschool@buditel.bg</a>
+                            <a href="mailto:ivaylo.kirilov.highschool@buditel.bg" class="text-decoration-none small d-block">ivaylo.kirilov.highschool@buditel.bg</a>
                         </div>
                     </div>
 
@@ -39,7 +40,7 @@
                         </div>
                         <div>
                             <h6 class="mb-1">Локация</h6>
-                            <span class="text-muted">Варна, България</span>
+                            <span class="text-muted">София, България</span>
                         </div>
                     </div>
                 </div>
@@ -52,7 +53,7 @@
                 <div class="card-body p-4">
                     <h3 class="h5 mb-4">Изпратете ни Съобщение</h3>
                     
-                    <form>
+                    <form id="contactForm">
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <div class="form-floating">
@@ -70,11 +71,11 @@
                                 <div class="form-floating">
                                     <select class="form-select" id="contactSubject" required>
                                         <option value="">Изберете тема...</option>
-                                        <option value="general">Общ въпрос</option>
-                                        <option value="support">Техническа поддръжка</option>
-                                        <option value="feedback">Обратна връзка</option>
-                                        <option value="partnership">Партньорство</option>
-                                        <option value="other">Друго</option>
+                                        <option value="Общ въпрос">Общ въпрос</option>
+                                        <option value="Техническа поддръжка">Техническа поддръжка</option>
+                                        <option value="Обратна връзка">Обратна връзка</option>
+                                        <option value="Партньорство">Партньорство</option>
+                                        <option value="Друго">Друго</option>
                                     </select>
                                     <label for="contactSubject"><i class="bi bi-tag me-1"></i>Тема</label>
                                 </div>
@@ -86,11 +87,11 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <button type="submit" class="btn btn-accent btn-lg w-100" disabled>
+                                <button type="submit" class="btn btn-accent btn-lg w-100" id="contactSubmitBtn">
                                     <i class="bi bi-send me-2"></i>Изпрати Съобщение
                                 </button>
                                 <small class="text-muted d-block text-center mt-2">
-                                    <i class="bi bi-info-circle me-1"></i>Формата за контакт скоро ще бъде активирана. Засега използвайте имейла.
+                                    <i class="bi bi-info-circle me-1"></i>Съобщението ще се отвори във вашия имейл клиент за изпращане.
                                 </small>
                             </div>
                         </div>
@@ -147,3 +148,31 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+<script>
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    var name = document.getElementById('contactName').value.trim();
+    var email = document.getElementById('contactEmail').value.trim();
+    var subject = document.getElementById('contactSubject').value;
+    var message = document.getElementById('contactMessage').value.trim();
+
+    if (!name || !email || !subject || !message) return;
+
+    var recipient = 'georgi.georgiev.highschool@buditel.bg';
+    var mailSubject = '[SYCOTAᐩ] ' + subject;
+    var mailBody = 'Име: ' + name + '\n' +
+                   'Имейл: ' + email + '\n' +
+                   'Тема: ' + subject + '\n\n' +
+                   message;
+
+    var mailtoUrl = 'mailto:' + encodeURIComponent(recipient) +
+        '?subject=' + encodeURIComponent(mailSubject) +
+        '&body=' + encodeURIComponent(mailBody);
+
+    window.location.href = mailtoUrl;
+});
+</script>
+}

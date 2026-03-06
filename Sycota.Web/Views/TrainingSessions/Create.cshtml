@@ -41,7 +41,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label asp-for="SessionDate" class="form-label">Дата и час <span class="text-danger">*</span></label>
-                                <input asp-for="SessionDate" type="datetime-local" class="form-control" required />
+                                <input asp-for="SessionDate" type="datetime-local" step="60" class="form-control" required asp-format="{0:yyyy-MM-ddTHH:mm}" />
                                 <span asp-validation-for="SessionDate" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 mb-3">

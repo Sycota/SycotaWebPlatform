@@ -13,8 +13,12 @@
     --sycota-text-muted: #6c757d;
 }
 
+/* ========================================
+   STICKY FOOTER LAYOUT - CRITICAL
+   ======================================== */
 html {
     font-size: 14px;
+    height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -23,22 +27,35 @@ html {
     }
 }
 
-/* Sticky footer solution */
-html {
-    height: 100%;
-}
-
 body {
     font-family: 'Open Sans', sans-serif;
     background-color: #f8f9fa;
     color: var(--sycota-text-dark);
     margin: 0;
+    padding: 0;
+    min-height: 100%;
 }
 
-/* Footer should be in normal flow (after content) */
-.footer {
-    position: static;
+/* Page wrapper - flexbox container for sticky footer */
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
+
+/* Main content grows to fill available space */
+.page-wrapper > .main-content {
+    flex: 1 0 auto;
+}
+
+/* Footer stays at bottom */
+.page-wrapper > .footer {
+    flex-shrink: 0;
+}
+
+/* ========================================
+   END STICKY FOOTER LAYOUT
+   ======================================== */
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
@@ -167,7 +184,7 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--sycota-text-dark) !important;
 }
 
-/* Footer - Fixed contrast */
+/* Footer Styling */
 .footer {
     background-color: var(--sycota-bg-dark);
     color: #e0e0e0;
@@ -281,17 +298,25 @@ a:hover {
 }
 
 .notification-item {
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding: 12px 16px;
     transition: background-color 0.2s;
 }
 
 .notification-item:hover {
-    background-color: #f8f9fa;
+    background-color: var(--sycota-bg-medium) !important;
 }
 
 .notification-item:last-child {
     border-bottom: none;
+}
+
+.notification-item strong {
+    color: var(--sycota-text-light);
+}
+
+.notification-item .text-muted {
+    color: rgba(255, 255, 255, 0.6) !important;
 }
 
 .notification-badge {
@@ -334,7 +359,7 @@ a:hover {
 
 /* Nav tabs contrast fix */
 .nav-tabs .nav-link {
-    color: var(--sycota-text-dark);
+    color: var(--sycota-text-dark) !important;
     font-weight: 500;
 }
 
@@ -358,27 +383,103 @@ a:hover {
     color: var(--sycota-accent-blue);
 }
 
-/* Language Switcher */
-.dropdown-item.active,
-.dropdown-item:active {
-    background-color: var(--sycota-accent-blue);
-    color: white;
+/* Identity Manage page fixes */
+.identity-manage-nav .nav-link,
+.identity-manage-nav .nav-link:not(.active) {
+    color: var(--sycota-text-dark) !important;
 }
 
-.dropdown-item {
-    padding: 0.5rem 1rem;
+.identity-manage-nav .nav-link.active {
+    color: var(--sycota-accent-blue) !important;
+    font-weight: 600;
 }
 
-.dropdown-item form {
-    margin: 0;
+/* Fix Identity scaffolded pages nav-pills in dark card-header context */
+[class*="nav-pills"] .nav-link,
+.nav.flex-column .nav-link,
+.nav.flex-column .nav-link:not(.active) {
+    color: var(--sycota-text-dark) !important;
 }
 
-/* Language dropdown button styling */
-#languageDropdown {
-    border-color: rgba(255, 255, 255, 0.3);
+.nav.flex-column .nav-link.active {
+    color: #fff !important;
+    background-color: var(--sycota-accent-blue) !important;
 }
 
-#languageDropdown:hover {
-    border-color: var(--sycota-accent-yellow);
-    color: var(--sycota-accent-yellow);
+/* Fix Identity page form labels and text visibility */
+.identity-content label,
+.identity-content .form-label,
+.identity-content h2,
+.identity-content h3,
+.identity-content h4,
+.identity-content p,
+.identity-content .text-muted {
+    color: var(--sycota-text-dark) !important;
+}
+
+/* Fix all Identity Manage pages - ensure text is readable */
+#manage-nav .nav-link,
+.manage-nav .nav-link,
+[id*="manage"] .nav-link {
+    color: var(--sycota-text-dark) !important;
+}
+
+#manage-nav .nav-link.active,
+.manage-nav .nav-link.active {
+    color: #fff !important;
+    background-color: var(--sycota-accent-blue) !important;
+}
+
+/* Identity pages general text fix */
+.main-content h1,
+.main-content h2,
+.main-content h3,
+.main-content h4,
+.main-content h5,
+.main-content h6,
+.main-content p,
+.main-content label,
+.main-content .form-label,
+.main-content .form-text {
+    color: var(--sycota-text-dark);
+}
+
+/* Restore white text inside card headers (overrides the rule above) */
+.card-header h1,
+.card-header h2,
+.card-header h3,
+.card-header h4,
+.card-header h5,
+.card-header h6,
+.card-header p,
+.card-header span,
+.card-header label,
+.card-header .form-label,
+.card-header .form-text {
+    color: var(--sycota-text-light);
+}
+
+/* Dropdown menus inside card headers should have dark readable text */
+.card-header .dropdown-menu:not(.dropdown-menu-dark) {
+    background-color: #ffffff;
+    border-color: #dee2e6;
+}
+
+.card-header .dropdown-menu:not(.dropdown-menu-dark) .dropdown-item {
+    color: #212529 !important;
+}
+
+.card-header .dropdown-menu:not(.dropdown-menu-dark) .dropdown-item:hover,
+.card-header .dropdown-menu:not(.dropdown-menu-dark) .dropdown-item:focus {
+    color: #000 !important;
+    background-color: #e9ecef;
+}
+
+.card-header .dropdown-menu:not(.dropdown-menu-dark) .dropdown-header {
+    color: #495057 !important;
+    font-weight: 600;
+}
+
+.card-header .dropdown-menu:not(.dropdown-menu-dark) .dropdown-item.text-danger {
+    color: #dc3545 !important;
 }

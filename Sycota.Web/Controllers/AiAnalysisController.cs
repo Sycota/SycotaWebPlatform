@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Sycota.Application.Interfaces;
@@ -38,13 +38,13 @@ public class AiAnalysisController : ControllerBase
         var userId = _userManager.GetUserId(User);
         if (string.IsNullOrEmpty(userId))
         {
-            return Unauthorized(new { error = "Not authenticated" });
+            return Unauthorized(new { error = "Не сте удостоверени" });
         }
 
         var session = await _trainingSessionRepository.GetTrainingSessionByIdAsync(sessionId, TrainingSessionIncludeOptions.All);
         if (session == null)
         {
-            return NotFound(new { error = "Session not found" });
+            return NotFound(new { error = "Сесията не е намерена" });
         }
 
         // Check access
@@ -95,18 +95,18 @@ public class AiAnalysisController : ControllerBase
         var userId = _userManager.GetUserId(User);
         if (string.IsNullOrEmpty(userId))
         {
-            return Unauthorized(new { error = "Not authenticated" });
+            return Unauthorized(new { error = "Не сте удостоверени" });
         }
 
         if (string.IsNullOrWhiteSpace(request.Message))
         {
-            return BadRequest(new { error = "Message is required" });
+            return BadRequest(new { error = "Съобщението е задължително" });
         }
 
         var session = await _trainingSessionRepository.GetTrainingSessionByIdAsync(sessionId, TrainingSessionIncludeOptions.All);
         if (session == null)
         {
-            return NotFound(new { error = "Session not found" });
+            return NotFound(new { error = "Сесията не е намерена" });
         }
 
         // Check access
@@ -173,13 +173,13 @@ Shot Data: {session.Shots ?? "{}"}";
         var userId = _userManager.GetUserId(User);
         if (string.IsNullOrEmpty(userId))
         {
-            return Unauthorized(new { error = "Not authenticated" });
+            return Unauthorized(new { error = "Не сте удостоверени" });
         }
 
         var session = await _trainingSessionRepository.GetTrainingSessionByIdAsync(sessionId);
         if (session == null)
         {
-            return NotFound(new { error = "Session not found" });
+            return NotFound(new { error = "Сесията не е намерена" });
         }
 
         // Check access
@@ -206,13 +206,13 @@ Shot Data: {session.Shots ?? "{}"}";
         var userId = _userManager.GetUserId(User);
         if (string.IsNullOrEmpty(userId))
         {
-            return Unauthorized(new { error = "Not authenticated" });
+            return Unauthorized(new { error = "Не сте удостоверени" });
         }
 
         var session = await _trainingSessionRepository.GetTrainingSessionByIdAsync(sessionId);
         if (session == null)
         {
-            return NotFound(new { error = "Session not found" });
+            return NotFound(new { error = "Сесията не е намерена" });
         }
 
         // Only owner can clear history

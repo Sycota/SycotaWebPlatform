@@ -1,0 +1,25 @@
+﻿@{
+    if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout != null)
+    {
+        Layout = (string)parentLayout;
+    }
+    else
+    {
+        Layout = "/Views/Shared/_Layout.cshtml";
+    }
+}
+
+<h1>Управление на профила</h1>
+
+<div class="row">
+    <div class="col-md-3">
+        <partial name="_ManageNav" />
+    </div>
+    <div class="col-md-9">
+        @RenderBody()
+    </div>
+</div>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}

@@ -4,7 +4,6 @@
     ViewData["Keywords"] = "прецизна стрелба, стрелкови клуб, ISSF, въздушна пушка, въздушен пистолет, тренировки, състезания, България, AI анализ, стрелба резултати";
 }
 
-<div class="container">
 <!-- Hero Section -->
 <section class="text-center py-5" aria-labelledby="hero-title">
     <img src="~/images/sycota.png" alt="SYCOTA" class="img-fluid mb-3" style="max-height: 100px;" />
@@ -12,89 +11,88 @@
     <p class="lead text-muted mb-4">
         Водещата платформа за стрелкови клубове, треньори и състезатели
     </p>
-        <div class="d-flex justify-content-center gap-3">
-            @if (User.Identity?.IsAuthenticated == true)
-            {
-                <a asp-controller="Clubs" asp-action="Index" class="btn btn-accent btn-lg">
-                    <i class="bi bi-bullseye me-2" aria-hidden="true"></i>Виж Клубовете
-                </a>
-            }
-            else
-            {
-                <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-accent btn-lg">
-                    <i class="bi bi-person-plus me-2" aria-hidden="true"></i>Започни Сега
-                </a>
-                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-primary btn-lg">
-                    <i class="bi bi-box-arrow-in-right me-2" aria-hidden="true"></i>Вход
-                </a>
-            }
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="row g-4 py-5" aria-labelledby="features-title">
-        <h2 id="features-title" class="visually-hidden">Функционалности на платформата</h2>
-        <div class="col-md-4">
-            <article class="card h-100 border-0 shadow-sm text-center">
-                <div class="card-body p-4">
-                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; background-color: rgba(47, 102, 144, 0.1);">
-                        <i class="bi bi-bullseye fs-1" style="color: var(--sycota-accent-blue);" aria-hidden="true"></i>
-                    </div>
-                    <h3 class="card-title h4">Управление на Клубове</h3>
-                    <p class="card-text text-muted">
-                        Създавайте и управлявайте стрелкови клубове. Организирайте членове, треньори и състезатели на едно място.
-                    </p>
-                </div>
-            </article>
-        </div>
-        <div class="col-md-4">
-            <article class="card h-100 border-0 shadow-sm text-center">
-                <div class="card-body p-4">
-                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; background-color: rgba(87, 114, 72, 0.1);">
-                        <i class="bi bi-graph-up-arrow fs-1" style="color: var(--sycota-bg-medium);" aria-hidden="true"></i>
-                    </div>
-                    <h3 class="card-title h4">Проследяване на Резултати</h3>
-                    <p class="card-text text-muted">
-                        Записвайте тренировъчни сесии с детайлни данни за изстрелите. Следете напредъка и анализирайте представянето във времето.
-                    </p>
-                </div>
-            </article>
-        </div>
-        <div class="col-md-4">
-            <article class="card h-100 border-0 shadow-sm text-center">
-                <div class="card-body p-4">
-                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; background-color: rgba(44, 57, 31, 0.1);">
-                        <i class="bi bi-people fs-1" style="color: var(--sycota-bg-dark);" aria-hidden="true"></i>
-                    </div>
-                    <h3 class="card-title h4">Тренирай и Се Състезавай</h3>
-                    <p class="card-text text-muted">
-                        Свържете треньори със състезатели. Споделяйте познания, давайте обратна връзка и помагайте на атлетите да постигнат целите си.
-                    </p>
-                </div>
-            </article>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="rounded-3 p-5 text-center my-5" style="background-color: rgba(47, 102, 144, 0.1);" aria-labelledby="cta-title">
-        <h2 id="cta-title" class="mb-3">Готови ли сте да издигнете стрелбата си на ново ниво?</h2>
-        <p class="text-muted mb-4">
-            Присъединете се към <span class="sycota-brand">SYCOTAᐩ</span> днес и станете част от общност, посветена на съвършенството в прецизната стрелба.
-        </p>
-        @if (User.Identity?.IsAuthenticated != true)
+    <div class="d-flex justify-content-center gap-3">
+        @if (User.Identity?.IsAuthenticated == true)
         {
-            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-accent btn-lg">
-                <i class="bi bi-rocket-takeoff me-2" aria-hidden="true"></i>Присъедини се Сега
+            <a asp-controller="Clubs" asp-action="Index" class="btn btn-accent btn-lg">
+                <i class="bi bi-bullseye me-2" aria-hidden="true"></i>Виж Клубовете
             </a>
         }
         else
         {
-            <a asp-controller="Clubs" asp-action="Create" class="btn btn-accent btn-lg">
-                <i class="bi bi-plus-circle me-2" aria-hidden="true"></i>Създай Свой Клуб
+            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-accent btn-lg">
+                <i class="bi bi-person-plus me-2" aria-hidden="true"></i>Започни Сега
+            </a>
+            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-primary btn-lg">
+                <i class="bi bi-box-arrow-in-right me-2" aria-hidden="true"></i>Вход
             </a>
         }
-    </section>
-</div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="row g-4 py-5" aria-labelledby="features-title">
+    <h2 id="features-title" class="visually-hidden">Функционалности на платформата</h2>
+    <div class="col-md-4">
+        <article class="card h-100 border-0 shadow-sm text-center">
+            <div class="card-body p-4">
+                <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; background-color: rgba(47, 102, 144, 0.1);">
+                    <i class="bi bi-bullseye fs-1" style="color: var(--sycota-accent-blue);" aria-hidden="true"></i>
+                </div>
+                <h3 class="card-title h4">Управление на Клубове</h3>
+                <p class="card-text text-muted">
+                    Създавайте и управлявайте стрелкови клубове. Организирайте членове, треньори и състезатели на едно място.
+                </p>
+            </div>
+        </article>
+    </div>
+    <div class="col-md-4">
+        <article class="card h-100 border-0 shadow-sm text-center">
+            <div class="card-body p-4">
+                <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; background-color: rgba(87, 114, 72, 0.1);">
+                    <i class="bi bi-graph-up-arrow fs-1" style="color: var(--sycota-bg-medium);" aria-hidden="true"></i>
+                </div>
+                <h3 class="card-title h4">Проследяване на Резултати</h3>
+                <p class="card-text text-muted">
+                    Записвайте тренировъчни сесии с детайлни данни за изстрелите. Следете напредъка и анализирайте представянето във времето.
+                </p>
+            </div>
+        </article>
+    </div>
+    <div class="col-md-4">
+        <article class="card h-100 border-0 shadow-sm text-center">
+            <div class="card-body p-4">
+                <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; background-color: rgba(44, 57, 31, 0.1);">
+                    <i class="bi bi-people fs-1" style="color: var(--sycota-bg-dark);" aria-hidden="true"></i>
+                </div>
+                <h3 class="card-title h4">Тренирай и Се Състезавай</h3>
+                <p class="card-text text-muted">
+                    Свържете треньори със състезатели. Споделяйте познания, давайте обратна връзка и помагайте на атлетите да постигнат целите си.
+                </p>
+            </div>
+        </article>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="rounded-3 p-5 text-center my-5" style="background-color: rgba(47, 102, 144, 0.1);" aria-labelledby="cta-title">
+    <h2 id="cta-title" class="mb-3">Готови ли сте да издигнете стрелбата си на ново ниво?</h2>
+    <p class="text-muted mb-4">
+        Присъединете се към <span class="sycota-brand">SYCOTAᐩ</span> днес и станете част от общност, посветена на съвършенството в прецизната стрелба.
+    </p>
+    @if (User.Identity?.IsAuthenticated != true)
+    {
+        <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-accent btn-lg">
+            <i class="bi bi-rocket-takeoff me-2" aria-hidden="true"></i>Присъедини се Сега
+        </a>
+    }
+    else
+    {
+        <a asp-controller="Clubs" asp-action="Create" class="btn btn-accent btn-lg">
+            <i class="bi bi-plus-circle me-2" aria-hidden="true"></i>Създай Свой Клуб
+        </a>
+    }
+</section>
 
 @section Head {
     <!-- Additional structured data for homepage -->

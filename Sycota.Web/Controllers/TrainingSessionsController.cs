@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Sycota.Application.Interfaces;
@@ -41,7 +41,7 @@ public class TrainingSessionsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id, ClubMemberIncludeOptions.Club);
         if (membership == null)
         {
-            TempData["Error"] = "You are not a member of this club.";
+            TempData["Error"] = "Не сте член на този клуб.";
             return RedirectToAction("Index", "Clubs");
         }
 
@@ -70,7 +70,7 @@ public class TrainingSessionsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, model.ClubId);
         if (membership == null)
         {
-            TempData["Error"] = "You are not a member of this club.";
+            TempData["Error"] = "Не сте член на този клуб.";
             return RedirectToAction("Index", "Clubs");
         }
 
@@ -116,7 +116,7 @@ public class TrainingSessionsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, session.ClubId, ClubMemberIncludeOptions.All);
         if (membership == null)
         {
-            TempData["Error"] = "You are not a member of this club.";
+            TempData["Error"] = "Не сте член на този клуб.";
             return RedirectToAction("Index", "Clubs");
         }
 
@@ -130,7 +130,7 @@ public class TrainingSessionsController : Controller
 
         if (!canEdit)
         {
-            TempData["Error"] = "You don't have permission to edit this session.";
+            TempData["Error"] = "Нямате право да редактирате тази сесия.";
             return RedirectToAction("Details", new { id });
         }
 
@@ -184,7 +184,7 @@ public class TrainingSessionsController : Controller
         session.Shots = shotsJson;
         await _trainingSessionRepository.UpdateTrainingSessionAsync(session);
 
-        TempData["Success"] = "Shots saved successfully.";
+        TempData["Success"] = "Изстрелите са запазени успешно.";
         return RedirectToAction(nameof(Details), new { id });
     }
 
@@ -195,20 +195,20 @@ public class TrainingSessionsController : Controller
         var userId = _userManager.GetUserId(User);
         if (string.IsNullOrEmpty(userId))
         {
-            return Json(new { success = false, message = "Unauthorized" });
+            return Json(new { success = false, message = "Неоторизиран достъп" });
         }
 
         var session = await _trainingSessionRepository.GetTrainingSessionByIdAsync(request.SessionId);
         if (session == null)
         {
-            return Json(new { success = false, message = "Session not found" });
+            return Json(new { success = false, message = "Сесията не е намерена" });
         }
 
         // Check permissions
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, session.ClubId, ClubMemberIncludeOptions.All);
         if (membership == null)
         {
-            return Json(new { success = false, message = "Not a member" });
+            return Json(new { success = false, message = "Не сте член" });
         }
 
         var canEdit = session.CreatedById == userId;
@@ -220,7 +220,7 @@ public class TrainingSessionsController : Controller
 
         if (!canEdit)
         {
-            return Json(new { success = false, message = "No permission" });
+            return Json(new { success = false, message = "Нямате право" });
         }
 
         session.Shots = request.ShotsJson;
@@ -247,7 +247,7 @@ public class TrainingSessionsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, session.ClubId, ClubMemberIncludeOptions.All);
         if (membership == null)
         {
-            TempData["Error"] = "You are not a member of this club.";
+            TempData["Error"] = "Не сте член на този клуб.";
             return RedirectToAction("Index", "Clubs");
         }
 
@@ -287,14 +287,14 @@ public class TrainingSessionsController : Controller
 
         if (session.CreatedById != userId)
         {
-            TempData["Error"] = "You can only delete your own sessions.";
+            TempData["Error"] = "Можете да изтривате само собствените си сесии.";
             return RedirectToAction(nameof(Details), new { id });
         }
 
         var clubId = session.ClubId;
         await _trainingSessionRepository.DeleteTrainingSessionAsync(session);
 
-        TempData["Success"] = "Training session deleted.";
+        TempData["Success"] = "Тренировъчната сесия е изтрита.";
         return RedirectToAction("MyResults", "Clubs", new { id = clubId });
     }
 }

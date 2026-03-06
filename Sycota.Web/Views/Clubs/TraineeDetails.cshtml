@@ -58,7 +58,7 @@
                                             <td>@session.SessionDate.ToString("dd.MM.yyyy")</td>
                                             <td>@session.Name</td>
                                             <td>
-                                                <span class="badge bg-secondary">@session.WeaponType</span>
+                                                <span class="badge bg-secondary">@session.WeaponType.GetDisplayName()</span>
                                             </td>
                                             <td>
                                                 <a asp-action="TraineeSessionDetails" 
@@ -91,7 +91,7 @@
                         <dd class="col-sm-7">@Model.Trainee.User?.Email</dd>
                         
                         <dt class="col-sm-5">Роля</dt>
-                        <dd class="col-sm-7"><span class="badge bg-info">@Model.Trainee.Role</span></dd>
+                        <dd class="col-sm-7"><span class="badge bg-info">@Model.Trainee.Role.GetDisplayName()</span></dd>
                         
                         <dt class="col-sm-5">Присъединил се</dt>
                         <dd class="col-sm-7">@Model.Trainee.JoinedAt.ToString("dd.MM.yyyy")</dd>
@@ -111,7 +111,7 @@
                             @if (Model.ShooterProfile.PrimaryWeapon.HasValue)
                             {
                                 <dt class="col-sm-5">Основно оръжие</dt>
-                                <dd class="col-sm-7">@Model.ShooterProfile.PrimaryWeapon</dd>
+                                <dd class="col-sm-7">@Model.ShooterProfile.PrimaryWeapon.Value.GetDisplayName()</dd>
                             }
                             @if (Model.ShooterProfile.Category.HasValue)
                             {

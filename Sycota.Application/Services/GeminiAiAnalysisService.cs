@@ -1,4 +1,4 @@
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -52,7 +52,7 @@ Keep your response concise but helpful, suitable for a competitive shooter. Do n
         }
         catch (Exception ex)
         {
-            return ServiceResult<string>.Fail($"Failed to analyze session: {ex.Message}");
+            return ServiceResult<string>.Fail($"Неуспешен анализ на сесията: {ex.Message}");
         }
     }
 
@@ -75,7 +75,7 @@ You are continuing a conversation about this training session. Answer the user's
         }
         catch (Exception ex)
         {
-            return ServiceResult<string>.Fail($"Failed to get AI response: {ex.Message}");
+            return ServiceResult<string>.Fail($"Неуспешно получаване на AI отговор: {ex.Message}");
         }
     }
 
@@ -323,7 +323,7 @@ Keep responses clear and readable without any special formatting.";
 
         if (!response.IsSuccessStatusCode)
         {
-            return ServiceResult<string>.Fail($"Gemini API error: {response.StatusCode} - {responseContent}");
+            return ServiceResult<string>.Fail($"Грешка в Gemini API: {response.StatusCode} - {responseContent}");
         }
 
         var geminiResponse = JsonSerializer.Deserialize<GeminiResponse>(responseContent, new JsonSerializerOptions
@@ -335,7 +335,7 @@ Keep responses clear and readable without any special formatting.";
         
         if (string.IsNullOrEmpty(text))
         {
-            return ServiceResult<string>.Fail("No response received from AI");
+            return ServiceResult<string>.Fail("Не е получен отговор от AI");
         }
 
         return ServiceResult<string>.Ok(text);

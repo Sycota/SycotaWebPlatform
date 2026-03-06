@@ -1,6 +1,6 @@
 ﻿@model Sycota.Web.Models.ViewModels.RecordShotsViewModel
 @{
-    ViewData["Title"] = "????????? ?? ???????? - " + Model.Session.Name;
+    ViewData["Title"] = "Записване на изстрели - " + Model.Session.Name;
 }
 
 <div class="container-fluid px-2 px-md-3 mb-5">
@@ -16,10 +16,10 @@
         </div>
         <div class="d-flex gap-1">
             <button id="saveBtn" class="btn btn-sm btn-accent">
-                <i class="bi bi-save me-1"></i><span class="d-none d-sm-inline">??????</span>
+                <i class="bi bi-save me-1"></i><span class="d-none d-sm-inline">Запази</span>
             </button>
             <a asp-action="Details" asp-route-id="@Model.SessionId" class="btn btn-sm btn-secondary d-none d-md-inline-flex">
-                <i class="bi bi-arrow-left me-1"></i>?????
+                <i class="bi bi-arrow-left me-1"></i>Назад
             </a>
         </div>
     </div>
@@ -27,29 +27,29 @@
     <!-- Mobile: Shot Groups tabs at top for easy access -->
     <div class="card shadow-sm mb-2 d-lg-none">
         <div class="card-header py-2 d-flex justify-content-between align-items-center">
-            <span class="small"><i class="bi bi-list-ol me-1"></i>?????</span>
+            <span class="small"><i class="bi bi-list-ol me-1"></i>Групи</span>
             <div class="dropdown">
                 <button type="button" class="btn btn-sm btn-accent dropdown-toggle py-0" data-bs-toggle="dropdown">
                     <i class="bi bi-plus"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><h6 class="dropdown-header">???????? ?????</h6></li>
-                    <li><a class="dropdown-item add-group-btn" href="#" data-type="10-shot-series"><i class="bi bi-bullseye me-2"></i>10-????????? ?????</a></li>
-                    <li><a class="dropdown-item add-group-btn" href="#" data-type="blind"><i class="bi bi-eye-slash me-2"></i>?? ?????</a></li>
-                    <li><a class="dropdown-item add-group-btn" href="#" data-type="practice"><i class="bi bi-flag me-2"></i>????????</a></li>
+                    <li><h6 class="dropdown-header">Добавяне на група</h6></li>
+                    <li><a class="dropdown-item add-group-btn" href="#" data-type="10-shot-series"><i class="bi bi-bullseye me-2"></i>10-изстрелна серия</a></li>
+                    <li><a class="dropdown-item add-group-btn" href="#" data-type="blind"><i class="bi bi-eye-slash me-2"></i>На сляпо</a></li>
+                    <li><a class="dropdown-item add-group-btn" href="#" data-type="practice"><i class="bi bi-flag me-2"></i>Практика</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><h6 class="dropdown-header">???????????? ?????????</h6></li>
-                    <li><a class="dropdown-item add-preset-btn" href="#" data-preset="ar40"><i class="bi bi-trophy me-2"></i>40-????????? (4×10)</a></li>
-                    <li><a class="dropdown-item add-preset-btn" href="#" data-preset="ar60"><i class="bi bi-trophy-fill me-2"></i>60-????????? (6×10)</a></li>
+                    <li><h6 class="dropdown-header">Предварителни настройки</h6></li>
+                    <li><a class="dropdown-item add-preset-btn" href="#" data-preset="ar40"><i class="bi bi-trophy me-2"></i>40-изстрелна (4&#215;10)</a></li>
+                    <li><a class="dropdown-item add-preset-btn" href="#" data-preset="ar60"><i class="bi bi-trophy-fill me-2"></i>60-изстрелна (6&#215;10)</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-danger remove-group-btn" href="#"><i class="bi bi-trash me-2"></i>???????? ?????</a></li>
+                    <li><a class="dropdown-item text-danger remove-group-btn" href="#"><i class="bi bi-trash me-2"></i>Премахни група</a></li>
                 </ul>
             </div>
         </div>
         <div class="card-body p-0">
             <div id="groupTabsMobile" class="nav nav-tabs nav-fill bg-light mobile-group-tabs" role="tablist">
                 <button class="nav-link active" data-group="warmup" type="button">
-                    <i class="bi bi-thermometer-half me-1"></i><span class="d-none d-sm-inline">?????????</span><span class="d-sm-none">?</span>
+                    <i class="bi bi-thermometer-half me-1"></i><span class="d-none d-sm-inline">Загряване</span><span class="d-sm-none">З</span>
                 </button>
             </div>
         </div>
@@ -60,7 +60,7 @@
         <div class="col-12 col-lg-7">
             <div class="card shadow-sm">
                 <div class="card-header py-2 d-flex justify-content-between align-items-center">
-                    <span class="small"><i class="bi bi-crosshair me-1"></i><span class="d-none d-sm-inline">ISSF 10? ???????? ????? </span>??????</span>
+                    <span class="small"><i class="bi bi-crosshair me-1"></i><span class="d-none d-sm-inline">ISSF 10м мишена </span>Мишена</span>
                     <div class="d-flex align-items-center gap-2">
                         <div class="btn-group btn-group-sm">
                             <button type="button" class="btn btn-outline-secondary btn-sm px-2 active" id="viewCurrentBtn" title="Show current group only">
@@ -88,11 +88,11 @@
                         <canvas id="targetCanvas" width="500" height="500"></canvas>
                     </div>
                     <div class="mt-1 small d-none d-md-block" style="color: #333;">
-                        <i class="bi bi-hand-index me-1"></i>???????? ?? ????????? ?? ???????. 
-                        <i class="bi bi-trash me-1 ms-2"></i>????? ????? ?? ??????????.
+                        <i class="bi bi-hand-index me-1"></i>Кликнете на мишената за изстрел. 
+                        <i class="bi bi-trash me-1 ms-2"></i>Десен клик за премахване.
                     </div>
                     <div class="mt-1 small d-md-none" style="color: #333;">
-                        <i class="bi bi-hand-index me-1"></i>????????? ?? ?????????. ????? ????????? ?? ??????????.
+                        <i class="bi bi-hand-index me-1"></i>Натиснете за изстрел. Дълго натискане за премахване.
                     </div>
                 </div>
             </div>
@@ -103,18 +103,18 @@
                     <div class="row text-center g-0">
                         <div class="col-3">
                             <div class="fs-6 fw-bold text-primary" id="totalShotsMobile">0</div>
-                            <small class="text-muted" style="font-size: 0.7rem;">????????</small>
+                            <small class="text-muted" style="font-size: 0.7rem;">Изстрели</small>
                         </div>
                         <div class="col-3">
                             <div class="fs-6 fw-bold text-success" id="totalScoreMobile">0.0</div>
-                            <small class="text-muted" style="font-size: 0.7rem;">????????</small>
+                            <small class="text-muted" style="font-size: 0.7rem;">Резултат</small>
                         </div>
                         <div class="col-3">
                             <div class="fs-6 fw-bold" style="color: #856404;" id="avgScoreMobile">0.0</div>
-                            <small class="text-muted" style="font-size: 0.7rem;">??????</small>
+                            <small class="text-muted" style="font-size: 0.7rem;">Средно</small>
                         </div>
                         <div class="col-3">
-                            <button type="button" class="btn btn-sm btn-outline-warning py-0 px-2" id="undoBtnMobile" disabled title="??????????">
+                            <button type="button" class="btn btn-sm btn-outline-warning py-0 px-2" id="undoBtnMobile" disabled title="Отмени">
                                 <i class="bi bi-arrow-counterclockwise"></i>
                             </button>
                         </div>
@@ -127,7 +127,7 @@
                 <div class="card-header py-2 d-flex justify-content-between align-items-center" 
                      data-bs-toggle="collapse" data-bs-target="#coordEntryCollapse" 
                      role="button" aria-expanded="false" style="cursor: pointer;">
-                    <span class="small"><i class="bi bi-pin-map me-1"></i>?????? ?? ??????????</span>
+                    <span class="small"><i class="bi bi-pin-map me-1"></i>Ръчно въвеждане</span>
                     <i class="bi bi-chevron-down d-lg-none"></i>
                 </div>
                 <div id="coordEntryCollapse" class="collapse show-lg">
@@ -156,7 +156,7 @@
                 <div class="card-header py-2 d-flex justify-content-between align-items-center"
                      data-bs-toggle="collapse" data-bs-target="#shotsListMobileCollapse"
                      role="button" aria-expanded="true" style="cursor: pointer;">
-                    <span class="small"><i class="bi bi-list-ol me-1"></i>?????? ? ????????</span>
+                    <span class="small"><i class="bi bi-list-ol me-1"></i>Списък с изстрели</span>
                     <i class="bi bi-chevron-down"></i>
                 </div>
                 <div id="shotsListMobileCollapse" class="collapse show">
@@ -173,7 +173,7 @@
                 <div class="card-header py-2 d-flex justify-content-between align-items-center"
                      data-bs-toggle="collapse" data-bs-target="#seriesSummaryMobileCollapse"
                      role="button" aria-expanded="false" style="cursor: pointer;">
-                    <span class="small"><i class="bi bi-calculator me-1"></i>????????? ?? ???????</span>
+                    <span class="small"><i class="bi bi-calculator me-1"></i>Обобщение на сериите</span>
                     <span class="badge bg-primary" id="seriesTotalScoreMobile">0.0</span>
                 </div>
                 <div id="seriesSummaryMobileCollapse" class="collapse">
@@ -192,38 +192,38 @@
             <!-- Current Group Panel -->
             <div class="card shadow-sm mb-3">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-list-ol me-2"></i>????? ????????</span>
+                    <span><i class="bi bi-list-ol me-2"></i>Групи изстрели</span>
                     <div class="dropdown">
                         <button type="button" class="btn btn-sm btn-accent dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="bi bi-plus"></i> ??????
+                            <i class="bi bi-plus"></i> Добави
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><h6 class="dropdown-header">???????? ?????</h6></li>
-                            <li><a class="dropdown-item add-group-btn" href="#" data-type="10-shot-series"><i class="bi bi-bullseye me-2"></i>10-????????? ?????</a></li>
-                            <li><a class="dropdown-item add-group-btn" href="#" data-type="blind"><i class="bi bi-eye-slash me-2"></i>?? ?????</a></li>
-                            <li><a class="dropdown-item add-group-btn" href="#" data-type="practice"><i class="bi bi-flag me-2"></i>????????</a></li>
+                            <li><h6 class="dropdown-header">Добавяне група</h6></li>
+                            <li><a class="dropdown-item add-group-btn" href="#" data-type="10-shot-series"><i class="bi bi-bullseye me-2"></i>10-изстрелна серия</a></li>
+                            <li><a class="dropdown-item add-group-btn" href="#" data-type="blind"><i class="bi bi-eye-slash me-2"></i>На сляпо</a></li>
+                            <li><a class="dropdown-item add-group-btn" href="#" data-type="practice"><i class="bi bi-flag me-2"></i>Практика</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><h6 class="dropdown-header">???????????? ?????????</h6></li>
-                            <li><a class="dropdown-item add-preset-btn" href="#" data-preset="ar40"><i class="bi bi-trophy me-2"></i>40-????????? ???????? ????? (4×10)</a></li>
-                            <li><a class="dropdown-item add-preset-btn" href="#" data-preset="ar60"><i class="bi bi-trophy-fill me-2"></i>60-????????? ???????? ????? (6×10)</a></li>
+                            <li><h6 class="dropdown-header">Предварителни настройки</h6></li>
+                            <li><a class="dropdown-item add-preset-btn" href="#" data-preset="ar40"><i class="bi bi-trophy me-2"></i>40-изстрелна мишена (4×10)</a></li>
+                            <li><a class="dropdown-item add-preset-btn" href="#" data-preset="ar60"><i class="bi bi-trophy-fill me-2"></i>60-изстрелна мишена (6×10)</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger remove-group-btn" href="#"><i class="bi bi-trash me-2"></i>???????? ???????? ?????</a></li>
+                            <li><a class="dropdown-item text-danger remove-group-btn" href="#"><i class="bi bi-trash me-2"></i>Премахни текущата група</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="card-body p-0">
                     <div id="groupTabs" class="nav nav-tabs nav-fill bg-light" role="tablist" style="border-bottom: 2px solid #dee2e6;">
                         <button class="nav-link active" data-group="warmup" type="button">
-                            <i class="bi bi-thermometer-half me-1" style="color: inherit;"></i>?????????
+                            <i class="bi bi-thermometer-half me-1" style="color: inherit;"></i>Загряване
                         </button>
                     </div>
                     <div class="p-3">
                         <div class="mb-3" id="groupTypeSelector" style="display: none;">
-                            <label class="form-label small">??? ?????</label>
+                            <label class="form-label small">Тип група</label>
                             <select id="groupType" class="form-select form-select-sm">
-                                <option value="10-shot-series">10-????????? ?????</option>
-                                <option value="blind">?? ????? (??? ??????? ??????)</option>
-                                <option value="practice">????????</option>
+                                <option value="10-shot-series">10-изстрелна серия</option>
+                                <option value="blind">На сляпо (без видими резултати)</option>
+                                <option value="practice">Практика</option>
                             </select>
                         </div>
                         <div id="shotsListContainer" style="max-height: 300px; overflow-y: auto;">
@@ -236,21 +236,21 @@
             <!-- Series Summary Panel (for competition presets) -->
             <div class="card shadow-sm mb-3" id="seriesSummaryPanel" style="display: none;">
                 <div class="card-header">
-                    <i class="bi bi-calculator me-2"></i>????????? ?? ???????
+                    <i class="bi bi-calculator me-2"></i>Обобщение на сериите
                 </div>
                 <div class="card-body p-0">
                     <table class="table table-sm mb-0">
                         <thead>
                             <tr>
-                                <th>?????</th>
-                                <th class="text-end">????????</th>
+                                <th>Серия</th>
+                                <th class="text-end">Резултат</th>
                             </tr>
                         </thead>
                         <tbody id="seriesSummaryBody">
                         </tbody>
                         <tfoot class="table-active">
                             <tr>
-                                <td><strong>????</strong></td>
+                                <td><strong>Общо</strong></td>
                                 <td class="text-end"><strong id="seriesTotalScore">0.0</strong></td>
                             </tr>
                         </tfoot>
@@ -261,32 +261,32 @@
             <!-- Statistics Panel -->
             <div class="card shadow-sm mb-3">
                 <div class="card-header">
-                    <i class="bi bi-graph-up me-2"></i>Statistics
+                    <i class="bi bi-graph-up me-2"></i>Статистика
                 </div>
                 <div class="card-body">
                     <div class="row text-center">
                         <div class="col-4">
                             <div class="fs-4 fw-bold text-primary" id="totalShots">0</div>
-                            <small class="text-muted">Total Shots</small>
+                            <small class="text-muted">Изстрели</small>
                         </div>
                         <div class="col-4">
                             <div class="fs-4 fw-bold text-success" id="totalScore">0.0</div>
-                            <small class="text-muted">Total Score</small>
+                            <small class="text-muted">Резултат</small>
                         </div>
                         <div class="col-4">
                             <div class="fs-4 fw-bold" style="color: #856404;" id="avgScore">0.0</div>
-                            <small class="text-muted">Average</small>
+                            <small class="text-muted">Средно</small>
                         </div>
                     </div>
                     <hr />
                     <div class="row text-center">
                         <div class="col-6">
                             <div class="fs-5 fw-bold" id="groupMOA">-</div>
-                            <small class="text-muted">Group Size (MOA)</small>
+                            <small class="text-muted">Размер група (MOA)</small>
                         </div>
                         <div class="col-6">
                             <div class="fs-5 fw-bold" id="groupCenter">-</div>
-                            <small class="text-muted">Center Offset (mm)</small>
+                            <small class="text-muted">Отместване (мм)</small>
                         </div>
                     </div>
                 </div>
@@ -295,18 +295,18 @@
             <!-- Quick Actions -->
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <i class="bi bi-lightning me-2"></i>Quick Actions
+                    <i class="bi bi-lightning me-2"></i>Бързи действия
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
                         <button type="button" class="btn btn-outline-warning" id="undoBtn" disabled>
-                            <i class="bi bi-arrow-counterclockwise me-1"></i>Undo Last Shot
+                            <i class="bi bi-arrow-counterclockwise me-1"></i>Отмени последния изстрел
                         </button>
                         <button type="button" class="btn btn-outline-secondary" id="clearGroupBtn">
-                            <i class="bi bi-eraser me-1"></i>Clear Current Group
+                            <i class="bi bi-eraser me-1"></i>Изчисти текущата група
                         </button>
                         <button type="button" class="btn btn-outline-danger" id="removeGroupBtn">
-                            <i class="bi bi-trash me-1"></i>Remove Current Group
+                            <i class="bi bi-trash me-1"></i>Премахни текущата група
                         </button>
                     </div>
                 </div>
@@ -421,21 +421,6 @@
     
     [data-bs-toggle="collapse"] .bi-chevron-down {
         transition: transform 0.2s ease;
-    }
-    
-    /* Dark text for dropdown menu items */
-    .dropdown-menu .dropdown-item {
-        color: #212529;
-    }
-    
-    .dropdown-menu .dropdown-item:hover {
-        color: #000;
-        background-color: #e9ecef;
-    }
-    
-    .dropdown-menu .dropdown-header {
-        color: #495057;
-        font-weight: 600;
     }
 </style>
 
@@ -911,7 +896,7 @@
         const shots = getCurrentShots();
         
         if (shots.length === 0) {
-            container.innerHTML = '<p class="text-muted text-center mb-0 small"><i class="bi bi-bullseye me-1"></i>No shots. Tap target to add.</p>';
+            container.innerHTML = '<p class="text-muted text-center mb-0 small"><i class="bi bi-bullseye me-1"></i>Няма изстрели. Натиснете върху мишената.</p>';
             return;
         }
         
@@ -925,7 +910,7 @@
         const isMobile = containerId.includes('Mobile');
         
         let html = '<div class="table-responsive"><table class="table table-sm mb-0" style="background: #fff;">';
-        html += '<thead><tr><th>#</th><th>Pos</th><th>Score</th><th></th></tr></thead><tbody>';
+        html += '<thead><tr><th>#</th><th>Поз.</th><th>Резултат</th><th></th></tr></thead><tbody>';
         
         let totalScore = 0;
         shots.forEach((shot, i) => {
@@ -952,7 +937,7 @@
         
         if (showTotal && shots.length > 0) {
             html += `<tr class="table-active">
-                <td colspan="2"><strong>Total</strong></td>
+                <td colspan="2"><strong>Общо</strong></td>
                 <td colspan="2"><strong>${totalScore.toFixed(1)}</strong></td>
             </tr>`;
         }
@@ -963,7 +948,7 @@
         container.querySelectorAll('.remove-shot-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const index = parseInt(this.dataset.index);
-                if (confirm(`Remove shot #${index + 1}?`)) {
+                if (confirm(`Премахни изстрел #${index + 1}?`)) {
                     removeShotByIndex(index);
                 }
             });
@@ -1025,7 +1010,7 @@
         if (!container) return;
         
         let html = `<button class="nav-link ${currentGroup === 'warmup' ? 'active' : ''}" data-group="warmup" type="button">
-            <i class="bi bi-thermometer-half me-1" style="color: inherit;"></i>${isMobile ? '<span class="d-none d-sm-inline">Warmup</span><span class="d-sm-none">W</span>' : 'Warmup'} (${shotsData.warmupShots.length})
+            <i class="bi bi-thermometer-half me-1" style="color: inherit;"></i>${isMobile ? '<span class="d-none d-sm-inline">\u0417\u0430\u0433\u0440\u044F\u0432\u0430\u043D\u0435</span><span class="d-sm-none">\u0417</span>' : '\u0417\u0430\u0433\u0440\u044F\u0432\u0430\u043D\u0435'} (${shotsData.warmupShots.length})
         </button>`;
         
         shotsData.groups.forEach((group, i) => {
@@ -1099,10 +1084,10 @@
 
     function addPreset(preset) {
         const seriesCount = preset === 'ar40' ? 4 : 6;
-        const presetName = preset === 'ar40' ? '40-Shot Air Rifle' : '60-Shot Air Rifle';
+        const presetName = preset === 'ar40' ? '40-Шотна Въздушна Рева' : '60-Шотна Въздушна Рева';
         
         if (shotsData.groups.length > 0) {
-            if (!confirm(`Add ${seriesCount} series for ${presetName}?`)) {
+            if (!confirm(`Добави ${seriesCount} серии за ${presetName}?`)) {
                 return;
             }
         }
@@ -1205,7 +1190,7 @@
 
     // Clear group handlers (desktop and mobile)
     function handleClearGroup() {
-        if (confirm('Clear all shots in current group?')) {
+        if (confirm('Изчисти всички изстрели в текущата група?')) {
             if (currentGroup === 'warmup') {
                 shotsData.warmupShots = [];
             } else {
@@ -1227,16 +1212,16 @@
     // Remove group handler
     function handleRemoveGroup() {
         if (currentGroup === 'warmup') {
-            alert('Cannot remove the Warmup group. You can clear it instead.');
+            alert('Не може да премахнете групата Загряване. Можете да я изчистите вместо това.');
             return;
         }
         
         const groupIndex = parseInt(currentGroup);
         const shotCount = shotsData.groups[groupIndex]?.shots?.length || 0;
         
-        let message = `Remove Series ${groupIndex + 1}?`;
+        let message = `Премахнете серия ${groupIndex + 1}?`;
         if (shotCount > 0) {
-            message += ` This will delete ${shotCount} shot(s).`;
+            message += ` Това ще изтрие ${shotCount} изстрела.`;
         }
         
         if (confirm(message)) {

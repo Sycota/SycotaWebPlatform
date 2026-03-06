@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Sycota.Infrastructure\Sycota.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Identity\Data\" />
+  </ItemGroup>
+
 </Project>

@@ -1,0 +1,41 @@
+﻿@inject SignInManager<Sycota.Domain.Entities.ApplicationUser> SignInManager
+
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+
+<ul class="nav nav-pills flex-column" id="manage-nav">
+    <li class="nav-item">
+        <a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" asp-area="Identity" asp-page="./Index">
+            <i class="bi bi-person me-2"></i>Профил
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" asp-area="Identity" asp-page="./Email">
+            <i class="bi bi-envelope me-2"></i>Имейл
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" asp-area="Identity" asp-page="./ChangePassword">
+            <i class="bi bi-key me-2"></i>Парола
+        </a>
+    </li>
+    @if (hasExternalLogins)
+    {
+        <li class="nav-item">
+            <a class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-area="Identity" asp-page="./ExternalLogins">
+                <i class="bi bi-link-45deg me-2"></i>Външни входове
+            </a>
+        </li>
+    }
+    <li class="nav-item">
+        <a class="nav-link @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" asp-area="Identity" asp-page="./TwoFactorAuthentication">
+            <i class="bi bi-shield-lock me-2"></i>Двуфакторна автентикация
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" asp-area="Identity" asp-page="./PersonalData">
+            <i class="bi bi-database me-2"></i>Лични данни
+        </a>
+    </li>
+</ul>

@@ -45,7 +45,7 @@
                                             <small class="text-muted">@request.User.Email</small>
                                         </td>
                                         <td>
-                                            <span class="badge bg-secondary">@request.RequestedRole</span>
+                                            <span class="badge bg-secondary">@request.RequestedRole.GetDisplayName()</span>
                                         </td>
                                         <td>
                                             @if (request.RequestedTrainer != null)
@@ -148,7 +148,7 @@
                                     <tr>
                                         <td>@invitation.Email</td>
                                         <td>
-                                            <span class="badge bg-secondary">@invitation.OfferedRole</span>
+                                            <span class="badge bg-secondary">@invitation.OfferedRole.GetDisplayName()</span>
                                         </td>
                                         <td>
                                             @if (invitation.AssignedTrainer != null)

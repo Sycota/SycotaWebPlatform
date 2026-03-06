@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Sycota.Application.Interfaces;
@@ -165,14 +165,14 @@ public class ClubsController : Controller
             var existingMembership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id);
             if (existingMembership != null)
             {
-                TempData["Error"] = "You are already a member of this club.";
+                TempData["Error"] = "Вече сте член на този клуб.";
                 return RedirectToAction(nameof(Details), new { id });
             }
 
             var pendingResult = await _clubService.HasPendingJoinRequestAsync(userId, id);
             if (pendingResult.Success && pendingResult.Data)
             {
-                TempData["Error"] = "You already have a pending request to join this club.";
+                TempData["Error"] = "Вече имате чакаща заявка за присъединяване към този клуб.";
                 return RedirectToAction(nameof(Details), new { id });
             }
         }
@@ -218,7 +218,7 @@ public class ClubsController : Controller
                 return RedirectToAction(nameof(Join), new { id = model.ClubId });
             }
 
-            TempData["Success"] = "Your request to join the club has been submitted. An admin will review it shortly.";
+            TempData["Success"] = "Заявката ви за присъединяване към клуба е изпратена. Администратор ще я прегледа скоро.";
         }
         else
         {
@@ -231,7 +231,7 @@ public class ClubsController : Controller
                 return RedirectToAction(nameof(Join), new { id = model.ClubId });
             }
 
-            TempData["Success"] = "You have successfully joined the club!";
+            TempData["Success"] = "Успешно се присъединихте към клуба!";
         }
 
         return RedirectToAction(nameof(Details), new { id = model.ClubId });
@@ -249,7 +249,7 @@ public class ClubsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id, ClubMemberIncludeOptions.Club);
         if (membership == null || membership.Role != ClubRole.Admin)
         {
-            TempData["Error"] = "Only admins can manage join requests.";
+            TempData["Error"] = "Само администратори могат да управляват заявките за присъединяване.";
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -286,7 +286,7 @@ public class ClubsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id);
         if (membership == null || membership.Role != ClubRole.Admin)
         {
-            TempData["Error"] = "Only admins can approve requests.";
+            TempData["Error"] = "Само администратори могат да одобряват заявки.";
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -297,7 +297,7 @@ public class ClubsController : Controller
         }
         else
         {
-            TempData["Success"] = "Request approved successfully.";
+            TempData["Success"] = "Заявката е одобрена успешно.";
         }
 
         return RedirectToAction(nameof(ManageRequests), new { id });
@@ -317,7 +317,7 @@ public class ClubsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id);
         if (membership == null || membership.Role != ClubRole.Admin)
         {
-            TempData["Error"] = "Only admins can reject requests.";
+            TempData["Error"] = "Само администратори могат да отхвърлят заявки.";
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -328,7 +328,7 @@ public class ClubsController : Controller
         }
         else
         {
-            TempData["Success"] = "Request rejected.";
+            TempData["Success"] = "Заявката е отхвърлена.";
         }
 
         return RedirectToAction(nameof(ManageRequests), new { id });
@@ -346,7 +346,7 @@ public class ClubsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id);
         if (membership == null || membership.Role != ClubRole.Admin)
         {
-            TempData["Error"] = "Only admins can invite members.";
+            TempData["Error"] = "Само администратори могат да канят членове.";
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -382,7 +382,7 @@ public class ClubsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, model.ClubId);
         if (membership == null || membership.Role != ClubRole.Admin)
         {
-            TempData["Error"] = "Only admins can invite members.";
+            TempData["Error"] = "Само администратори могат да канят членове.";
             return RedirectToAction(nameof(Details), new { id = model.ClubId });
         }
 
@@ -401,7 +401,7 @@ public class ClubsController : Controller
             return RedirectToAction(nameof(Invite), new { id = model.ClubId });
         }
 
-        TempData["Success"] = $"Invitation sent to {model.Email}";
+        TempData["Success"] = $"Поканата е изпратена до {model.Email}";
         return RedirectToAction(nameof(ManageRequests), new { id = model.ClubId });
     }
 
@@ -420,13 +420,13 @@ public class ClubsController : Controller
 
         if (invitation.ExpiresAt < DateTime.UtcNow)
         {
-            TempData["Error"] = "This invitation has expired.";
+            TempData["Error"] = "Тази покана е изтекла.";
             return RedirectToAction(nameof(Index));
         }
 
         if (invitation.Status != MembershipRequestStatus.Pending)
         {
-            TempData["Error"] = "This invitation has already been used or cancelled.";
+            TempData["Error"] = "Тази покана вече е използвана или отменена.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -458,7 +458,7 @@ public class ClubsController : Controller
         }
 
         var invitationResult = await _clubService.GetInvitationByCodeAsync(code);
-        TempData["Success"] = "You have successfully joined the club!";
+        TempData["Success"] = "Успешно се присъединихте към клуба!";
         
         return RedirectToAction(nameof(Details), new { id = invitationResult.Data.ClubId });
     }
@@ -477,7 +477,7 @@ public class ClubsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id);
         if (membership == null || membership.Role != ClubRole.Admin)
         {
-            TempData["Error"] = "Only admins can cancel invitations.";
+            TempData["Error"] = "Само администратори могат да отменят покани.";
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -488,7 +488,7 @@ public class ClubsController : Controller
         }
         else
         {
-            TempData["Success"] = "Invitation cancelled.";
+            TempData["Success"] = "Поканата е отменена.";
         }
 
         return RedirectToAction(nameof(ManageRequests), new { id });
@@ -506,7 +506,7 @@ public class ClubsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id, ClubMemberIncludeOptions.All);
         if (membership == null)
         {
-            TempData["Error"] = "You are not a member of this club.";
+            TempData["Error"] = "Не сте член на този клуб.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -535,13 +535,13 @@ public class ClubsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id, ClubMemberIncludeOptions.All);
         if (membership == null)
         {
-            TempData["Error"] = "You are not a member of this club.";
+            TempData["Error"] = "Не сте член на този клуб.";
             return RedirectToAction(nameof(Index));
         }
 
         if (!membership.CanTrain)
         {
-            TempData["Error"] = "Only trainers can view trainees.";
+            TempData["Error"] = "Само треньори могат да преглеждат обучаеми.";
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -568,7 +568,7 @@ public class ClubsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id, ClubMemberIncludeOptions.All);
         if (membership == null || !membership.CanTrain)
         {
-            TempData["Error"] = "You must be a trainer to view trainee details.";
+            TempData["Error"] = "Трябва да сте треньор, за да преглеждате детайли за обучаеми.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -582,7 +582,7 @@ public class ClubsController : Controller
         var trainee = traineeResult.Data;
         if (trainee.TrainerId != membership.Id)
         {
-            TempData["Error"] = "This competitor is not assigned to you.";
+            TempData["Error"] = "Този състезател не е назначен към вас.";
             return RedirectToAction(nameof(Trainees), new { id });
         }
 
@@ -614,7 +614,7 @@ public class ClubsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id, ClubMemberIncludeOptions.All);
         if (membership == null || !membership.CanTrain)
         {
-            TempData["Error"] = "You must be a trainer to view trainee performance.";
+            TempData["Error"] = "Трябва да сте треньор, за да преглеждате представянето на обучаеми.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -628,7 +628,7 @@ public class ClubsController : Controller
         var trainee = traineeResult.Data;
         if (trainee.TrainerId != membership.Id)
         {
-            TempData["Error"] = "This competitor is not assigned to you.";
+            TempData["Error"] = "Този състезател не е назначен към вас.";
             return RedirectToAction(nameof(Trainees), new { id });
         }
 
@@ -669,7 +669,7 @@ public class ClubsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id, ClubMemberIncludeOptions.All);
         if (membership == null || !membership.CanTrain)
         {
-            TempData["Error"] = "You must be a trainer to view trainee sessions.";
+            TempData["Error"] = "Трябва да сте треньор, за да преглеждате сесиите на обучаеми.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -683,14 +683,14 @@ public class ClubsController : Controller
         var trainee = traineeResult.Data;
         if (trainee.TrainerId != membership.Id)
         {
-            TempData["Error"] = "This competitor is not assigned to you.";
+            TempData["Error"] = "Този състезател не е назначен към вас.";
             return RedirectToAction(nameof(Trainees), new { id });
         }
 
         var session = await _trainingSessionRepository.GetTrainingSessionByIdAsync(sessionId, TrainingSessionIncludeOptions.All);
         if (session == null || session.CreatedById != trainee.UserId)
         {
-            TempData["Error"] = "Session not found or does not belong to this trainee.";
+            TempData["Error"] = "Сесията не е намерена или не принадлежи на този обучаем.";
             return RedirectToAction(nameof(TraineeDetails), new { id, traineeId });
         }
 
@@ -716,7 +716,7 @@ public class ClubsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id);
         if (membership == null || membership.Role != ClubRole.Admin)
         {
-            TempData["Error"] = "Only admins can edit club details.";
+            TempData["Error"] = "Само администратори могат да редактират данните на клуба.";
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -754,7 +754,7 @@ public class ClubsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, model.Id);
         if (membership == null || membership.Role != ClubRole.Admin)
         {
-            TempData["Error"] = "Only admins can edit club details.";
+            TempData["Error"] = "Само администратори могат да редактират данните на клуба.";
             return RedirectToAction(nameof(Details), new { id = model.Id });
         }
 
@@ -778,7 +778,7 @@ public class ClubsController : Controller
 
         await _clubRepository.UpdateClubAsync(club);
 
-        TempData["Success"] = "Club details updated successfully.";
+        TempData["Success"] = "Данните на клуба са обновени успешно.";
         return RedirectToAction(nameof(Details), new { id = model.Id });
     }
 
@@ -796,7 +796,7 @@ public class ClubsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id);
         if (membership == null)
         {
-            TempData["Error"] = "You are not a member of this club.";
+            TempData["Error"] = "Не сте член на този клуб.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -807,7 +807,7 @@ public class ClubsController : Controller
             return RedirectToAction(nameof(Details), new { id });
         }
 
-        TempData["Success"] = "You have left the club.";
+        TempData["Success"] = "Напуснахте клуба.";
         return RedirectToAction(nameof(Index));
     }
 
@@ -823,7 +823,7 @@ public class ClubsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id);
         if (membership == null || membership.Role != ClubRole.Admin)
         {
-            TempData["Error"] = "Only admins can manage members.";
+            TempData["Error"] = "Само администратори могат да управляват членовете.";
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -860,7 +860,7 @@ public class ClubsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id);
         if (membership == null || membership.Role != ClubRole.Admin)
         {
-            TempData["Error"] = "Only admins can assign trainers.";
+            TempData["Error"] = "Само администратори могат да назначават треньори.";
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -874,7 +874,7 @@ public class ClubsController : Controller
         var competitor = competitorResult.Data;
         if (competitor.ClubId != id || competitor.Role != ClubRole.Competitor)
         {
-            TempData["Error"] = "Invalid competitor selected.";
+            TempData["Error"] = "Невалиден избор на състезател.";
             return RedirectToAction(nameof(ManageMembers), new { id });
         }
 
@@ -882,7 +882,7 @@ public class ClubsController : Controller
 
         var competitorName = !string.IsNullOrEmpty(competitor.User?.FirstName) 
             ? $"{competitor.User.FirstName} {competitor.User.LastName}" 
-            : competitor.User?.UserName ?? "Unknown";
+            : competitor.User?.UserName ?? "Неизвестен";
 
         var currentTrainerName = competitor.Trainer != null 
             ? (!string.IsNullOrEmpty(competitor.Trainer.User?.FirstName) 
@@ -918,7 +918,7 @@ public class ClubsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, model.ClubId);
         if (membership == null || membership.Role != ClubRole.Admin)
         {
-            TempData["Error"] = "Only admins can assign trainers.";
+            TempData["Error"] = "Само администратори могат да назначават треньори.";
             return RedirectToAction(nameof(Details), new { id = model.ClubId });
         }
 
@@ -931,11 +931,11 @@ public class ClubsController : Controller
 
         if (model.SelectedTrainerId.HasValue)
         {
-            TempData["Success"] = "Trainer assigned successfully.";
+            TempData["Success"] = "Треньорът е назначен успешно.";
         }
         else
         {
-            TempData["Success"] = "Trainer assignment removed.";
+            TempData["Success"] = "Назначението на треньор е премахнато.";
         }
 
         return RedirectToAction(nameof(ManageMembers), new { id = model.ClubId });
@@ -955,13 +955,13 @@ public class ClubsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id);
         if (membership == null || membership.Role != ClubRole.Admin)
         {
-            TempData["Error"] = "Only admins can remove members.";
+            TempData["Error"] = "Само администратори могат да премахват членове.";
             return RedirectToAction(nameof(Details), new { id });
         }
 
         if (membership.Id == memberId)
         {
-            TempData["Error"] = "You cannot remove yourself. Use the Leave Club option instead.";
+            TempData["Error"] = "Не можете да премахнете себе си. Използвайте опцията за напускане на клуба.";
             return RedirectToAction(nameof(ManageMembers), new { id });
         }
 
@@ -972,7 +972,7 @@ public class ClubsController : Controller
         }
         else
         {
-            TempData["Success"] = "Member removed from the club.";
+            TempData["Success"] = "Членът е премахнат от клуба.";
         }
 
         return RedirectToAction(nameof(ManageMembers), new { id });
@@ -992,7 +992,7 @@ public class ClubsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id);
         if (membership == null || membership.Role != ClubRole.Admin)
         {
-            TempData["Error"] = "Only admins can modify trainer status.";
+            TempData["Error"] = "Само администратори могат да променят треньорския статус.";
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -1006,7 +1006,7 @@ public class ClubsController : Controller
         var targetMember = targetMemberResult.Data;
         if (targetMember.Role != ClubRole.Admin || targetMember.ClubId != id)
         {
-            TempData["Error"] = "Can only toggle trainer status for admins in this club.";
+            TempData["Error"] = "Треньорският статус може да се променя само за администратори в този клуб.";
             return RedirectToAction(nameof(ManageMembers), new { id });
         }
 
@@ -1018,8 +1018,8 @@ public class ClubsController : Controller
         else
         {
             TempData["Success"] = targetMember.IsAlsoTrainer 
-                ? "Trainer role disabled for this admin." 
-                : "Trainer role enabled for this admin.";
+                ? "Треньорската роля е деактивирана за този администратор." 
+                : "Треньорската роля е активирана за този администратор.";
         }
 
         return RedirectToAction(nameof(ManageMembers), new { id });
@@ -1037,7 +1037,7 @@ public class ClubsController : Controller
         var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id, ClubMemberIncludeOptions.All);
         if (membership == null)
         {
-            TempData["Error"] = "You are not a member of this club.";
+            TempData["Error"] = "Не сте член на този клуб.";
             return RedirectToAction(nameof(Index));
         }
 

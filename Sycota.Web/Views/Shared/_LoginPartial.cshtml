@@ -16,9 +16,9 @@
             <span>@User.Identity?.Name</span>
         </a>
         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
-            <li class="dropdown-header">
-                <small class="text-muted">Вписан като</small>
-                <div class="fw-semibold">@User.Identity?.Name</div>
+            <li class="dropdown-header" style="color: #ffffff;">
+                <small class="text-white-50">Вписан като</small>
+                <div class="fw-semibold text-white">@User.Identity?.Name</div>
             </li>
             <li><hr class="dropdown-divider"></li>
             <li>
@@ -60,8 +60,8 @@ else
             <i class="bi bi-box-arrow-in-right me-1"></i>Вход
         </a>
     </li>
-    <li class="nav-item">
-        <a class="btn btn-accent btn-sm ms-2" asp-area="Identity" asp-page="/Account/Register">
+    <li class="nav-item d-flex align-items-center">
+        <a class="btn btn-accent btn-sm ms-lg-2 my-2 my-lg-0" asp-area="Identity" asp-page="/Account/Register">
             <i class="bi bi-person-plus me-1"></i>Регистрация
         </a>
     </li>

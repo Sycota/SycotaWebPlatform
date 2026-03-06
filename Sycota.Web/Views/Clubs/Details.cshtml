@@ -159,7 +159,7 @@
                         <div class="alert alert-info mb-3">
                             <small>
                                 <i class="bi bi-person-badge me-1"></i>
-                                Вие сте <strong>@Model.CurrentMembership.Role</strong>
+                                Вие сте <strong>@Model.CurrentMembership.Role.GetDisplayName()</strong>
                                 @if (Model.CurrentMembership.Role == Sycota.Domain.Enums.ClubRole.Admin && Model.CurrentMembership.IsAlsoTrainer)
                                 {
                                     <span class="badge bg-warning text-dark ms-1">+ Треньор</span>

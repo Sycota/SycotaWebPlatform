@@ -1,4 +1,4 @@
-@model Sycota.Web.Models.ViewModels.NotificationsViewModel
+﻿@model Sycota.Web.Models.ViewModels.NotificationsViewModel
 
 @if (Model.TotalCount > 0)
 {
@@ -7,12 +7,12 @@
             <i class="bi bi-bell-fill"></i>
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge">
                 @Model.TotalCount
-                <span class="visually-hidden">notifications</span>
+                <span class="visually-hidden">известия</span>
             </span>
         </a>
-        <ul class="dropdown-menu dropdown-menu-end notification-dropdown">
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark notification-dropdown">
             <li class="dropdown-header">
-                <strong><i class="bi bi-envelope me-2"></i>Club Invitations</strong>
+                <strong><i class="bi bi-envelope me-2"></i>Покани за клубове</strong>
             </li>
             <li><hr class="dropdown-divider"></li>
             @foreach (var invitation in Model.PendingInvitations.Take(5))
@@ -25,11 +25,11 @@
                                 <strong>@invitation.Club.Name</strong>
                                 <br />
                                 <small class="text-muted">
-                                    Invited as <span class="badge bg-secondary">@invitation.OfferedRole</span>
+                                    Поканен като <span class="badge bg-secondary">@invitation.OfferedRole.GetDisplayName()</span>
                                 </small>
                                 <br />
                                 <small class="text-muted">
-                                    <i class="bi bi-clock me-1"></i>Expires @invitation.ExpiresAt.ToString("MMM dd")
+                                    <i class="bi bi-clock me-1"></i>Изтича на @invitation.ExpiresAt.ToString("dd.MM")
                                 </small>
                             </div>
                         </div>
@@ -41,7 +41,7 @@
                 <li><hr class="dropdown-divider"></li>
                 <li>
                     <a class="dropdown-item text-center" asp-controller="Notifications" asp-action="Index">
-                        View all @Model.TotalCount invitations
+                        Виж всички @Model.TotalCount покани
                     </a>
                 </li>
             }
@@ -51,7 +51,7 @@
 else
 {
     <li class="nav-item">
-        <a class="nav-link" asp-controller="Notifications" asp-action="Index" title="Notifications">
+        <a class="nav-link" asp-controller="Notifications" asp-action="Index" title="Известия">
             <i class="bi bi-bell"></i>
         </a>
     </li>

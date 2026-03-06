@@ -71,26 +71,26 @@ namespace Sycota.Web.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-            [Required]
-            [StringLength(50, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
-            [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Username can only contain letters and digits.")]
-            [Display(Name = "Username")]
+            [Required(ErrorMessage = "Потребителското име е задължително.")]
+            [StringLength(50, ErrorMessage = "{0} трябва да бъде между {2} и {1} символа.", MinimumLength = 3)]
+            [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Потребителското име може да съдържа само букви и цифри.")]
+            [Display(Name = "Потребителско име")]
             public string Username { get; set; }
 
-            [Required]
-            [EmailAddress]
-            [Display(Name = "Email")]
+            [Required(ErrorMessage = "Имейлът е задължителен.")]
+            [EmailAddress(ErrorMessage = "Невалиден имейл адрес.")]
+            [Display(Name = "Имейл")]
             public string Email { get; set; }
 
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage = "Паролата е задължителна.")]
+            [StringLength(100, ErrorMessage = "{0} трябва да бъде между {2} и {1} символа.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Парола")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Потвърдете паролата")]
+            [Compare("Password", ErrorMessage = "Паролата и потвърждението на паролата не съвпадат.")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -126,8 +126,8 @@ namespace Sycota.Web.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    await _emailSender.SendEmailAsync(Input.Email, "Потвърдете имейла си",
+                        $"Моля, потвърдете акаунта си като <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>кликнете тук</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
@@ -141,7 +141,7 @@ namespace Sycota.Web.Areas.Identity.Pages.Account
                 }
                 foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    ModelState.AddModelError(string.Empty, TranslateIdentityError(error));
                 }
             }
 
@@ -157,9 +157,8 @@ namespace Sycota.Web.Areas.Identity.Pages.Account
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
-                    $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
-                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
+                throw new InvalidOperationException($"Не може да се създаде инстанция на '{nameof(ApplicationUser)}'. " +
+                    $"Уверете се, че '{nameof(ApplicationUser)}' не е абстрактен клас и има конструктор без параметри.");
             }
         }
 
@@ -167,9 +166,27 @@ namespace Sycota.Web.Areas.Identity.Pages.Account
         {
             if (!_userManager.SupportsUserEmail)
             {
-                throw new NotSupportedException("The default UI requires a user store with email support.");
+                throw new NotSupportedException("Интерфейсът по подразбиране изисква потребителско хранилище с поддръжка на имейл.");
             }
             return (IUserEmailStore<ApplicationUser>)_userStore;
+        }
+
+        private static string TranslateIdentityError(IdentityError error)
+        {
+            return error.Code switch
+            {
+                "DuplicateUserName" => "Това потребителско име вече е заето.",
+                "DuplicateEmail" => "Този имейл адрес вече е регистриран.",
+                "InvalidEmail" => "Невалиден имейл адрес.",
+                "InvalidUserName" => "Потребителското име съдържа невалидни символи.",
+                "PasswordTooShort" => "Паролата е твърде кратка.",
+                "PasswordRequiresNonAlphanumeric" => "Паролата трябва да съдържа поне един специален символ.",
+                "PasswordRequiresDigit" => "Паролата трябва да съдържа поне една цифра.",
+                "PasswordRequiresLower" => "Паролата трябва да съдържа поне една малка буква.",
+                "PasswordRequiresUpper" => "Паролата трябва да съдържа поне една главна буква.",
+                "PasswordRequiresUniqueChars" => "Паролата трябва да съдържа уникални символи.",
+                _ => error.Description
+            };
         }
     }
 }

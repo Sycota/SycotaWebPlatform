@@ -21,11 +21,11 @@
         <div class="d-flex align-items-center gap-2">
             <label class="form-label mb-0 small">Период:</label>
             <div class="btn-group btn-group-sm" role="group">
-                <a asp-action="PerformanceDashboard" asp-route-id="@Model.CurrentMembership.ClubId" asp-route-days="7" class="btn @(selectedDays == 7 ? "btn-primary" : "btn-outline-secondary")">7?</a>
-                <a asp-action="PerformanceDashboard" asp-route-id="@Model.CurrentMembership.ClubId" asp-route-days="14" class="btn @(selectedDays == 14 ? "btn-primary" : "btn-outline-secondary")">14?</a>
-                <a asp-action="PerformanceDashboard" asp-route-id="@Model.CurrentMembership.ClubId" asp-route-days="30" class="btn @(selectedDays == 30 ? "btn-primary" : "btn-outline-secondary")">30?</a>
-                <a asp-action="PerformanceDashboard" asp-route-id="@Model.CurrentMembership.ClubId" asp-route-days="90" class="btn @(selectedDays == 90 ? "btn-primary" : "btn-outline-secondary")">90?</a>
-                <a asp-action="PerformanceDashboard" asp-route-id="@Model.CurrentMembership.ClubId" asp-route-days="365" class="btn @(selectedDays == 365 ? "btn-primary" : "btn-outline-secondary")">1?</a>
+                <a asp-action="PerformanceDashboard" asp-route-id="@Model.CurrentMembership.ClubId" asp-route-days="7" class="btn @(selectedDays == 7 ? "btn-primary" : "btn-outline-secondary")">7 дни</a>
+                <a asp-action="PerformanceDashboard" asp-route-id="@Model.CurrentMembership.ClubId" asp-route-days="14" class="btn @(selectedDays == 14 ? "btn-primary" : "btn-outline-secondary")">14 дни</a>
+                <a asp-action="PerformanceDashboard" asp-route-id="@Model.CurrentMembership.ClubId" asp-route-days="30" class="btn @(selectedDays == 30 ? "btn-primary" : "btn-outline-secondary")">30 дни</a>
+                <a asp-action="PerformanceDashboard" asp-route-id="@Model.CurrentMembership.ClubId" asp-route-days="90" class="btn @(selectedDays == 90 ? "btn-primary" : "btn-outline-secondary")">90 дни</a>
+                <a asp-action="PerformanceDashboard" asp-route-id="@Model.CurrentMembership.ClubId" asp-route-days="365" class="btn @(selectedDays == 365 ? "btn-primary" : "btn-outline-secondary")">1 год</a>
             </div>
         </div>
     </div>
@@ -137,7 +137,7 @@
                                     }
                                 </div>
                                 <div class="progress-bar bg-primary" role="progressbar" style="width: @((tensPercent - innerTensPercent))%;"
-                                     title="10-??: @((tensPercent - innerTensPercent).ToString("F1"))%">
+                                     title="10-ки: @((tensPercent - innerTensPercent).ToString("F1"))%">
                                     @if ((tensPercent - innerTensPercent) > 5)
                                     {
                                         <span>@((tensPercent - innerTensPercent).ToString("F0"))%</span>
@@ -265,7 +265,7 @@
                                 <tr class="@rowClass">
                                     <td>@series.Date.ToString("dd.MM")</td>
                                     <td>@series.SessionName</td>
-                                    <td>????? @series.SeriesNumber</td>
+                                    <td>Серия @series.SeriesNumber</td>
                                     <td class="text-end fw-bold">@series.Score.ToString("F1")</td>
                                     <td class="text-end">@series.AveragePerShot.ToString("F2")</td>
                                     <td class="text-end">
@@ -302,7 +302,7 @@
             data: {
                 labels: chartData.dailyLabels || [],
                 datasets: [{
-                    label: 'Average Score/Shot',
+                    label: 'Среден резултат/изстрел',
                     data: chartData.dailyScores || [],
                     borderColor: '#0d6efd',
                     backgroundColor: 'rgba(13, 110, 253, 0.1)',
@@ -323,7 +323,7 @@
                         beginAtZero: false,
                         min: 8,
                         max: 11,
-                        title: { display: true, text: 'Score per Shot' }
+                        title: { display: true, text: 'Резултат на изстрел' }
                     }
                 }
             }
@@ -337,7 +337,7 @@
             data: {
                 labels: chartData.seriesLabels || [],
                 datasets: [{
-                    label: 'Series Score',
+                    label: 'Резултат на серия',
                     data: chartData.seriesScores || [],
                     backgroundColor: chartData.seriesScores?.map(score => 
                         score >= 100 ? '#198754' : score >= 95 ? '#0d6efd' : '#ffc107'
@@ -356,7 +356,7 @@
                         beginAtZero: false,
                         min: 80,
                         max: 109,
-                        title: { display: true, text: 'Series Score' }
+                        title: { display: true, text: 'Резултат на серия' }
                     }
                 }
             }
@@ -388,13 +388,13 @@
                 labels: chartData.seriesLabels,
                 datasets: [
                     {
-                        label: 'Inner 10s',
+                        label: 'Вътрешни 10-ки',
                         data: chartData.innerTensProgression || [],
                         backgroundColor: '#6f42c1',
                         stack: 'Stack 0'
                     },
                     {
-                        label: '10s',
+                        label: '10-ки',
                         data: (chartData.tensProgression || []).map((t, i) => t - (chartData.innerTensProgression?.[i] || 0)),
                         backgroundColor: '#0d6efd',
                         stack: 'Stack 0'
@@ -412,7 +412,7 @@
                     y: { 
                         stacked: true,
                         max: 10,
-                        title: { display: true, text: '10s per Series' }
+                        title: { display: true, text: '10-ки на серия' }
                     }
                 }
             }
