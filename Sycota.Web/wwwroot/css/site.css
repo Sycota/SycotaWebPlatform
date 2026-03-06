@@ -1,4 +1,4 @@
-/* Brand Fonts */
+﻿/* Brand Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Inter:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap');
 
 /* Brand Color Variables */
@@ -23,16 +23,21 @@ html {
     }
 }
 
-body {
-    font-family: 'Open Sans', sans-serif;
-    margin-bottom: 60px;
-    background-color: #f8f9fa;
-    color: var(--sycota-text-dark);
+/* Sticky footer solution */
+html {
+    height: 100%;
 }
 
-html {
-    position: relative;
-    min-height: 100%;
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f8f9fa;
+    color: var(--sycota-text-dark);
+    margin: 0;
+}
+
+/* Footer should be in normal flow (after content) */
+.footer {
+    position: static;
 }
 
 /* Typography */
@@ -64,11 +69,37 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .nav-link {
-    color: var(--sycota-text-light) ;
+    color: var(--sycota-text-light) !important;
 }
 
 .nav-link:hover {
     color: var(--sycota-accent-yellow) !important;
+}
+
+/* Navbar dropdown fix */
+.navbar-dark .nav-link,
+.navbar-dark .nav-link.dropdown-toggle {
+    color: var(--sycota-text-light) !important;
+}
+
+.navbar-dark .nav-link:hover,
+.navbar-dark .nav-link:focus {
+    color: var(--sycota-accent-yellow) !important;
+}
+
+.navbar-dark .dropdown-menu {
+    background-color: var(--sycota-bg-dark);
+    border-color: var(--sycota-bg-medium);
+}
+
+.navbar-dark .dropdown-item {
+    color: var(--sycota-text-light);
+}
+
+.navbar-dark .dropdown-item:hover,
+.navbar-dark .dropdown-item:focus {
+    background-color: var(--sycota-bg-medium);
+    color: var(--sycota-accent-yellow);
 }
 
 /* Buttons */
@@ -154,6 +185,17 @@ h1, h2, h3, h4, h5, h6 {
 .footer a:hover {
     color: #c9e617 !important;
     text-decoration: underline;
+}
+
+.footer-link {
+    color: rgba(255, 255, 255, 0.75) !important;
+    text-decoration: none !important;
+    transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+    color: var(--sycota-accent-yellow) !important;
+    text-decoration: none !important;
 }
 
 /* Alerts - Improved contrast */

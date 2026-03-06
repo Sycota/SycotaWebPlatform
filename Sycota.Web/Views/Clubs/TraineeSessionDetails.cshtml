@@ -1,4 +1,4 @@
-@model Sycota.Web.Models.ViewModels.TraineeSessionDetailsViewModel
+﻿@model Sycota.Web.Models.ViewModels.TraineeSessionDetailsViewModel
 @{
     ViewData["Title"] = Model.Session.Name;
     var traineeName = !string.IsNullOrEmpty(Model.Trainee.User?.FirstName) 
@@ -6,7 +6,7 @@
         : Model.Trainee.User?.UserName;
 }
 
-<div class="container">
+<div class="container mb-5">
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a asp-controller="Clubs" asp-action="Index">Clubs</a></li>

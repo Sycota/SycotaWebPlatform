@@ -1,4 +1,4 @@
-# robots.txt for SYCOTA?
+﻿# robots.txt for SYCOTAᐩ
 User-agent: *
 Allow: /
 Disallow: /Identity/
@@ -6,7 +6,7 @@ Disallow: /api/
 Disallow: /Account/
 
 # Sitemap location
-Sitemap: https://sycota.com/sitemap.xml
+Sitemap: https://sycota.app/sitemap.xml
 
 # Crawl-delay for politeness
 Crawl-delay: 1

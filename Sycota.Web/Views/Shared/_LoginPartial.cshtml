@@ -3,33 +3,66 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-<ul class="navbar-nav">
+<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 @if (SignInManager.IsSignedIn(User))
 {
     @await Component.InvokeAsync("NotificationBadge")
-    <li class="nav-item">
-        <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Управление">
-            <i class="bi bi-person-circle me-1"></i>@User.Identity?.Name
+    
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="rounded-circle bg-light text-dark d-flex align-items-center justify-content-center me-2" style="width: 28px; height: 28px;">
+                <i class="bi bi-person-fill small"></i>
+            </div>
+            <span>@User.Identity?.Name</span>
         </a>
-    </li>
-    <li class="nav-item">
-        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button type="submit" class="nav-link btn btn-link">
-                <i class="bi bi-box-arrow-right me-1"></i>Изход
-            </button>
-        </form>
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+            <li class="dropdown-header">
+                <small class="text-muted">Вписан като</small>
+                <div class="fw-semibold">@User.Identity?.Name</div>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <a class="dropdown-item" asp-area="" asp-controller="Clubs" asp-action="Index">
+                    <i class="bi bi-bullseye me-2"></i>Моите Клубове
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" asp-area="" asp-controller="Notifications" asp-action="Index">
+                    <i class="bi bi-bell me-2"></i>Известия
+                </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">
+                    <i class="bi bi-gear me-2"></i>Настройки на акаунта
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/ChangePassword">
+                    <i class="bi bi-key me-2"></i>Смяна на парола
+                </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <form class="px-0" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit" class="dropdown-item text-danger">
+                        <i class="bi bi-box-arrow-right me-2"></i>Изход
+                    </button>
+                </form>
+            </li>
+        </ul>
     </li>
 }
 else
 {
     <li class="nav-item">
-        <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">
-            <i class="bi bi-person-plus me-1"></i>Регистрация
+        <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">
+            <i class="bi bi-box-arrow-in-right me-1"></i>Вход
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">
-            <i class="bi bi-box-arrow-in-right me-1"></i>Вход
+        <a class="btn btn-accent btn-sm ms-2" asp-area="Identity" asp-page="/Account/Register">
+            <i class="bi bi-person-plus me-1"></i>Регистрация
         </a>
     </li>
 }

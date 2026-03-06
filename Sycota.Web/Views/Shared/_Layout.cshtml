@@ -82,44 +82,79 @@
     @await RenderSectionAsync("Head", required: false)
 </head>
 <body>
+<div class="main-wrapper">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3" aria-label="Основна навигация">
+        <nav class="navbar navbar-expand-lg navbar-dark border-bottom box-shadow mb-3" aria-label="Основна навигация">
             <div class="container-fluid">
                 <a class="navbar-brand sycota-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <i class="bi bi-bullseye me-1" aria-hidden="true"></i>SYCOTAᐩ
+                    <img src="~/images/sycota.png" alt="SYCOTA" style="height: 36px;" />
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar"
                         aria-expanded="false" aria-label="Превключване на навигацията">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse collapse" id="mainNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">
-                                <i class="bi bi-house me-1" aria-hidden="true"></i>Начало
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-house-fill me-1" aria-hidden="true"></i>Начало
                             </a>
                         </li>
+                            
                         @if (User.Identity?.IsAuthenticated == true)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Clubs" asp-action="Index">
-                                    <i class="bi bi-bullseye me-1" aria-hidden="true"></i>Клубове
+                                <a class="nav-link" asp-area="" asp-controller="Clubs" asp-action="Index">
+                                    <i class="bi bi-bullseye me-1" aria-hidden="true"></i>Моите Клубове
                                 </a>
                             </li>
                         }
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">
-                                <i class="bi bi-shield-check me-1" aria-hidden="true"></i>Поверителност
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">
+                                    <i class="bi bi-info-circle me-1" aria-hidden="true"></i>За Нас
+                                </a>
+                            </li>
+                        }
+                            
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-journal-text me-1" aria-hidden="true"></i>Информация
                             </a>
+                            <ul class="dropdown-menu dropdown-menu-dark">
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="About">
+                                        <i class="bi bi-info-circle me-2"></i>За Платформата
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Features">
+                                        <i class="bi bi-stars me-2"></i>Функционалности
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Privacy">
+                                        <i class="bi bi-shield-check me-2"></i>Поверителност
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Contact">
+                                        <i class="bi bi-envelope me-2"></i>Контакти
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
+                        
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-5">
             @if (TempData["Success"] != null)
             {
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -137,14 +172,46 @@
             @RenderBody()
         </main>
     </div>
+</div>
 
-    <footer class="border-top footer text-muted py-3">
+    <footer class="footer text-muted py-4" style="background-color: var(--sycota-bg-dark);">
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                <span class="sycota-brand">&copy; 2025 SYCOTAᐩ - Платформа за Прецизна Стрелба</span>
-                <nav aria-label="Връзки в долния колонтитул">
-                    <a asp-area="" asp-controller="Home" asp-action="Privacy">Поверителност</a>
-                </nav>
+            <div class="row align-items-center gy-3">
+                <div class="col-lg-4 col-md-12 text-center text-lg-start">
+                    <div class="d-flex align-items-center justify-content-center justify-content-lg-start">
+                        <img src="~/images/sycota.png" alt="SYCOTA" style="height: 28px; filter: brightness(0) invert(1);" class="me-2" />
+                        <span class="text-light opacity-75 small">Платформа за Прецизна Стрелба</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12 text-center">
+                    <ul class="list-inline mb-0 small">
+                        <li class="list-inline-item">
+                            <a asp-area="" asp-controller="Home" asp-action="About" class="footer-link">За Нас</a>
+                        </li>
+                        <li class="list-inline-item text-light opacity-50 mx-1">•</li>
+                        <li class="list-inline-item">
+                            <a asp-area="" asp-controller="Home" asp-action="Privacy" class="footer-link">Поверителност</a>
+                        </li>
+                        <li class="list-inline-item text-light opacity-50 mx-1">•</li>
+                        <li class="list-inline-item">
+                            <a asp-area="" asp-controller="Home" asp-action="Terms" class="footer-link">Условия</a>
+                        </li>
+                        <li class="list-inline-item text-light opacity-50 mx-1">•</li>
+                        <li class="list-inline-item">
+                            <a asp-area="" asp-controller="Home" asp-action="Contact" class="footer-link">Контакти</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-12 text-center text-lg-end">
+                    <a href="mailto:georgi.georgiev.highschool@buditel.bg" class="text-light opacity-75 text-decoration-none small">
+                        <i class="bi bi-envelope me-1"></i>georgi.georgiev.highschool@buditel.bg
+                    </a>
+                </div>
+            </div>
+            <hr class="my-3 opacity-25" />
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+                <span class="text-light opacity-50 small">&copy; 2025 SYCOTAᐩ. Всички права запазени.</span>
+                <span class="text-light opacity-50 small">Направено с <i class="bi bi-heart-fill text-danger"></i> в България</span>
             </div>
         </div>
     </footer>

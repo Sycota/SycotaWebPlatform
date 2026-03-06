@@ -5,14 +5,13 @@
 }
 
 <div class="container">
-    <!-- Hero Section -->
-    <section class="text-center py-5" aria-labelledby="hero-title">
-        <h1 id="hero-title" class="display-3 fw-bold mb-3 sycota-brand" style="color: var(--sycota-bg-dark);">
-            SYCOTAᐩ
-        </h1>
-        <p class="lead text-muted mb-4">
-            Водещата платформа за стрелкови клубове, треньори и състезатели
-        </p>
+<!-- Hero Section -->
+<section class="text-center py-5" aria-labelledby="hero-title">
+    <img src="~/images/sycota.png" alt="SYCOTA" class="img-fluid mb-3" style="max-height: 100px;" />
+    <h1 id="hero-title" class="visually-hidden">SYCOTAᐩ</h1>
+    <p class="lead text-muted mb-4">
+        Водещата платформа за стрелкови клубове, треньори и състезатели
+    </p>
         <div class="d-flex justify-content-center gap-3">
             @if (User.Identity?.IsAuthenticated == true)
             {

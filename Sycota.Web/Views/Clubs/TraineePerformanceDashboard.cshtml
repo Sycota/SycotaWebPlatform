@@ -1,4 +1,4 @@
-@model Sycota.Web.Models.ViewModels.TraineePerformanceDashboardViewModel
+﻿@model Sycota.Web.Models.ViewModels.TraineePerformanceDashboardViewModel
 @{
     ViewData["Title"] = "Trainee Performance Dashboard";
     var selectedDays = Model.SelectedDays;
@@ -7,7 +7,7 @@
         : Model.Trainee.User?.UserName;
 }
 
-<div class="container-fluid">
+<div class="container-fluid mb-5">
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a asp-action="Index">Clubs</a></li>
