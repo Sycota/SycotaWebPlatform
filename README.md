@@ -1,1 +1,1 @@
-Линк към SYCOTAᐩ: https://sycota.app
+# Линк към SYCOTAᐩ: https://sycota.app
