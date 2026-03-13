@@ -493,6 +493,22 @@
         return html;
     }
 
+    // Strip any remaining markdown formatting from text
+    function stripMarkdown(text) {
+        if (!text) return text;
+        // Remove bold: **text** or __text__
+        text = text.replace(/\*\*(.+?)\*\*/g, '$1');
+        text = text.replace(/__(.+?)__/g, '$1');
+        // Remove italic: *text* or _text_ (not inside words)
+        text = text.replace(/(?<!\w)\*(.+?)\*(?!\w)/g, '$1');
+        text = text.replace(/(?<!\w)_(.+?)_(?!\w)/g, '$1');
+        // Remove markdown headers: ## Header
+        text = text.replace(/^#{1,6}\s*/gm, '');
+        // Replace bullet asterisks with dashes: * item -> - item
+        text = text.replace(/^(\s*)\*\s/gm, '$1- ');
+        return text;
+    }
+
     // AI Chat Functions
     function addChatMessage(role, content) {
         const container = document.getElementById('chatMessages');
@@ -508,7 +524,7 @@
         
         const contentDiv = document.createElement('div');
         contentDiv.className = 'message-content';
-        contentDiv.textContent = content;
+        contentDiv.textContent = role === 'assistant' ? stripMarkdown(content) : content;
         
         messageDiv.appendChild(labelDiv);
         messageDiv.appendChild(contentDiv);
@@ -570,11 +586,27 @@
     
     async function analyzeSession() {
         if (isLoading) return;
+        
+        // Check if this is a regeneration (we already have messages)
+        const isRegenerate = chatHistory.length > 0;
+        
+        if (isRegenerate) {
+            // Clear the chat UI for a fresh analysis
+            chatHistory = [];
+            const container = document.getElementById('chatMessages');
+            container.innerHTML = '';
+            document.getElementById('clearChatBtn').style.display = 'none';
+        }
+        
         setLoading(true);
         showTypingIndicator();
         
         try {
-            const response = await fetch(`/api/AiAnalysis/analyze/${sessionId}`, {
+            const url = isRegenerate 
+                ? `/api/AiAnalysis/analyze/${sessionId}?regenerate=true`
+                : `/api/AiAnalysis/analyze/${sessionId}`;
+            
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -583,9 +615,7 @@
             hideTypingIndicator();
             
             if (response.ok && data.analysis) {
-                if (!data.cached) {
-                    chatHistory.push({ role: 'assistant', content: data.analysis });
-                }
+                chatHistory.push({ role: 'assistant', content: data.analysis });
                 addChatMessage('assistant', data.analysis);
                 document.getElementById('analyzeBtn').innerHTML = '<i class="bi bi-arrow-clockwise me-1"></i>Прегенерирай анализ';
             } else {

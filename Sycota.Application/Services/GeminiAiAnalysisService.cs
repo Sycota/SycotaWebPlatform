@@ -30,22 +30,23 @@ public class GeminiAiAnalysisService : IAiAnalysisService
             var sessionSummary = ParseSessionData(sessionJson);
             
             var systemPrompt = GetSystemPrompt();
-            var userPrompt = $@"Please analyze this shooting training session and provide insights:
+            var userPrompt = $@"Моля, анализирай тази тренировъчна сесия по стрелба и дай препоръки.
+Отговори САМО на български език.
 
-Session: {sessionName}
-Date: {sessionDate:MMMM dd, yyyy}
-Weapon: {weaponType}
+Сесия: {sessionName}
+Дата: {sessionDate:dd.MM.yyyy}
+Оръжие: {weaponType}
 
 {sessionSummary}
 
-Please provide:
-1. Overall performance assessment
-2. Shot grouping analysis (consistency, spread)
-3. Any patterns you notice (drift direction, clustering)
-4. Specific areas for improvement
-5. Actionable tips for the next session
+Моля, предостави:
+1. Обща оценка на представянето
+2. Анализ на групирането на изстрелите (последователност, разпръскване)
+3. Забелязани модели (посока на отклонение, групиране)
+4. Конкретни области за подобрение
+5. Практически съвети за следващата тренировка
 
-Keep your response concise but helpful, suitable for a competitive shooter. Do not use bold, italic and other formatting.";
+Отговорът трябва да е кратък, но полезен, подходящ за състезателен стрелец. Не използвай форматиране (bold, italic и др.).";
 
             var response = await SendToGeminiAsync(systemPrompt, userPrompt, new List<ChatMessage>());
             return response;
@@ -65,10 +66,10 @@ Keep your response concise but helpful, suitable for a competitive shooter. Do n
             
             var systemPrompt = GetSystemPrompt() + $@"
 
-Current session context:
+Контекст на текущата сесия:
 {parsedContext}
 
-You are continuing a conversation about this training session. Answer the user's questions helpfully and provide coaching advice when appropriate. Do not use bold, italic and other formatting.";
+Продължаваш разговор за тази тренировъчна сесия. Отговаряй на въпросите на потребителя полезно и давай треньорски съвети когато е уместно. Не използвай форматиране (bold, italic и др.). Отговаряй САМО на български език.";
 
             var response = await SendToGeminiAsync(systemPrompt, userMessage, conversationHistory);
             return response;
@@ -232,12 +233,39 @@ You are continuing a conversation about this training session. Answer the user's
         return 0;
     }
 
+    private static string StripMarkdownFormatting(string text)
+    {
+        // Remove bold markers: **text** or __text__
+        text = System.Text.RegularExpressions.Regex.Replace(text, @"\*\*(.+?)\*\*", "$1");
+        text = System.Text.RegularExpressions.Regex.Replace(text, @"__(.+?)__", "$1");
+        // Remove italic markers: *text* or _text_ (single, not inside words)
+        text = System.Text.RegularExpressions.Regex.Replace(text, @"(?<!\w)\*(.+?)\*(?!\w)", "$1");
+        text = System.Text.RegularExpressions.Regex.Replace(text, @"(?<!\w)_(.+?)_(?!\w)", "$1");
+        // Remove markdown headers: ## Header
+        text = System.Text.RegularExpressions.Regex.Replace(text, @"^#{1,6}\s*", "", System.Text.RegularExpressions.RegexOptions.Multiline);
+        // Replace bullet points with asterisks: * item -> - item
+        text = System.Text.RegularExpressions.Regex.Replace(text, @"^(\s*)\*\s", "$1- ", System.Text.RegularExpressions.RegexOptions.Multiline);
+        return text;
+    }
+
     private string GetSystemPrompt()
     {
         return @"You are an expert ISSF (International Shooting Sport Federation) shooting coach AI assistant. 
 You specialize in 10m Air Rifle and Air Pistol Olympic-style precision shooting.
 
-IMPORTANT: Do NOT use any markdown formatting in your responses. No bold, no italics, no headers, no bullet points with asterisks. Use plain text only with simple dashes (-) for lists and line breaks for separation.
+CRITICAL LANGUAGE RULE:
+- You MUST respond ONLY in Bulgarian (български език). Every single word of your response must be in Bulgarian.
+- Do NOT write in English or any other language under any circumstances.
+- Even if the user writes in English, you MUST still respond in Bulgarian.
+
+CRITICAL FORMATTING RULES - YOU MUST FOLLOW THESE:
+- Do NOT use any markdown formatting whatsoever.
+- Do NOT use asterisks (*) for bold, italic, or bullet points.
+- Do NOT use underscores (_) for bold or italic.
+- Do NOT use hash symbols (#) for headers.
+- Use simple dashes (-) for list items.
+- Use plain text only with line breaks for separation.
+- Write section titles as plain text on their own line, without any special characters before or after them.
 
 Your knowledge includes:
 - ISSF decimal scoring system (10.0 to 10.9 for the inner ring)
@@ -260,7 +288,8 @@ When analyzing shots:
 
 Be encouraging but honest. Provide specific, actionable feedback.
 Use shooting terminology appropriately but explain technical terms when needed.
-Keep responses clear and readable without any special formatting.";
+Keep responses clear and readable without any special formatting.
+Remember: ALL responses must be in Bulgarian.";
     }
 
     private async Task<ServiceResult<string>> SendToGeminiAsync(string systemPrompt, string userMessage, List<ChatMessage> history)
@@ -296,7 +325,7 @@ Keep responses clear and readable without any special formatting.";
             GenerationConfig = new GeminiGenerationConfig
             {
                 Temperature = 0.7,
-                MaxOutputTokens = 2048,
+                MaxOutputTokens = 16000,
                 TopP = 0.95,
                 TopK = 40
             },
@@ -338,6 +367,9 @@ Keep responses clear and readable without any special formatting.";
             return ServiceResult<string>.Fail("Не е получен отговор от AI");
         }
 
+        // Strip any markdown formatting the model may have used despite instructions
+        text = StripMarkdownFormatting(text);
+
         return ServiceResult<string>.Ok(text);
     }
 }
@@ -365,7 +397,7 @@ internal class GeminiPart
 internal class GeminiGenerationConfig
 {
     public double Temperature { get; set; } = 0.7;
-    public int MaxOutputTokens { get; set; } = 2048;
+    public int MaxOutputTokens { get; set; } = 4096;
     public double TopP { get; set; } = 0.95;
     public int TopK { get; set; } = 40;
 }

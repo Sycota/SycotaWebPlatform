@@ -33,7 +33,7 @@ public class AiAnalysisController : ControllerBase
     }
 
     [HttpPost("analyze/{sessionId}")]
-    public async Task<IActionResult> AnalyzeSession(int sessionId)
+    public async Task<IActionResult> AnalyzeSession(int sessionId, [FromQuery] bool regenerate = false)
     {
         var userId = _userManager.GetUserId(User);
         if (string.IsNullOrEmpty(userId))
@@ -55,13 +55,21 @@ public class AiAnalysisController : ControllerBase
         }
 
         // Check if we already have an analysis for this session
-        var existingMessages = await _chatMessageRepository.GetBySessionIdAsync(sessionId, 1);
-        var existingAnalysis = existingMessages.FirstOrDefault(m => m.Role == "assistant");
-        
-        if (existingAnalysis != null)
+        if (!regenerate)
         {
-            // Return cached analysis
-            return Ok(new { analysis = existingAnalysis.Content, cached = true });
+            var existingMessages = await _chatMessageRepository.GetBySessionIdAsync(sessionId, 1);
+            var existingAnalysis = existingMessages.FirstOrDefault(m => m.Role == "assistant");
+            
+            if (existingAnalysis != null)
+            {
+                // Return cached analysis
+                return Ok(new { analysis = existingAnalysis.Content, cached = true });
+            }
+        }
+        else
+        {
+            // Clear existing messages before regenerating
+            await _chatMessageRepository.DeleteBySessionIdAsync(sessionId);
         }
 
         var result = await _aiAnalysisService.AnalyzeSessionAsync(
