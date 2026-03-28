@@ -195,17 +195,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .footer a {
-    color: var(--sycota-accent-yellow) !important;
+    color: #ffffff !important;
     text-decoration: none;
 }
 
 .footer a:hover {
-    color: #c9e617 !important;
+    color: var(--sycota-accent-yellow) !important;
     text-decoration: underline;
 }
 
 .footer-link {
-    color: rgba(255, 255, 255, 0.75) !important;
+    color: #ffffff !important;
     text-decoration: none !important;
     transition: color 0.2s ease;
 }

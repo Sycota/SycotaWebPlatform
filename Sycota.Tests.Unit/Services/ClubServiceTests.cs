@@ -1,4 +1,4 @@
-using Moq;
+﻿using Moq;
 using Sycota.Application.Interfaces;
 using Sycota.Application.Interfaces.Options;
 using Sycota.Application.Services;
@@ -44,7 +44,7 @@ public class ClubServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Contains("not found", result.Error);
+        Assert.Contains("не беше намерен", result.Error);
     }
 
     [Fact]
@@ -87,7 +87,7 @@ public class ClubServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Contains("not found", result.Error);
+        Assert.Contains("не беше намерен", result.Error);
     }
 
     [Fact]
@@ -125,7 +125,7 @@ public class ClubServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Contains("User id is required", result.Error);
+        Assert.Contains("задължителен", result.Error);
     }
 
     [Fact]
@@ -140,7 +140,7 @@ public class ClubServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Contains("not found", result.Error);
+        Assert.Contains("не беше намерен", result.Error);
     }
 
     [Fact]
@@ -160,7 +160,7 @@ public class ClubServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Contains("already a member", result.Error);
+        Assert.Contains("вече е член", result.Error);
     }
 
     [Fact]
@@ -182,7 +182,7 @@ public class ClubServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Contains("does not belong to a trainer", result.Error);
+        Assert.Contains("не принадлежи на треньор", result.Error);
     }
 
     [Fact]
@@ -224,7 +224,7 @@ public class ClubServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Contains("not found", result.Error);
+        Assert.Contains("не беше намерен", result.Error);
     }
 
     [Fact]
@@ -262,7 +262,7 @@ public class ClubServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Contains("not found", result.Error);
+        Assert.Contains("не беше намерен", result.Error);
     }
 
     [Fact]
@@ -279,7 +279,7 @@ public class ClubServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Contains("only assign trainers to competitors", result.Error.ToLower());
+        Assert.Contains("само на състезатели", result.Error);
     }
 
     [Fact]
@@ -299,7 +299,7 @@ public class ClubServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Contains("same club", result.Error);
+        Assert.Contains("един и същ клуб", result.Error);
     }
 
     [Fact]
@@ -344,7 +344,7 @@ public class ClubServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Contains("Only admins", result.Error);
+        Assert.Contains("Само администратори", result.Error);
     }
 
     [Fact]
@@ -380,7 +380,7 @@ public class ClubServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Contains("User id is required", result.Error);
+        Assert.Contains("задължителен", result.Error);
     }
 
     [Fact]
@@ -395,7 +395,7 @@ public class ClubServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Contains("not found", result.Error);
+        Assert.Contains("не беше намерен", result.Error);
     }
 
     [Fact]
@@ -415,7 +415,7 @@ public class ClubServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Contains("already a member", result.Error);
+        Assert.Contains("вече е член", result.Error);
     }
 
     [Fact]
@@ -437,7 +437,7 @@ public class ClubServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Contains("already have a pending request", result.Error);
+        Assert.Contains("чакаща заявка", result.Error);
     }
 
     [Fact]
@@ -481,7 +481,7 @@ public class ClubServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Contains("not found", result.Error);
+        Assert.Contains("не беше намерена", result.Error);
     }
 
     [Fact]
@@ -504,7 +504,7 @@ public class ClubServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Contains("already been processed", result.Error);
+        Assert.Contains("вече е обработена", result.Error);
     }
 
     [Fact]
@@ -557,7 +557,7 @@ public class ClubServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Contains("Email is required", result.Error);
+        Assert.Contains("задължителен", result.Error);
     }
 
     [Fact]
@@ -577,7 +577,7 @@ public class ClubServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Contains("already exists", result.Error);
+        Assert.Contains("Вече съществува", result.Error);
     }
 
     [Fact]
@@ -615,7 +615,7 @@ public class ClubServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Contains("code is required", result.Error);
+        Assert.Contains("задължителен", result.Error);
     }
 
     [Fact]
@@ -640,7 +640,7 @@ public class ClubServiceTests
 
         // Assert
         Assert.False(result.Success);
-        Assert.Contains("expired", result.Error);
+        Assert.Contains("изтекла", result.Error);
     }
 
     [Fact]

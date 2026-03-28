@@ -8,6 +8,8 @@ public class ApplicationUser : IdentityUser
     public string LastName { get; set; } = string.Empty;
     public string? DOB { get; set; }
     public string? Nationality { get; set; }
+    public bool IsAdmin { get; set; }
 }
+
 
 
