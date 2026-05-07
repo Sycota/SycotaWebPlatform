@@ -190,9 +190,12 @@
                             <a asp-action="Invite" asp-route-id="@Model.Club.Id" class="btn btn-outline-warning">
                                 <i class="bi bi-envelope-plus me-1"></i>Покани член
                             </a>
-                            <a asp-action="Inventory" asp-route-id="@Model.Club.Id" class="btn btn-outline-warning">
-                                <i class="bi bi-box-seam me-1"></i>Инвентар
-                            </a>
+                            @if (Model.Club.IsInventoryEnabled)
+                            {
+                                <a asp-action="Inventory" asp-route-id="@Model.Club.Id" class="btn btn-outline-warning">
+                                    <i class="bi bi-box-seam me-1"></i>Инвентар
+                                </a>
+                            }
                         </div>
                     </div>
                 </div>
@@ -224,9 +227,18 @@
                             <a asp-action="PerformanceDashboard" asp-route-id="@Model.Club.Id" class="btn btn-outline-primary">
                                 <i class="bi bi-speedometer2 me-1"></i>Табло за представяне
                             </a>
-                            <a asp-action="Inventory" asp-route-id="@Model.Club.Id" class="btn btn-outline-primary">
-                                <i class="bi bi-box-seam me-1"></i>Инвентар
-                            </a>
+                            @if (Model.Club.IsLeaderboardEnabled)
+                            {
+                                <a asp-action="Leaderboard" asp-route-id="@Model.Club.Id" class="btn btn-outline-primary">
+                                    <i class="bi bi-trophy me-1"></i>Класация
+                                </a>
+                            }
+                            @if (Model.Club.IsInventoryEnabled)
+                            {
+                                <a asp-action="Inventory" asp-route-id="@Model.Club.Id" class="btn btn-outline-primary">
+                                    <i class="bi bi-box-seam me-1"></i>Инвентар
+                                </a>
+                            }
 
                             @if (Model.IsTrainer || (Model.CurrentMembership.Role == Sycota.Domain.Enums.ClubRole.Admin && Model.CurrentMembership.IsAlsoTrainer))
                             {

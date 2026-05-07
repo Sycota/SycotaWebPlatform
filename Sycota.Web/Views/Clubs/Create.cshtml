@@ -68,6 +68,22 @@
                             </div>
                         </div>
 
+                        <div class="mb-4">
+                            <h6 class="mb-2">Опции на клуба</h6>
+                            <div class="form-check form-switch mb-2">
+                                <input asp-for="IsInventoryEnabled" class="form-check-input" type="checkbox" />
+                                <label asp-for="IsInventoryEnabled" class="form-check-label"><strong>Инвентар</strong></label>
+                            </div>
+                            <div class="form-check form-switch mb-2">
+                                <input asp-for="IsGamificationEnabled" class="form-check-input" type="checkbox" />
+                                <label asp-for="IsGamificationEnabled" class="form-check-label"><strong>Прогрес и значки</strong></label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input asp-for="IsLeaderboardEnabled" class="form-check-input" type="checkbox" />
+                                <label asp-for="IsLeaderboardEnabled" class="form-check-label"><strong>Класация</strong></label>
+                            </div>
+                        </div>
+
                         <div class="alert alert-info">
                             <i class="bi bi-info-circle me-1"></i>
                             Създателят на клуба става <strong>администратор</strong> на този клуб.

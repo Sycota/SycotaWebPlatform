@@ -1,0 +1,71 @@
+﻿@model Sycota.Web.Models.ViewModels.LeaderboardViewModel
+@{
+    ViewData["Title"] = "Класация";
+    var selectedDays = Model.SelectedDays;
+}
+
+<div class="container mb-5">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">Клубове</a></li>
+            <li class="breadcrumb-item"><a asp-action="Details" asp-route-id="@Model.Club.Id">@Model.Club.Name</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Класация</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <h2 class="mb-0"><i class="bi bi-trophy me-2"></i>Класация</h2>
+        <div class="btn-group btn-group-sm" role="group">
+            <a asp-action="Leaderboard" asp-route-id="@Model.Club.Id" asp-route-days="7" class="btn @(selectedDays == 7 ? "btn-primary" : "btn-outline-secondary")">7 дни</a>
+            <a asp-action="Leaderboard" asp-route-id="@Model.Club.Id" asp-route-days="30" class="btn @(selectedDays == 30 ? "btn-primary" : "btn-outline-secondary")">30 дни</a>
+            <a asp-action="Leaderboard" asp-route-id="@Model.Club.Id" asp-route-days="90" class="btn @(selectedDays == 90 ? "btn-primary" : "btn-outline-secondary")">90 дни</a>
+            <a asp-action="Leaderboard" asp-route-id="@Model.Club.Id" asp-route-days="365" class="btn @(selectedDays == 365 ? "btn-primary" : "btn-outline-secondary")">1 год.</a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Стрелец</th>
+                            <th>XP</th>
+                            <th>Ниво</th>
+                            <th>Сесии</th>
+                            <th>Значки</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Entries.Any())
+                        {
+                            <tr><td colspan="6" class="text-center py-4 text-muted">Няма данни за класация.</td></tr>
+                        }
+                        else
+                        {
+                            @foreach (var entry in Model.Entries)
+                            {
+                                var isCurrentUser = entry.ClubMemberId == Model.CurrentMembership.Id;
+                                <tr class="@(isCurrentUser ? "table-primary" : string.Empty)">
+                                    <td><strong>@entry.Position</strong></td>
+                                    <td>
+                                        @entry.ShooterName
+                                        @if (isCurrentUser)
+                                        {
+                                            <span class="badge bg-dark ms-1">Вие</span>
+                                        }
+                                    </td>
+                                    <td class="fw-bold text-primary">@entry.TotalXp</td>
+                                    <td>@entry.Level <small class="text-muted">(@entry.RankTitle)</small></td>
+                                    <td>@entry.SessionCount</td>
+                                    <td>@entry.BadgesCount</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

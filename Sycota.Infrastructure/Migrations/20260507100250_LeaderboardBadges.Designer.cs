@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sycota.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Sycota.Infrastructure.Data;
 namespace Sycota.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260507100250_LeaderboardBadges")]
+    partial class LeaderboardBadges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -355,15 +358,6 @@ namespace Sycota.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
-
-                    b.Property<bool>("IsGamificationEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsInventoryEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsLeaderboardEnabled")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()

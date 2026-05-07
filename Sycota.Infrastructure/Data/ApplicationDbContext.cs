@@ -23,6 +23,7 @@ namespace Sycota.Infrastructure.Data
         public DbSet<ClubWeapon> ClubWeapons { get; set; }
         public DbSet<ClubAmmo> ClubAmmo { get; set; }
         public DbSet<InventoryIssue> InventoryIssues { get; set; }
+        public DbSet<BadgeNotification> BadgeNotifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -274,6 +275,23 @@ namespace Sycota.Infrastructure.Data
                     .WithMany()
                     .HasForeignKey(e => e.AmmoId)
                     .OnDelete(DeleteBehavior.NoAction);
+            });
+
+            // Configure BadgeNotification entity
+            builder.Entity<BadgeNotification>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.UserId).IsRequired().HasMaxLength(450);
+                entity.Property(e => e.ClubName).HasMaxLength(200);
+                entity.Property(e => e.BadgeTitle).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.BadgeDescription).IsRequired().HasMaxLength(500);
+                entity.HasIndex(e => new { e.UserId, e.ClubId, e.BadgeTitle }).IsUnique();
+                entity.HasIndex(e => new { e.UserId, e.IsRead, e.UnlockedAtUtc });
+
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }

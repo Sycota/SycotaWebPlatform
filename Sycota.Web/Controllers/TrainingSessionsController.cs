@@ -6,6 +6,8 @@ using Sycota.Application.Interfaces.Options;
 using Sycota.Domain.Entities;
 using Sycota.Domain.Enums;
 using Sycota.Web.Models.ViewModels;
+using System.Globalization;
+using System.Text;
 
 namespace Sycota.Web.Controllers;
 
@@ -54,6 +56,136 @@ public class TrainingSessionsController : Controller
 
         ViewBag.ClubName = membership.Club.Name;
         return View(viewModel);
+    }
+
+    // GET: /TrainingSessions/ExportResultsCsv/5 (clubId)
+    public async Task<IActionResult> ExportResultsCsv(int id)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id);
+        if (membership == null)
+        {
+            TempData["Error"] = "Не сте член на този клуб.";
+            return RedirectToAction("Index", "Clubs");
+        }
+
+        var sessions = (await _trainingSessionRepository.GetAllTrainingSessionsByClubIdAsync(id, TrainingSessionIncludeOptions.None))
+            .Where(s => s.CreatedById == userId)
+            .OrderByDescending(s => s.SessionDate)
+            .ToList();
+
+        var sb = new StringBuilder();
+        sb.AppendLine("Name,SessionDate,WeaponType,Description,Notes");
+        foreach (var s in sessions)
+        {
+            sb.AppendLine($"{EscapeCsv(s.Name)},{s.SessionDate:O},{EscapeCsv(s.WeaponType.ToString())},{EscapeCsv(s.Description)},{EscapeCsv(s.Notes)}");
+        }
+
+        var bytes = Encoding.UTF8.GetBytes(sb.ToString());
+        return File(bytes, "text/csv", $"sycota-results-{id}-{DateTime.UtcNow:yyyyMMdd}.csv");
+    }
+
+    // GET: /TrainingSessions/ExportResultsExcel/5 (clubId)
+    public async Task<IActionResult> ExportResultsExcel(int id)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id);
+        if (membership == null)
+        {
+            TempData["Error"] = "Не сте член на този клуб.";
+            return RedirectToAction("Index", "Clubs");
+        }
+
+        var sessions = (await _trainingSessionRepository.GetAllTrainingSessionsByClubIdAsync(id, TrainingSessionIncludeOptions.None))
+            .Where(s => s.CreatedById == userId)
+            .OrderByDescending(s => s.SessionDate)
+            .ToList();
+
+        var sb = new StringBuilder();
+        sb.AppendLine("<table><tr><th>Име</th><th>Дата</th><th>Тип оръжие</th><th>Описание</th><th>Бележки</th></tr>");
+        foreach (var s in sessions)
+        {
+            sb.AppendLine($"<tr><td>{System.Net.WebUtility.HtmlEncode(s.Name)}</td><td>{s.SessionDate:dd.MM.yyyy HH:mm}</td><td>{System.Net.WebUtility.HtmlEncode(s.WeaponType.ToString())}</td><td>{System.Net.WebUtility.HtmlEncode(s.Description)}</td><td>{System.Net.WebUtility.HtmlEncode(s.Notes)}</td></tr>");
+        }
+        sb.AppendLine("</table>");
+
+        var bytes = Encoding.UTF8.GetBytes(sb.ToString());
+        return File(bytes, "application/vnd.ms-excel", $"sycota-results-{id}-{DateTime.UtcNow:yyyyMMdd}.xls");
+    }
+
+    // POST: /TrainingSessions/ImportResultsCsv
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ImportResultsCsv(int clubId, IFormFile file)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, clubId);
+        if (membership == null)
+        {
+            TempData["Error"] = "Не сте член на този клуб.";
+            return RedirectToAction("Index", "Clubs");
+        }
+
+        if (file == null || file.Length == 0)
+        {
+            TempData["Error"] = "Моля, изберете CSV файл за импорт.";
+            return RedirectToAction("MyResults", "Clubs", new { id = clubId });
+        }
+
+        var imported = 0;
+        using var stream = file.OpenReadStream();
+        using var reader = new StreamReader(stream, Encoding.UTF8);
+
+        _ = await reader.ReadLineAsync(); // header
+        while (!reader.EndOfStream)
+        {
+            var line = await reader.ReadLineAsync();
+            if (string.IsNullOrWhiteSpace(line)) continue;
+
+            var columns = ParseCsvLine(line);
+            if (columns.Count < 5) continue;
+
+            if (!DateTime.TryParse(columns[1], null, DateTimeStyles.RoundtripKind, out var sessionDate))
+            {
+                continue;
+            }
+
+            var weaponType = ParseWeaponType(columns[2]);
+
+            var session = new TrainingSession
+            {
+                ClubId = clubId,
+                Name = columns[0],
+                SessionDate = sessionDate,
+                WeaponType = weaponType,
+                Description = columns[3],
+                Notes = columns[4],
+                Shots = "{\"warmupShots\":[],\"groups\":[]}",
+                CreatedById = userId,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await _trainingSessionRepository.AddTrainingSessionAsync(session);
+            imported++;
+        }
+
+        TempData["Success"] = $"Успешно импортирани сесии: {imported}.";
+        return RedirectToAction("MyResults", "Clubs", new { id = clubId });
     }
 
     // POST: /TrainingSessions/Create
@@ -296,6 +428,67 @@ public class TrainingSessionsController : Controller
 
         TempData["Success"] = "Тренировъчната сесия е изтрита.";
         return RedirectToAction("MyResults", "Clubs", new { id = clubId });
+    }
+
+    private static string EscapeCsv(string? value)
+    {
+        value ??= string.Empty;
+        if (value.Contains('"') || value.Contains(',') || value.Contains('\n') || value.Contains('\r'))
+        {
+            return $"\"{value.Replace("\"", "\"\"")}\"";
+        }
+        return value;
+    }
+
+    private static List<string> ParseCsvLine(string line)
+    {
+        var result = new List<string>();
+        var current = new StringBuilder();
+        var inQuotes = false;
+
+        for (var i = 0; i < line.Length; i++)
+        {
+            var c = line[i];
+            if (c == '"')
+            {
+                if (inQuotes && i + 1 < line.Length && line[i + 1] == '"')
+                {
+                    current.Append('"');
+                    i++;
+                }
+                else
+                {
+                    inQuotes = !inQuotes;
+                }
+            }
+            else if (c == ',' && !inQuotes)
+            {
+                result.Add(current.ToString());
+                current.Clear();
+            }
+            else
+            {
+                current.Append(c);
+            }
+        }
+
+        result.Add(current.ToString());
+        return result;
+    }
+
+    private static ISSFWeaponType ParseWeaponType(string input)
+    {
+        if (Enum.TryParse<ISSFWeaponType>(input, true, out var parsed))
+        {
+            return parsed;
+        }
+
+        if (int.TryParse(input, out var intValue) && Enum.IsDefined(typeof(ISSFWeaponType), intValue))
+        {
+            return (ISSFWeaponType)intValue;
+        }
+
+        return ISSFWeaponType.AirRifle;
     }
 }
 

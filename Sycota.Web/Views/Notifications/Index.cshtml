@@ -10,14 +10,14 @@
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-envelope me-2"></i>Покани за членство</span>
+                    <span><i class="bi bi-bell me-2"></i>Всички известия</span>
                     @if (Model.TotalCount > 0)
                     {
                         <span class="badge bg-danger">@Model.TotalCount нови</span>
                     }
                 </div>
                 <div class="card-body">
-                    @if (!Model.PendingInvitations.Any())
+                    @if (!Model.PendingInvitations.Any() && !Model.GamificationNotifications.Any())
                     {
                         <div class="text-center py-5">
                             <i class="bi bi-envelope-open display-1 text-muted"></i>
@@ -27,6 +27,32 @@
                     }
                     else
                     {
+                        @if (Model.GamificationNotifications.Any())
+                        {
+                            <h6 class="mb-3"><i class="bi bi-award me-1"></i>Постижения</h6>
+                            <div class="list-group list-group-flush mb-4">
+                                @foreach (var notification in Model.GamificationNotifications)
+                                {
+                                    <div class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <span class="badge bg-warning text-dark mb-1">@notification.BadgeTitle</span>
+                                                <p class="mb-1 text-muted">@notification.BadgeDescription</p>
+                                                <small class="text-muted"><i class="bi bi-clock me-1"></i>@notification.UnlockedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</small>
+                                            </div>
+                                            <a asp-action="Achievement" asp-route-notificationId="@notification.Id" class="btn btn-outline-warning btn-sm">
+                                                <i class="bi bi-stars me-1"></i>Отвори
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+
+                        @if (Model.PendingInvitations.Any())
+                        {
+                            <h6 class="mb-3"><i class="bi bi-envelope me-1"></i>Покани за членство</h6>
+                        }
                         <div class="list-group list-group-flush">
                             @foreach (var invitation in Model.PendingInvitations)
                             {

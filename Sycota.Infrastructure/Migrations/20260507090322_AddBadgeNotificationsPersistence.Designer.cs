@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sycota.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Sycota.Infrastructure.Data;
 namespace Sycota.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260507090322_AddBadgeNotificationsPersistence")]
+    partial class AddBadgeNotificationsPersistence
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -274,55 +277,6 @@ namespace Sycota.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Sycota.Domain.Entities.BadgeNotification", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("BadgeDescription")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("BadgeTitle")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int>("ClubId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ClubName")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ReadAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("UnlockedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId", "ClubId", "BadgeTitle")
-                        .IsUnique();
-
-                    b.HasIndex("UserId", "IsRead", "UnlockedAtUtc");
-
-                    b.ToTable("BadgeNotifications");
-                });
-
             modelBuilder.Entity("Sycota.Domain.Entities.Club", b =>
                 {
                     b.Property<int>("Id")
@@ -355,15 +309,6 @@ namespace Sycota.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
-
-                    b.Property<bool>("IsGamificationEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsInventoryEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsLeaderboardEnabled")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -860,17 +805,6 @@ namespace Sycota.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("TrainingSession");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Sycota.Domain.Entities.BadgeNotification", b =>
-                {
-                    b.HasOne("Sycota.Domain.Entities.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("User");
                 });

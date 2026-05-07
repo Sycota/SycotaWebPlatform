@@ -18,4 +18,8 @@
     <None Include="C:\Users\gogo1\Documents\GitHub\SycotaWebPlatform\Sycota.Application\.editorconfig" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>

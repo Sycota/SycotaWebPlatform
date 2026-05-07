@@ -11,6 +11,9 @@ public class Club
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public string CreatedById { get; set; } = string.Empty;
     public bool RequiresApproval { get; set; } = true; // If true, join requests need admin approval
+    public bool IsInventoryEnabled { get; set; } = true;
+    public bool IsGamificationEnabled { get; set; } = true;
+    public bool IsLeaderboardEnabled { get; set; } = true;
     
     // Navigation properties
     public ApplicationUser CreatedBy { get; set; } = null!;

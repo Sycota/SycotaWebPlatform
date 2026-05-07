@@ -20,9 +20,27 @@
                 <h2 class="mb-0">
                     <i class="bi bi-graph-up me-2"></i>Моите тренировъчни резултати
                 </h2>
-                <div class="d-flex gap-2">
+                <div class="d-flex gap-2 flex-wrap">
                     <a asp-action="PerformanceDashboard" asp-route-id="@Model.CurrentMembership.ClubId" class="btn btn-outline-primary">
                         <i class="bi bi-speedometer2 me-1"></i>Табло за представяне
+                    </a>
+                    @if (Model.IsLeaderboardEnabled)
+                    {
+                        <a asp-action="Leaderboard" asp-route-id="@Model.CurrentMembership.ClubId" class="btn btn-outline-primary">
+                            <i class="bi bi-trophy me-1"></i>Класация
+                        </a>
+                    }
+                    @if (Model.IsGamificationEnabled)
+                    {
+                        <a asp-action="Gamification" asp-route-id="@Model.CurrentMembership.ClubId" class="btn btn-outline-dark">
+                            <i class="bi bi-controller me-1"></i>Прогрес
+                        </a>
+                        <a asp-action="Badges" asp-route-id="@Model.CurrentMembership.ClubId" class="btn btn-outline-dark">
+                            <i class="bi bi-award me-1"></i>Значки
+                        </a>
+                    }
+                    <a asp-controller="TrainingSessions" asp-action="ExportResultsCsv" asp-route-id="@Model.CurrentMembership.ClubId" class="btn btn-outline-secondary">
+                        <i class="bi bi-download me-1"></i>Експорт CSV
                     </a>
                     <a asp-controller="TrainingSessions" asp-action="Create" asp-route-id="@Model.CurrentMembership.ClubId" class="btn btn-accent">
                         <i class="bi bi-plus-circle me-1"></i>Нова сесия
@@ -30,6 +48,19 @@
                 </div>
             </div>
                 <div class="card-body">
+                    <form asp-controller="TrainingSessions" asp-action="ImportResultsCsv" method="post" enctype="multipart/form-data" class="border rounded p-3 mb-3 bg-light-subtle">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="clubId" value="@Model.CurrentMembership.ClubId" />
+                        <div class="row g-2 align-items-center">
+                            <div class="col-md-8">
+                                <input type="file" name="file" accept=".csv" class="form-control" required />
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-outline-primary w-100">Импорт от CSV</button>
+                            </div>
+                        </div>
+                    </form>
+
                     @if (!Model.TrainingSessions.Any())
                     {
                         <div class="text-center py-5">
@@ -131,6 +162,79 @@
                     }
                 </div>
             </div>
+
+            @if (Model.IsGamificationEnabled)
+            {
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-controller me-2"></i>Прогрес накратко</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-muted">Ранг</span>
+                        <span class="badge bg-dark">@Model.RankTitle</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-muted">Ниво</span>
+                        <strong>@Model.Level</strong>
+                    </div>
+                    <div class="mb-2">
+                        <div class="progress" role="progressbar" aria-label="XP" aria-valuemin="0" aria-valuemax="@Model.NextLevelXp" aria-valuenow="@Model.TotalXp">
+                            <div class="progress-bar" style="width:@(Math.Min(100, (int)((double)Model.TotalXp / Math.Max(1, Model.NextLevelXp) * 100)))%"></div>
+                        </div>
+                        <small class="text-muted">XP: @Model.TotalXp / @Model.NextLevelXp</small>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-muted">Текуща серия</span>
+                        <strong>@Model.CurrentStreakDays дни</strong>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-muted">Седмична цел</span>
+                        <strong>@Math.Min(Model.WeeklyChallengeProgress, Model.WeeklyChallengeTarget)/@Model.WeeklyChallengeTarget</strong>
+                    </div>
+                    <div class="progress" role="progressbar" aria-label="Weekly challenge" aria-valuemin="0" aria-valuemax="@Model.WeeklyChallengeTarget" aria-valuenow="@Model.WeeklyChallengeProgress">
+                        <div class="progress-bar bg-success" style="width:@(Math.Min(100, (int)((double)Model.WeeklyChallengeProgress / Math.Max(1, Model.WeeklyChallengeTarget) * 100)))%"></div>
+                    </div>
+                    <div class="d-grid mt-3">
+                        <a asp-action="Gamification" asp-route-id="@Model.CurrentMembership.ClubId" class="btn btn-outline-dark btn-sm">
+                            Пълен преглед на прогреса
+                        </a>
+                    </div>
+                    @if (!string.IsNullOrWhiteSpace(Model.NextMilestone))
+                    {
+                        <div class="alert alert-info py-2 mt-3 mb-0">@Model.NextMilestone</div>
+                    }
+                </div>
+            </div>
+            }
+
+            @if (Model.IsGamificationEnabled)
+            {
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-award me-2"></i>Последни значки</h5>
+                    </div>
+                    <div class="card-body">
+                        @if (Model.Badges.Any())
+                        {
+                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                @foreach (var badge in Model.Badges.Take(4))
+                                {
+                                    <span class="badge bg-@badge.ColorClass">@badge.Title</span>
+                                }
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">Отключени: @Model.Badges.Count()</small>
+                                <a asp-action="Badges" asp-route-id="@Model.CurrentMembership.ClubId" class="btn btn-outline-secondary btn-sm">Всички</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted mb-0">Все още няма отключени постижения.</p>
+                        }
+                    </div>
+                </div>
+            }
 
             <!-- Summary Stats -->
             <div class="card shadow-sm">

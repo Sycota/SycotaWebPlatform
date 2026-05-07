@@ -81,6 +81,25 @@ public class MyResultsViewModel
     public ClubMember CurrentMembership { get; set; } = null!;
     public IEnumerable<TrainingSession> TrainingSessions { get; set; } = [];
     public ShooterProfile? ShooterProfile { get; set; }
+    public IEnumerable<AchievementBadge> Badges { get; set; } = [];
+    public string? NextMilestone { get; set; }
+    public int TotalXp { get; set; }
+    public int Level { get; set; }
+    public int NextLevelXp { get; set; }
+    public string RankTitle { get; set; } = string.Empty;
+    public int CurrentStreakDays { get; set; }
+    public int BestStreakDays { get; set; }
+    public int WeeklyChallengeTarget { get; set; } = 3;
+    public int WeeklyChallengeProgress { get; set; }
+    public bool IsGamificationEnabled { get; set; }
+    public bool IsLeaderboardEnabled { get; set; }
+}
+
+public class AchievementBadge
+{
+    public string Title { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public string ColorClass { get; set; } = "secondary";
 }
 
 public class TraineesViewModel
@@ -105,6 +124,9 @@ public class CreateClubViewModel
     public string? ContactEmail { get; set; }
     public string? ContactPhone { get; set; }
     public bool RequiresApproval { get; set; } = true;
+    public bool IsInventoryEnabled { get; set; } = true;
+    public bool IsGamificationEnabled { get; set; } = true;
+    public bool IsLeaderboardEnabled { get; set; } = true;
 }
 
 public class JoinClubViewModel
@@ -142,7 +164,60 @@ public class AcceptInvitationViewModel
 public class NotificationsViewModel
 {
     public IEnumerable<ClubInvitation> PendingInvitations { get; set; } = [];
-    public int TotalCount => PendingInvitations.Count();
+    public IEnumerable<GamificationNotificationViewModel> GamificationNotifications { get; set; } = [];
+    public int UnreadGamificationCount => GamificationNotifications.Count(n => !n.IsRead);
+    public int TotalCount => PendingInvitations.Count() + UnreadGamificationCount;
+}
+
+public class GamificationNotificationViewModel
+{
+    public string Id { get; set; } = string.Empty;
+    public int ClubId { get; set; }
+    public string? ClubName { get; set; }
+    public string BadgeTitle { get; set; } = string.Empty;
+    public string BadgeDescription { get; set; } = string.Empty;
+    public DateTime UnlockedAtUtc { get; set; }
+    public bool IsRead { get; set; }
+}
+
+public class GamificationOverviewViewModel
+{
+    public ClubMember CurrentMembership { get; set; } = null!;
+    public int TotalXp { get; set; }
+    public int Level { get; set; }
+    public int NextLevelXp { get; set; }
+    public string RankTitle { get; set; } = string.Empty;
+    public int CurrentStreakDays { get; set; }
+    public int BestStreakDays { get; set; }
+    public int WeeklyChallengeTarget { get; set; }
+    public int WeeklyChallengeProgress { get; set; }
+    public string? NextMilestone { get; set; }
+}
+
+public class BadgesPageViewModel
+{
+    public ClubMember CurrentMembership { get; set; } = null!;
+    public IEnumerable<AchievementBadge> Badges { get; set; } = [];
+}
+
+public class LeaderboardViewModel
+{
+    public ClubMember CurrentMembership { get; set; } = null!;
+    public Club Club { get; set; } = null!;
+    public IEnumerable<LeaderboardEntryViewModel> Entries { get; set; } = [];
+    public int SelectedDays { get; set; } = 30;
+}
+
+public class LeaderboardEntryViewModel
+{
+    public int Position { get; set; }
+    public int ClubMemberId { get; set; }
+    public string ShooterName { get; set; } = string.Empty;
+    public int SessionCount { get; set; }
+    public int TotalXp { get; set; }
+    public int Level { get; set; }
+    public string RankTitle { get; set; } = string.Empty;
+    public int BadgesCount { get; set; }
 }
 
 public class ManageMembersViewModel
@@ -283,6 +358,9 @@ public class EditClubViewModel
     public string? ContactEmail { get; set; }
     public string? ContactPhone { get; set; }
     public bool RequiresApproval { get; set; }
+    public bool IsInventoryEnabled { get; set; }
+    public bool IsGamificationEnabled { get; set; }
+    public bool IsLeaderboardEnabled { get; set; }
 }
 
 public class ClubInventoryViewModel

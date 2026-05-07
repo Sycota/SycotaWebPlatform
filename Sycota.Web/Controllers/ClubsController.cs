@@ -7,6 +7,7 @@ using Sycota.Application.Interfaces.Options;
 using Sycota.Domain.Entities;
 using Sycota.Domain.Enums;
 using Sycota.Web.Models.ViewModels;
+using Sycota.Web.Services;
 using System.Text.Json;
 
 namespace Sycota.Web.Controllers;
@@ -20,6 +21,8 @@ public class ClubsController : Controller
     private readonly ITrainingSessionRepository _trainingSessionRepository;
     private readonly IClubAnnouncementRepository _clubAnnouncementRepository;
     private readonly IClubInventoryRepository _clubInventoryRepository;
+    private readonly IGamificationService _gamificationService;
+    private readonly IGamificationNotificationService _gamificationNotificationService;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IEmailSender _emailSender;
 
@@ -37,6 +40,8 @@ public class ClubsController : Controller
         ITrainingSessionRepository trainingSessionRepository,
         IClubAnnouncementRepository clubAnnouncementRepository,
         IClubInventoryRepository clubInventoryRepository,
+        IGamificationService gamificationService,
+        IGamificationNotificationService gamificationNotificationService,
         UserManager<ApplicationUser> userManager,
         IEmailSender emailSender)
     {
@@ -46,6 +51,8 @@ public class ClubsController : Controller
         _trainingSessionRepository = trainingSessionRepository;
         _clubAnnouncementRepository = clubAnnouncementRepository;
         _clubInventoryRepository = clubInventoryRepository;
+        _gamificationService = gamificationService;
+        _gamificationNotificationService = gamificationNotificationService;
         _userManager = userManager;
         _emailSender = emailSender;
     }
@@ -157,6 +164,9 @@ public class ClubsController : Controller
             ContactEmail = model.ContactEmail,
             ContactPhone = model.ContactPhone,
             RequiresApproval = model.RequiresApproval,
+            IsInventoryEnabled = model.IsInventoryEnabled,
+            IsGamificationEnabled = model.IsGamificationEnabled,
+            IsLeaderboardEnabled = model.IsLeaderboardEnabled,
             CreatedById = userId,
             CreatedAt = DateTime.UtcNow
         };
@@ -561,13 +571,205 @@ public class ClubsController : Controller
         }
 
         var trainingSessions = await _trainingSessionRepository.GetAllTrainingSessionsByClubIdAsync(id, TrainingSessionIncludeOptions.All);
-        var myTrainingSessions = trainingSessions.Where(ts => ts.CreatedById == userId).OrderByDescending(ts => ts.SessionDate);
+        var myTrainingSessions = trainingSessions
+            .Where(ts => ts.CreatedById == userId)
+            .OrderByDescending(ts => ts.SessionDate)
+            .ToList();
+
+        var club = membership.Club ?? await _clubRepository.GetClubByIdAsync(id);
+        var isGamificationEnabled = club?.IsGamificationEnabled == true;
+        var isLeaderboardEnabled = club?.IsLeaderboardEnabled == true;
+
+        var gamification = isGamificationEnabled
+            ? _gamificationService.Calculate(myTrainingSessions, membership.ShooterProfile)
+            : new Sycota.Domain.Classes.GamificationProgress();
+
+        if (isGamificationEnabled)
+        {
+            _gamificationNotificationService.RegisterUnlockedBadges(userId, id, membership.Club?.Name, gamification.Badges);
+        }
 
         var viewModel = new MyResultsViewModel
         {
             CurrentMembership = membership,
             TrainingSessions = myTrainingSessions,
-            ShooterProfile = membership.ShooterProfile
+            ShooterProfile = membership.ShooterProfile,
+            Badges = gamification.Badges.Select(b => new AchievementBadge
+            {
+                Title = b.Title,
+                Description = b.Description,
+                ColorClass = b.ColorClass
+            }),
+            NextMilestone = gamification.NextMilestone,
+            TotalXp = gamification.TotalXp,
+            Level = gamification.Level,
+            NextLevelXp = gamification.NextLevelXp,
+            RankTitle = gamification.RankTitle,
+            CurrentStreakDays = gamification.CurrentStreakDays,
+            BestStreakDays = gamification.BestStreakDays,
+            WeeklyChallengeTarget = gamification.WeeklyChallengeTarget,
+            WeeklyChallengeProgress = gamification.WeeklyChallengeProgress,
+            IsGamificationEnabled = isGamificationEnabled,
+            IsLeaderboardEnabled = isLeaderboardEnabled
+        };
+
+        return View(viewModel);
+    }
+
+    // GET: /Clubs/Leaderboard/5
+    public async Task<IActionResult> Leaderboard(int id, int days = 30)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id, ClubMemberIncludeOptions.All);
+        if (membership == null)
+        {
+            TempData["Error"] = "Не сте член на този клуб.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        var club = membership.Club ?? await _clubRepository.GetClubByIdAsync(id);
+        if (club == null)
+        {
+            return NotFound();
+        }
+
+        if (!club.IsLeaderboardEnabled)
+        {
+            TempData["Error"] = "Класацията е изключена за този клуб.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        var membersResult = await _clubService.GetClubMembersAsync(id, ClubMemberIncludeOptions.User | ClubMemberIncludeOptions.ShooterProfile);
+        var members = membersResult.Success
+            ? membersResult.Data.Where(m => m.Role == ClubRole.Competitor).ToList()
+            : [];
+
+        var sessions = await _trainingSessionRepository.GetAllTrainingSessionsByClubIdAsync(id, TrainingSessionIncludeOptions.All);
+        var cutoffDate = days > 0 ? DateTime.UtcNow.AddDays(-days) : DateTime.MinValue;
+
+        var entries = members
+            .Select(member =>
+            {
+                var memberSessions = sessions
+                    .Where(ts => ts.CreatedById == member.UserId && ts.SessionDate >= cutoffDate)
+                    .ToList();
+
+                var progress = _gamificationService.Calculate(memberSessions, member.ShooterProfile);
+                var shooterName = !string.IsNullOrWhiteSpace(member.User?.FirstName)
+                    ? $"{member.User.FirstName} {member.User.LastName}".Trim()
+                    : member.User?.UserName ?? "Неизвестен";
+
+                return new LeaderboardEntryViewModel
+                {
+                    ClubMemberId = member.Id,
+                    ShooterName = shooterName,
+                    SessionCount = memberSessions.Count,
+                    TotalXp = progress.TotalXp,
+                    Level = progress.Level,
+                    RankTitle = progress.RankTitle,
+                    BadgesCount = progress.Badges.Count
+                };
+            })
+            .OrderByDescending(e => e.TotalXp)
+            .ThenByDescending(e => e.SessionCount)
+            .ThenBy(e => e.ShooterName)
+            .ToList();
+
+        for (var i = 0; i < entries.Count; i++)
+        {
+            entries[i].Position = i + 1;
+        }
+
+        var viewModel = new LeaderboardViewModel
+        {
+            CurrentMembership = membership,
+            Club = club,
+            Entries = entries,
+            SelectedDays = days
+        };
+
+        return View(viewModel);
+    }
+
+    // GET: /Clubs/Gamification/5
+    public async Task<IActionResult> Gamification(int id)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+        var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id, ClubMemberIncludeOptions.All);
+        if (membership == null)
+        {
+            TempData["Error"] = "Не сте член на този клуб.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        if (membership.Club?.IsGamificationEnabled != true)
+        {
+            TempData["Error"] = "Прогресът и значките са изключени за този клуб.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        var sessions = (await _trainingSessionRepository.GetAllTrainingSessionsByClubIdAsync(id, TrainingSessionIncludeOptions.All))
+            .Where(ts => ts.CreatedById == userId)
+            .ToList();
+
+        var gamification = _gamificationService.Calculate(sessions, membership.ShooterProfile);
+        var viewModel = new GamificationOverviewViewModel
+        {
+            CurrentMembership = membership,
+            TotalXp = gamification.TotalXp,
+            Level = gamification.Level,
+            NextLevelXp = gamification.NextLevelXp,
+            RankTitle = gamification.RankTitle,
+            CurrentStreakDays = gamification.CurrentStreakDays,
+            BestStreakDays = gamification.BestStreakDays,
+            WeeklyChallengeTarget = gamification.WeeklyChallengeTarget,
+            WeeklyChallengeProgress = gamification.WeeklyChallengeProgress,
+            NextMilestone = gamification.NextMilestone
+        };
+
+        return View(viewModel);
+    }
+
+    // GET: /Clubs/Badges/5
+    public async Task<IActionResult> Badges(int id)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+        var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id, ClubMemberIncludeOptions.All);
+        if (membership == null)
+        {
+            TempData["Error"] = "Не сте член на този клуб.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        if (membership.Club?.IsGamificationEnabled != true)
+        {
+            TempData["Error"] = "Прогресът и значките са изключени за този клуб.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        var sessions = (await _trainingSessionRepository.GetAllTrainingSessionsByClubIdAsync(id, TrainingSessionIncludeOptions.All))
+            .Where(ts => ts.CreatedById == userId)
+            .ToList();
+
+        var gamification = _gamificationService.Calculate(sessions, membership.ShooterProfile);
+        var viewModel = new BadgesPageViewModel
+        {
+            CurrentMembership = membership,
+            Badges = gamification.Badges.Select(b => new AchievementBadge
+            {
+                Title = b.Title,
+                Description = b.Description,
+                ColorClass = b.ColorClass
+            })
         };
 
         return View(viewModel);
@@ -784,7 +986,10 @@ public class ClubsController : Controller
             Address = club.Address,
             ContactEmail = club.ContactEmail,
             ContactPhone = club.ContactPhone,
-            RequiresApproval = club.RequiresApproval
+            RequiresApproval = club.RequiresApproval,
+            IsInventoryEnabled = club.IsInventoryEnabled,
+            IsGamificationEnabled = club.IsGamificationEnabled,
+            IsLeaderboardEnabled = club.IsLeaderboardEnabled
         };
 
         return View(viewModel);
@@ -825,6 +1030,9 @@ public class ClubsController : Controller
         club.ContactEmail = model.ContactEmail;
         club.ContactPhone = model.ContactPhone;
         club.RequiresApproval = model.RequiresApproval;
+        club.IsInventoryEnabled = model.IsInventoryEnabled;
+        club.IsGamificationEnabled = model.IsGamificationEnabled;
+        club.IsLeaderboardEnabled = model.IsLeaderboardEnabled;
 
         await _clubRepository.UpdateClubAsync(club);
 
@@ -920,6 +1128,12 @@ public class ClubsController : Controller
             return NotFound();
         }
 
+        if (!club.IsInventoryEnabled)
+        {
+            TempData["Error"] = "Инвентарът е изключен за този клуб.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
         var competitorsResult = await _clubService.GetCompetitorsAsync(id, ClubMemberIncludeOptions.User);
         var viewModel = new ClubInventoryViewModel
         {
@@ -946,6 +1160,13 @@ public class ClubsController : Controller
         {
             TempData["Error"] = "Само администратори могат да добавят оръжия.";
             return RedirectToAction(nameof(Inventory), new { id = request.ClubId });
+        }
+
+        var club = await _clubRepository.GetClubByIdAsync(request.ClubId);
+        if (club == null || !club.IsInventoryEnabled)
+        {
+            TempData["Error"] = "Инвентарът е изключен за този клуб.";
+            return RedirectToAction(nameof(Details), new { id = request.ClubId });
         }
 
         if (!ModelState.IsValid)
@@ -978,6 +1199,13 @@ public class ClubsController : Controller
         {
             TempData["Error"] = "Само администратори могат да редактират оръжия.";
             return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+        }
+
+        var club = await _clubRepository.GetClubByIdAsync(model.ClubId);
+        if (club == null || !club.IsInventoryEnabled)
+        {
+            TempData["Error"] = "Инвентарът е изключен за този клуб.";
+            return RedirectToAction(nameof(Details), new { id = model.ClubId });
         }
 
         var weapon = await _clubInventoryRepository.GetWeaponByIdAsync(model.Id);
@@ -1016,6 +1244,13 @@ public class ClubsController : Controller
             return RedirectToAction(nameof(Inventory), new { id = clubId });
         }
 
+        var club = await _clubRepository.GetClubByIdAsync(clubId);
+        if (club == null || !club.IsInventoryEnabled)
+        {
+            TempData["Error"] = "Инвентарът е изключен за този клуб.";
+            return RedirectToAction(nameof(Details), new { id = clubId });
+        }
+
         var weapon = await _clubInventoryRepository.GetWeaponByIdAsync(id);
         if (weapon == null || weapon.ClubId != clubId)
         {
@@ -1047,6 +1282,13 @@ public class ClubsController : Controller
         {
             TempData["Error"] = "Само администратори могат да добавят боеприпаси.";
             return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+        }
+
+        var club = await _clubRepository.GetClubByIdAsync(model.ClubId);
+        if (club == null || !club.IsInventoryEnabled)
+        {
+            TempData["Error"] = "Инвентарът е изключен за този клуб.";
+            return RedirectToAction(nameof(Details), new { id = model.ClubId });
         }
 
         if (!ModelState.IsValid)
@@ -1081,6 +1323,13 @@ public class ClubsController : Controller
         {
             TempData["Error"] = "Само администратори могат да редактират патрони.";
             return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+        }
+
+        var club = await _clubRepository.GetClubByIdAsync(model.ClubId);
+        if (club == null || !club.IsInventoryEnabled)
+        {
+            TempData["Error"] = "Инвентарът е изключен за този клуб.";
+            return RedirectToAction(nameof(Details), new { id = model.ClubId });
         }
 
         var ammo = await _clubInventoryRepository.GetAmmoByIdAsync(model.Id);
@@ -1120,6 +1369,13 @@ public class ClubsController : Controller
             return RedirectToAction(nameof(Inventory), new { id = clubId });
         }
 
+        var club = await _clubRepository.GetClubByIdAsync(clubId);
+        if (club == null || !club.IsInventoryEnabled)
+        {
+            TempData["Error"] = "Инвентарът е изключен за този клуб.";
+            return RedirectToAction(nameof(Details), new { id = clubId });
+        }
+
         var ammo = await _clubInventoryRepository.GetAmmoByIdAsync(id);
         if (ammo == null || ammo.ClubId != clubId)
         {
@@ -1151,6 +1407,13 @@ public class ClubsController : Controller
         {
             TempData["Error"] = "Само треньори могат да издават оръжие.";
             return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+        }
+
+        var club = await _clubRepository.GetClubByIdAsync(model.ClubId);
+        if (club == null || !club.IsInventoryEnabled)
+        {
+            TempData["Error"] = "Инвентарът е изключен за този клуб.";
+            return RedirectToAction(nameof(Details), new { id = model.ClubId });
         }
 
         var weapon = await _clubInventoryRepository.GetWeaponByIdAsync(model.WeaponId);
@@ -1189,6 +1452,13 @@ public class ClubsController : Controller
         {
             TempData["Error"] = "Само треньори могат да издават боеприпаси.";
             return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+        }
+
+        var club = await _clubRepository.GetClubByIdAsync(model.ClubId);
+        if (club == null || !club.IsInventoryEnabled)
+        {
+            TempData["Error"] = "Инвентарът е изключен за този клуб.";
+            return RedirectToAction(nameof(Details), new { id = model.ClubId });
         }
 
         var ammo = await _clubInventoryRepository.GetAmmoByIdAsync(model.AmmoId);

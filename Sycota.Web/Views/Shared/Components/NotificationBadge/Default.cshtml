@@ -11,6 +11,29 @@
             </span>
         </a>
         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark notification-dropdown">
+            @if (Model.GamificationNotifications.Any())
+            {
+                <li class="dropdown-header">
+                    <strong><i class="bi bi-award me-2"></i>Нови постижения</strong>
+                </li>
+                @foreach (var notification in Model.GamificationNotifications.Take(3))
+                {
+                    <li>
+                        <a class="dropdown-item notification-item" asp-controller="Notifications" asp-action="Achievement" asp-route-notificationId="@notification.Id">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-trophy text-warning me-2 mt-1"></i>
+                                <div>
+                                    <strong>@notification.BadgeTitle</strong>
+                                    <br />
+                                    <small class="text-muted">@notification.BadgeDescription</small>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                }
+                <li><hr class="dropdown-divider"></li>
+            }
+
             <li class="dropdown-header">
                 <strong><i class="bi bi-envelope me-2"></i>Покани за клубове</strong>
             </li>
@@ -36,12 +59,12 @@
                     </a>
                 </li>
             }
-            @if (Model.TotalCount > 5)
+            @if (Model.TotalCount > 5 || Model.GamificationNotifications.Any())
             {
                 <li><hr class="dropdown-divider"></li>
                 <li>
                     <a class="dropdown-item text-center" asp-controller="Notifications" asp-action="Index">
-                        Виж всички @Model.TotalCount покани
+                        Виж всички @Model.TotalCount известия
                     </a>
                 </li>
             }

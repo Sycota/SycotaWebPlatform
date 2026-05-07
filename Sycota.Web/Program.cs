@@ -74,9 +74,11 @@ builder.Services.AddScoped<IClubInventoryRepository, ClubInventoryRepository>();
 
 // Register Services
 builder.Services.AddScoped<IClubService, ClubService>();
+builder.Services.AddScoped<IGamificationService, GamificationService>();
 
 // Register AI Analysis Service
 builder.Services.AddHttpClient<IAiAnalysisService, GeminiAiAnalysisService>();
+builder.Services.AddScoped<IGamificationNotificationService, DbGamificationNotificationService>();
 
 builder.Services.AddControllersWithViews();
 
