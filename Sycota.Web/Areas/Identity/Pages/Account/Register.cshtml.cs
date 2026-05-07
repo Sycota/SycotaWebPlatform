@@ -129,6 +129,9 @@ namespace Sycota.Web.Areas.Identity.Pages.Account
                     await _emailSender.SendEmailAsync(Input.Email, "Потвърдете имейла си",
                         $"Моля, потвърдете акаунта си като <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>кликнете тук</a>.");
 
+                    await _emailSender.SendEmailAsync(Input.Email, "Добре дошли в SYCOTA+",
+                        $"<p>Добре дошли в <strong>SYCOTA+</strong>!</p><p>Радваме се, че сте с нас.</p><p>За да активирате акаунта си, <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>потвърдете имейла си оттук</a>.</p>");
+
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });

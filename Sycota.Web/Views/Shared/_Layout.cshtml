@@ -86,7 +86,7 @@
             <nav class="navbar navbar-expand-lg navbar-dark border-bottom box-shadow mb-3" aria-label="Основна навигация">
                 <div class="container-fluid">
                     <a class="navbar-brand sycota-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                        <img src="~/images/sycota.png" alt="SYCOTA" style="height: 48px;" />
+                        <img src="~/images/sycota.png" alt="SYCOTA" style="height: 48px; filter: brightness(0) invert(1);" />
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar"
                             aria-expanded="false" aria-label="Превключване на навигацията">
@@ -102,11 +102,7 @@
                             
                             @if (User.Identity?.IsAuthenticated == true)
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="Clubs" asp-action="Index">
-                                        <i class="bi bi-bullseye me-1" aria-hidden="true"></i>Моите Клубове
-                                    </a>
-                                </li>
+                                @await Component.InvokeAsync("ClubsMenu")
                             }
                             else
                             {

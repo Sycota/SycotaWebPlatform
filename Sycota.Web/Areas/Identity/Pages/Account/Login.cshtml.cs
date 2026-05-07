@@ -116,6 +116,11 @@ namespace Sycota.Web.Areas.Identity.Pages.Account
                     _logger.LogWarning("User account locked out.");
                     return RedirectToPage("./Lockout");
                 }
+                if (result.IsNotAllowed)
+                {
+                    ModelState.AddModelError(string.Empty, "Трябва да потвърдите имейла си, преди да влезете.");
+                    return Page();
+                }
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Невалиден опит за вход.");

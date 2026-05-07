@@ -101,6 +101,11 @@ namespace Sycota.Web.Areas.Identity.Pages.Account
             {
                 return RedirectToPage("./Lockout");
             }
+            if (result.IsNotAllowed)
+            {
+                ErrorMessage = "Трябва да потвърдите имейла си, преди да влезете.";
+                return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+            }
             else
             {
                 // If the user does not have an account, then ask the user to create an account.
@@ -154,6 +159,9 @@ namespace Sycota.Web.Areas.Identity.Pages.Account
 
                         await _emailSender.SendEmailAsync(Input.Email, "Потвърдете имейла си",
                             $"Моля, потвърдете акаунта си като <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>кликнете тук</a>.");
+
+                        await _emailSender.SendEmailAsync(Input.Email, "Добре дошли в SYCOTA+",
+                            $"<p>Добре дошли в <strong>SYCOTA+</strong>!</p><p>Акаунтът ви е създаден успешно.</p><p>За да активирате достъпа си, <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>потвърдете имейла си оттук</a>.</p>");
 
                         // If account confirmation is required, we need to show the link if we don't have a real email sender
                         if (_userManager.Options.SignIn.RequireConfirmedAccount)

@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Sycota.Web.Models.ViewModels.ContactMessageViewModel
+@{
     ViewData["Title"] = "Контакти";
     ViewData["Description"] = "Свържете се с екипа на SYCOTAᐩ. Имате въпроси или предложения? Ще се радваме да чуем от вас.";
 }
@@ -52,24 +53,28 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-body p-4">
                     <h3 class="h5 mb-4">Изпратете ни Съобщение</h3>
-                    
-                    <form id="contactForm">
+
+                    <form asp-action="Contact" method="post">
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <div class="form-floating">
-                                    <input type="text" class="form-control" id="contactName" placeholder="Вашето име" required>
-                                    <label for="contactName"><i class="bi bi-person me-1"></i>Вашето име</label>
+                                    <input asp-for="Name" class="form-control" placeholder="Вашето име" />
+                                    <label asp-for="Name"><i class="bi bi-person me-1"></i>Вашето име</label>
                                 </div>
+                                <span asp-validation-for="Name" class="text-danger small"></span>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating">
-                                    <input type="email" class="form-control" id="contactEmail" placeholder="Имейл адрес" required>
-                                    <label for="contactEmail"><i class="bi bi-envelope me-1"></i>Имейл адрес</label>
+                                    <input asp-for="Email" class="form-control" placeholder="Имейл адрес" />
+                                    <label asp-for="Email"><i class="bi bi-envelope me-1"></i>Имейл адрес</label>
                                 </div>
+                                <span asp-validation-for="Email" class="text-danger small"></span>
                             </div>
                             <div class="col-12">
                                 <div class="form-floating">
-                                    <select class="form-select" id="contactSubject" required>
+                                    <select asp-for="Subject" class="form-select">
                                         <option value="">Изберете тема...</option>
                                         <option value="Общ въпрос">Общ въпрос</option>
                                         <option value="Техническа поддръжка">Техническа поддръжка</option>
@@ -77,21 +82,23 @@
                                         <option value="Партньорство">Партньорство</option>
                                         <option value="Друго">Друго</option>
                                     </select>
-                                    <label for="contactSubject"><i class="bi bi-tag me-1"></i>Тема</label>
+                                    <label asp-for="Subject"><i class="bi bi-tag me-1"></i>Тема</label>
                                 </div>
+                                <span asp-validation-for="Subject" class="text-danger small"></span>
                             </div>
                             <div class="col-12">
                                 <div class="form-floating">
-                                    <textarea class="form-control" id="contactMessage" placeholder="Вашето съобщение" style="height: 150px" required></textarea>
-                                    <label for="contactMessage"><i class="bi bi-chat-text me-1"></i>Вашето съобщение</label>
+                                    <textarea asp-for="Message" class="form-control" placeholder="Вашето съобщение" style="height: 150px"></textarea>
+                                    <label asp-for="Message"><i class="bi bi-chat-text me-1"></i>Вашето съобщение</label>
                                 </div>
+                                <span asp-validation-for="Message" class="text-danger small"></span>
                             </div>
                             <div class="col-12">
-                                <button type="submit" class="btn btn-accent btn-lg w-100" id="contactSubmitBtn">
+                                <button type="submit" class="btn btn-accent btn-lg w-100">
                                     <i class="bi bi-send me-2"></i>Изпрати Съобщение
                                 </button>
                                 <small class="text-muted d-block text-center mt-2">
-                                    <i class="bi bi-info-circle me-1"></i>Съобщението ще се отвори във вашия имейл клиент за изпращане.
+                                    <i class="bi bi-info-circle me-1"></i>Съобщението се изпраща директно от платформата.
                                 </small>
                             </div>
                         </div>
@@ -150,29 +157,5 @@
 </div>
 
 @section Scripts {
-<script>
-document.getElementById('contactForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    var name = document.getElementById('contactName').value.trim();
-    var email = document.getElementById('contactEmail').value.trim();
-    var subject = document.getElementById('contactSubject').value;
-    var message = document.getElementById('contactMessage').value.trim();
-
-    if (!name || !email || !subject || !message) return;
-
-    var recipient = 'georgi.georgiev.highschool@buditel.bg';
-    var mailSubject = '[SYCOTAᐩ] ' + subject;
-    var mailBody = 'Име: ' + name + '\n' +
-                   'Имейл: ' + email + '\n' +
-                   'Тема: ' + subject + '\n\n' +
-                   message;
-
-    var mailtoUrl = 'mailto:' + encodeURIComponent(recipient) +
-        '?subject=' + encodeURIComponent(mailSubject) +
-        '&body=' + encodeURIComponent(mailBody);
-
-    window.location.href = mailtoUrl;
-});
-</script>
+    <partial name="_ValidationScriptsPartial" />
 }

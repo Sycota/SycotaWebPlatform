@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sycota.Infrastructure.Data;
@@ -6,6 +6,9 @@ using Sycota.Domain.Entities;
 using Sycota.Application.Interfaces;
 using Sycota.Application.Services;
 using Sycota.Infrastructure.Repository;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Sycota.Web.Models;
+using Sycota.Web.Services;
 
 // Register code pages encoding provider for proper Cyrillic support
 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -21,9 +24,9 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
     // Use username for sign in instead of email
-    options.SignIn.RequireConfirmedAccount = false;
+    options.SignIn.RequireConfirmedAccount = true;
     options.User.RequireUniqueEmail = true;
-    options.SignIn.RequireConfirmedEmail = false;
+    options.SignIn.RequireConfirmedEmail = true;
 })
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -51,6 +54,12 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 // Register HttpContextAccessor for sitemap generation
 builder.Services.AddHttpContextAccessor();
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddHttpClient<IEmailSender, ResendEmailSender>((sp, client) =>
+{
+    var emailSettings = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<EmailSettings>>().Value;
+    client.BaseAddress = new Uri(emailSettings.ResendBaseUrl);
+});
 
 // Register Repositories
 builder.Services.AddScoped<IClubRepository, ClubRepository>();
@@ -60,6 +69,8 @@ builder.Services.AddScoped<IShooterProfileRepository, ShooterProfileRepository>(
 builder.Services.AddScoped<IClubJoinRequestRepository, ClubJoinRequestRepository>();
 builder.Services.AddScoped<IClubInvitationRepository, ClubInvitationRepository>();
 builder.Services.AddScoped<IAiChatMessageRepository, AiChatMessageRepository>();
+builder.Services.AddScoped<IClubAnnouncementRepository, ClubAnnouncementRepository>();
+builder.Services.AddScoped<IClubInventoryRepository, ClubInventoryRepository>();
 
 // Register Services
 builder.Services.AddScoped<IClubService, ClubService>();

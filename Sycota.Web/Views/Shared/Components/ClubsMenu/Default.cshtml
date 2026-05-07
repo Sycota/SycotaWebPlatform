@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Sycota.Domain.Entities.Club>
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-bullseye me-1" aria-hidden="true"></i>Клубове
+    </a>
+    <ul class="dropdown-menu dropdown-menu-dark">
+        <li>
+            <a class="dropdown-item" asp-controller="Clubs" asp-action="Index">
+                Моите клубове
+            </a>
+        </li>
+        @if (Model.Any())
+        {
+            <li><hr class="dropdown-divider"></li>
+            @foreach (var club in Model)
+            {
+                <li>
+                    <a class="dropdown-item" asp-controller="Clubs" asp-action="Details" asp-route-id="@club.Id">
+                        @club.Name
+                    </a>
+                </li>
+            }
+        }
+        <li><hr class="dropdown-divider"></li>
+        <li>
+            <a class="dropdown-item" asp-controller="Clubs" asp-action="Create">
+                Създай клуб
+            </a>
+        </li>
+    </ul>
+</li>

@@ -1,4 +1,4 @@
-namespace Sycota.Domain.Entities;
+﻿namespace Sycota.Domain.Entities;
 
 public class Club
 {
@@ -16,6 +16,10 @@ public class Club
     public ApplicationUser CreatedBy { get; set; } = null!;
     public ICollection<ClubMember> Members { get; set; } = new List<ClubMember>();
     public ICollection<TrainingSession> TrainingSessions { get; set; } = new List<TrainingSession>();
+    public ICollection<ClubAnnouncement> Announcements { get; set; } = new List<ClubAnnouncement>();
+    public ICollection<ClubWeapon> Weapons { get; set; } = new List<ClubWeapon>();
+    public ICollection<ClubAmmo> AmmoBatches { get; set; } = new List<ClubAmmo>();
+    public ICollection<InventoryIssue> InventoryIssues { get; set; } = new List<InventoryIssue>();
     public ICollection<ClubJoinRequest> JoinRequests { get; set; } = new List<ClubJoinRequest>();
     public ICollection<ClubInvitation> Invitations { get; set; } = new List<ClubInvitation>();
 }

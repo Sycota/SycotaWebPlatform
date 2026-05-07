@@ -19,6 +19,10 @@ namespace Sycota.Infrastructure.Data
         public DbSet<ClubJoinRequest> ClubJoinRequests { get; set; }
         public DbSet<ClubInvitation> ClubInvitations { get; set; }
         public DbSet<AiChatMessage> AiChatMessages { get; set; }
+        public DbSet<ClubAnnouncement> ClubAnnouncements { get; set; }
+        public DbSet<ClubWeapon> ClubWeapons { get; set; }
+        public DbSet<ClubAmmo> ClubAmmo { get; set; }
+        public DbSet<InventoryIssue> InventoryIssues { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -188,6 +192,88 @@ namespace Sycota.Infrastructure.Data
                     .WithMany()
                     .HasForeignKey(e => e.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // Configure ClubAnnouncement entity
+            builder.Entity<ClubAnnouncement>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Title).IsRequired().HasMaxLength(120);
+                entity.Property(e => e.Content).IsRequired().HasMaxLength(2000);
+                entity.Property(e => e.CreatedByUserId).IsRequired().HasMaxLength(450);
+                entity.Property(e => e.CreatedByName).IsRequired().HasMaxLength(200);
+
+                entity.HasIndex(e => new { e.ClubId, e.CreatedAt });
+
+                entity.HasOne<Club>()
+                    .WithMany(c => c.Announcements)
+                    .HasForeignKey(e => e.ClubId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // Configure ClubWeapon entity
+            builder.Entity<ClubWeapon>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => new { e.ClubId, e.SerialNumber }).IsUnique();
+                entity.Property(e => e.SerialNumber).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Model).IsRequired().HasMaxLength(200);
+
+                entity.HasOne(e => e.Club)
+                    .WithMany(c => c.Weapons)
+                    .HasForeignKey(e => e.ClubId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.AssignedShooter)
+                    .WithMany()
+                    .HasForeignKey(e => e.AssignedShooterId)
+                    .OnDelete(DeleteBehavior.NoAction);
+            });
+
+            // Configure ClubAmmo entity
+            builder.Entity<ClubAmmo>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => new { e.ClubId, e.SerialNumber }).IsUnique();
+                entity.Property(e => e.SerialNumber).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Type).HasConversion<int>();
+
+                entity.HasOne(e => e.Club)
+                    .WithMany(c => c.AmmoBatches)
+                    .HasForeignKey(e => e.ClubId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // Configure InventoryIssue entity
+            builder.Entity<InventoryIssue>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => new { e.ClubId, e.IssuedAt });
+
+                entity.HasOne(e => e.Club)
+                    .WithMany(c => c.InventoryIssues)
+                    .HasForeignKey(e => e.ClubId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.Shooter)
+                    .WithMany()
+                    .HasForeignKey(e => e.ShooterId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(e => e.IssuedBy)
+                    .WithMany()
+                    .HasForeignKey(e => e.IssuedById)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(e => e.Weapon)
+                    .WithMany()
+                    .HasForeignKey(e => e.WeaponId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(e => e.Ammo)
+                    .WithMany()
+                    .HasForeignKey(e => e.AmmoId)
+                    .OnDelete(DeleteBehavior.NoAction);
             });
         }
     }

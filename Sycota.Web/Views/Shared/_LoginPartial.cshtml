@@ -25,15 +25,6 @@
                 <div class="fw-semibold text-white">@User.Identity?.Name</div>
             </li>
             <li><hr class="dropdown-divider"></li>
-            @if (currentUser?.IsAdmin == true)
-            {
-                <li>
-                    <a class="dropdown-item text-warning" asp-area="" asp-controller="Admin" asp-action="Index">
-                        <i class="bi bi-shield-lock-fill me-2"></i>Админ панел
-                    </a>
-                </li>
-                <li><hr class="dropdown-divider"></li>
-            }
             <li>
                 <a class="dropdown-item" asp-area="" asp-controller="Clubs" asp-action="Index">
                     <i class="bi bi-bullseye me-2"></i>Моите Клубове

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sycota.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Sycota.Infrastructure.Data;
 namespace Sycota.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260507052150_AddClubInventory")]
+    partial class AddClubInventory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -934,7 +937,7 @@ namespace Sycota.Infrastructure.Migrations
                     b.HasOne("Sycota.Domain.Entities.ClubMember", "AssignedShooter")
                         .WithMany()
                         .HasForeignKey("AssignedShooterId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Sycota.Domain.Entities.Club", "Club")
                         .WithMany("Weapons")
@@ -952,7 +955,7 @@ namespace Sycota.Infrastructure.Migrations
                     b.HasOne("Sycota.Domain.Entities.ClubAmmo", "Ammo")
                         .WithMany()
                         .HasForeignKey("AmmoId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Sycota.Domain.Entities.Club", "Club")
                         .WithMany("InventoryIssues")
@@ -975,7 +978,7 @@ namespace Sycota.Infrastructure.Migrations
                     b.HasOne("Sycota.Domain.Entities.ClubWeapon", "Weapon")
                         .WithMany()
                         .HasForeignKey("WeaponId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Ammo");
 

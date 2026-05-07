@@ -1,14 +1,14 @@
 ﻿@model Sycota.Web.Models.ViewModels.ClubIndexViewModel
 @{
-    ViewData["Title"] = "Клубове";
-    ViewData["Description"] = "Разгледайте стрелкови клубове в SYCOTAᐩ. Присъединете се към клуб или създайте свой собствен за прецизна стрелба.";
+    ViewData["Title"] = "Моите клубове";
+    ViewData["Description"] = "Всички клубове, в които членувате в SYCOTAᐩ.";
     ViewData["Keywords"] = "стрелкови клубове, ISSF клубове, въздушна пушка клуб, състезателна стрелба, България";
 }
 
 <div class="container mb-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="text-primary">
-            <i class="bi bi-bullseye me-2" aria-hidden="true"></i>Стрелкови Клубове
+            <i class="bi bi-bullseye me-2" aria-hidden="true"></i>Моите Клубове
         </h1>
         <a asp-action="Create" class="btn btn-primary">
             <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>Създай Клуб
@@ -31,23 +31,12 @@
         </div>
     }
 
-    @if (Model.CurrentMembership != null)
-    {
-        <div class="alert alert-info mb-4">
-            <i class="bi bi-info-circle me-2" aria-hidden="true"></i>
-            В момента сте <strong>@Model.CurrentMembership.Role.GetDisplayName()</strong> в 
-            <a asp-action="Details" asp-route-id="@Model.CurrentMembership.ClubId" class="alert-link">
-                @Model.CurrentMembership.Club?.Name
-            </a>
-        </div>
-    }
-
     @if (!Model.Clubs.Any())
     {
         <section class="text-center py-5" aria-labelledby="no-clubs-title">
             <i class="bi bi-building display-1 text-muted" aria-hidden="true"></i>
-            <h2 id="no-clubs-title" class="mt-3 text-muted">Няма Намерени Клубове</h2>
-            <p class="text-muted">Бъдете първият, който създава стрелкови клуб!</p>
+            <h2 id="no-clubs-title" class="mt-3 text-muted">Все още не членувате в клуб</h2>
+            <p class="text-muted">Създайте нов клуб, за да започнете.</p>
             <a asp-action="Create" class="btn btn-primary btn-lg">
                 <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>Създайте Своя Клуб
             </a>
@@ -60,17 +49,13 @@
                 @foreach (var club in Model.Clubs)
                 {
                     var memberCount = club.Members?.Count ?? 0;
-                    var isMember = Model.CurrentMembership?.ClubId == club.Id;
 
                     <div class="col">
-                        <article class="card h-100 shadow-sm @(isMember ? "border-primary" : "")">
+                        <article class="card h-100 shadow-sm border-primary">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-start">
                                     <h2 class="card-title h5">@club.Name</h2>
-                                    @if (isMember)
-                                    {
-                                        <span class="badge bg-primary">Член</span>
-                                    }
+                                    <span class="badge bg-primary">Член</span>
                                 </div>
                                 <p class="card-text text-muted">@(club.Description.Length > 100 ? club.Description.Substring(0, 100) + "..." : club.Description)</p>
                                 
@@ -89,12 +74,6 @@
                                     <a asp-action="Details" asp-route-id="@club.Id" class="btn btn-outline-primary flex-grow-1">
                                         <i class="bi bi-eye me-1" aria-hidden="true"></i>Преглед
                                     </a>
-                                    @if (!isMember && Model.CurrentMembership == null)
-                                    {
-                                        <a asp-action="Join" asp-route-id="@club.Id" class="btn btn-primary flex-grow-1">
-                                            <i class="bi bi-person-plus me-1" aria-hidden="true"></i>Присъедини се
-                                        </a>
-                                    }
                                 </div>
                             </div>
                         </article>

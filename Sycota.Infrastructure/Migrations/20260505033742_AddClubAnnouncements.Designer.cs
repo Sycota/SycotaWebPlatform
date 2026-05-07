@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sycota.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Sycota.Infrastructure.Data;
 namespace Sycota.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260505033742_AddClubAnnouncements")]
+    partial class AddClubAnnouncements
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -322,42 +325,6 @@ namespace Sycota.Infrastructure.Migrations
                     b.ToTable("Clubs");
                 });
 
-            modelBuilder.Entity("Sycota.Domain.Entities.ClubAmmo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ClubId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RemainingQuantity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SerialNumber")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClubId", "SerialNumber")
-                        .IsUnique();
-
-                    b.ToTable("ClubAmmo");
-                });
-
             modelBuilder.Entity("Sycota.Domain.Entities.ClubAnnouncement", b =>
                 {
                     b.Property<Guid>("Id")
@@ -556,87 +523,6 @@ namespace Sycota.Infrastructure.Migrations
                     b.ToTable("ClubMembers");
                 });
 
-            modelBuilder.Entity("Sycota.Domain.Entities.ClubWeapon", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("AssignedShooterId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ClubId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Model")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("SerialNumber")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AssignedShooterId");
-
-                    b.HasIndex("ClubId", "SerialNumber")
-                        .IsUnique();
-
-                    b.ToTable("ClubWeapons");
-                });
-
-            modelBuilder.Entity("Sycota.Domain.Entities.InventoryIssue", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("AmmoId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("AmmoQuantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ClubId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("IssuedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("IssuedById")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ShooterId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("WeaponId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AmmoId");
-
-                    b.HasIndex("IssuedById");
-
-                    b.HasIndex("ShooterId");
-
-                    b.HasIndex("WeaponId");
-
-                    b.HasIndex("ClubId", "IssuedAt");
-
-                    b.ToTable("InventoryIssues");
-                });
-
             modelBuilder.Entity("Sycota.Domain.Entities.ShooterProfile", b =>
                 {
                     b.Property<int>("Id")
@@ -817,17 +703,6 @@ namespace Sycota.Infrastructure.Migrations
                     b.Navigation("CreatedBy");
                 });
 
-            modelBuilder.Entity("Sycota.Domain.Entities.ClubAmmo", b =>
-                {
-                    b.HasOne("Sycota.Domain.Entities.Club", "Club")
-                        .WithMany("AmmoBatches")
-                        .HasForeignKey("ClubId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Club");
-                });
-
             modelBuilder.Entity("Sycota.Domain.Entities.ClubAnnouncement", b =>
                 {
                     b.HasOne("Sycota.Domain.Entities.Club", null)
@@ -929,65 +804,6 @@ namespace Sycota.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Sycota.Domain.Entities.ClubWeapon", b =>
-                {
-                    b.HasOne("Sycota.Domain.Entities.ClubMember", "AssignedShooter")
-                        .WithMany()
-                        .HasForeignKey("AssignedShooterId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("Sycota.Domain.Entities.Club", "Club")
-                        .WithMany("Weapons")
-                        .HasForeignKey("ClubId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AssignedShooter");
-
-                    b.Navigation("Club");
-                });
-
-            modelBuilder.Entity("Sycota.Domain.Entities.InventoryIssue", b =>
-                {
-                    b.HasOne("Sycota.Domain.Entities.ClubAmmo", "Ammo")
-                        .WithMany()
-                        .HasForeignKey("AmmoId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("Sycota.Domain.Entities.Club", "Club")
-                        .WithMany("InventoryIssues")
-                        .HasForeignKey("ClubId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Sycota.Domain.Entities.ClubMember", "IssuedBy")
-                        .WithMany()
-                        .HasForeignKey("IssuedById")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Sycota.Domain.Entities.ClubMember", "Shooter")
-                        .WithMany()
-                        .HasForeignKey("ShooterId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Sycota.Domain.Entities.ClubWeapon", "Weapon")
-                        .WithMany()
-                        .HasForeignKey("WeaponId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("Ammo");
-
-                    b.Navigation("Club");
-
-                    b.Navigation("IssuedBy");
-
-                    b.Navigation("Shooter");
-
-                    b.Navigation("Weapon");
-                });
-
             modelBuilder.Entity("Sycota.Domain.Entities.ShooterProfile", b =>
                 {
                     b.HasOne("Sycota.Domain.Entities.ClubMember", "ClubMember")
@@ -1020,11 +836,7 @@ namespace Sycota.Infrastructure.Migrations
 
             modelBuilder.Entity("Sycota.Domain.Entities.Club", b =>
                 {
-                    b.Navigation("AmmoBatches");
-
                     b.Navigation("Announcements");
-
-                    b.Navigation("InventoryIssues");
 
                     b.Navigation("Invitations");
 
@@ -1033,8 +845,6 @@ namespace Sycota.Infrastructure.Migrations
                     b.Navigation("Members");
 
                     b.Navigation("TrainingSessions");
-
-                    b.Navigation("Weapons");
                 });
 
             modelBuilder.Entity("Sycota.Domain.Entities.ClubMember", b =>

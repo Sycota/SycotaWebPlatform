@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Sycota.Application.Interfaces;
 using Sycota.Application.Interfaces.Options;
@@ -17,7 +18,10 @@ public class ClubsController : Controller
     private readonly IClubMemberRepository _clubMemberRepository;
     private readonly IClubService _clubService;
     private readonly ITrainingSessionRepository _trainingSessionRepository;
+    private readonly IClubAnnouncementRepository _clubAnnouncementRepository;
+    private readonly IClubInventoryRepository _clubInventoryRepository;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IEmailSender _emailSender;
 
     // Constants for ISSF 10m Air Rifle scoring
     private const double PELLET_RADIUS = 2.25;   // 4.5mm pellet diameter / 2
@@ -31,32 +35,43 @@ public class ClubsController : Controller
         IClubMemberRepository clubMemberRepository,
         IClubService clubService,
         ITrainingSessionRepository trainingSessionRepository,
-        UserManager<ApplicationUser> userManager)
+        IClubAnnouncementRepository clubAnnouncementRepository,
+        IClubInventoryRepository clubInventoryRepository,
+        UserManager<ApplicationUser> userManager,
+        IEmailSender emailSender)
     {
         _clubRepository = clubRepository;
         _clubMemberRepository = clubMemberRepository;
         _clubService = clubService;
         _trainingSessionRepository = trainingSessionRepository;
+        _clubAnnouncementRepository = clubAnnouncementRepository;
+        _clubInventoryRepository = clubInventoryRepository;
         _userManager = userManager;
+        _emailSender = emailSender;
     }
 
     // GET: /Clubs
     public async Task<IActionResult> Index()
     {
-        var clubs = await _clubRepository.GetAllClubsAsync(ClubIncludeOptions.Members);
         var userId = _userManager.GetUserId(User);
-
-        ClubMember? currentMembership = null;
-        if (!string.IsNullOrEmpty(userId))
+        if (string.IsNullOrEmpty(userId))
         {
-            var allMembers = await _clubMemberRepository.GetAllClubMembersAsync(ClubMemberIncludeOptions.Club);
-            currentMembership = allMembers.FirstOrDefault(m => m.UserId == userId);
+            return Unauthorized();
         }
+
+        var myMemberships = (await _clubMemberRepository.GetAllClubMembersAsync())
+            .Where(m => m.UserId == userId)
+            .ToList();
+
+        var myClubIds = myMemberships.Select(m => m.ClubId).Distinct().ToHashSet();
+        var clubs = (await _clubRepository.GetAllClubsAsync(ClubIncludeOptions.Members))
+            .Where(c => myClubIds.Contains(c.Id))
+            .ToList();
 
         var viewModel = new ClubIndexViewModel
         {
             Clubs = clubs,
-            CurrentMembership = currentMembership
+            CurrentMembership = null
         };
 
         return View(viewModel);
@@ -70,6 +85,8 @@ public class ClubsController : Controller
         {
             return NotFound();
         }
+
+        var announcements = await _clubAnnouncementRepository.GetByClubIdAsync(id);
 
         var userId = _userManager.GetUserId(User);
         ClubMember? currentMembership = null;
@@ -101,6 +118,8 @@ public class ClubsController : Controller
             Members = membersResult.Success ? membersResult.Data : [],
             Trainers = trainersResult.Success ? trainersResult.Data : [],
             Competitors = competitorsResult.Success ? competitorsResult.Data : [],
+            Announcements = announcements,
+            NewAnnouncement = new CreateAnnouncementViewModel { ClubId = id },
             HasPendingRequest = hasPendingRequest,
             PendingRequestsCount = pendingRequestsCount
         };
@@ -399,6 +418,37 @@ public class ClubsController : Controller
         {
             TempData["Error"] = result.Error;
             return RedirectToAction(nameof(Invite), new { id = model.ClubId });
+        }
+
+        try
+        {
+            var club = await _clubRepository.GetClubByIdAsync(model.ClubId);
+            var invitation = await _clubService.GetPendingInvitationsAsync(model.ClubId);
+            var latestInvitation = invitation.Success
+                ? invitation.Data.FirstOrDefault(i => i.Email == model.Email)
+                : null;
+
+            if (latestInvitation is not null)
+            {
+                var invitationUrl = Url.Action(nameof(AcceptInvitation), "Clubs", new { code = latestInvitation.InvitationCode }, Request.Scheme);
+                var safeClubName = System.Net.WebUtility.HtmlEncode(club?.Name ?? "SYCOTA+");
+                var safeRole = System.Net.WebUtility.HtmlEncode(latestInvitation.OfferedRole.ToString());
+                var safeMessage = string.IsNullOrWhiteSpace(latestInvitation.Message)
+                    ? string.Empty
+                    : $"<p><strong>Съобщение:</strong> {System.Net.WebUtility.HtmlEncode(latestInvitation.Message)}</p>";
+                var messageBody = $@"
+                    <p>Получихте покана за клуб <strong>{safeClubName}</strong> в SYCOTA+.</p>
+                    <p><strong>Роля:</strong> {safeRole}</p>
+                    {safeMessage}
+                    <p><a href='{invitationUrl}'>Натиснете тук, за да прегледате и приемете поканата</a></p>
+                    <p>Поканата е валидна до: {latestInvitation.ExpiresAt:dd.MM.yyyy HH:mm}</p>";
+
+                await _emailSender.SendEmailAsync(model.Email, "Покана за клуб в SYCOTA+", messageBody);
+            }
+        }
+        catch
+        {
+            TempData["Error"] = "Поканата е създадена, но изпращането на имейл не беше успешно.";
         }
 
         TempData["Success"] = $"Поканата е изпратена до {model.Email}";
@@ -846,6 +896,330 @@ public class ClubsController : Controller
         };
 
         return View(viewModel);
+    }
+
+    // GET: /Clubs/Inventory/5
+    public async Task<IActionResult> Inventory(int id)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, id, ClubMemberIncludeOptions.All);
+        if (membership == null)
+        {
+            TempData["Error"] = "Не сте член на този клуб.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        var club = await _clubRepository.GetClubByIdAsync(id);
+        if (club == null)
+        {
+            return NotFound();
+        }
+
+        var competitorsResult = await _clubService.GetCompetitorsAsync(id, ClubMemberIncludeOptions.User);
+        var viewModel = new ClubInventoryViewModel
+        {
+            Club = club,
+            CurrentMembership = membership,
+            Weapons = await _clubInventoryRepository.GetWeaponsByClubIdAsync(id),
+            AmmoBatches = await _clubInventoryRepository.GetAmmoByClubIdAsync(id),
+            Issues = await _clubInventoryRepository.GetIssuesByClubIdAsync(id),
+            Shooters = competitorsResult.Success ? competitorsResult.Data : []
+        };
+
+        return View(viewModel);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddWeapon(AddWeaponViewModel request)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+        var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, request.ClubId);
+        if (membership == null || membership.Role != ClubRole.Admin)
+        {
+            TempData["Error"] = "Само администратори могат да добавят оръжия.";
+            return RedirectToAction(nameof(Inventory), new { id = request.ClubId });
+        }
+
+        if (!ModelState.IsValid)
+        {
+            TempData["Error"] = "Невалидни данни за оръжие.";
+            return RedirectToAction(nameof(Inventory), new { id = request.ClubId });
+        }
+
+        await _clubInventoryRepository.AddWeaponAsync(new ClubWeapon
+        {
+            ClubId = request.ClubId,
+            SerialNumber = request.SerialNumber.Trim(),
+            Model = request.Model.Trim(),
+            CreatedAt = DateTime.UtcNow
+        });
+
+        TempData["Success"] = "Оръжието е добавено успешно.";
+        return RedirectToAction(nameof(Inventory), new { id = request.ClubId });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditWeapon(EditWeaponViewModel model)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+        var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, model.ClubId);
+        if (membership == null || membership.Role != ClubRole.Admin)
+        {
+            TempData["Error"] = "Само администратори могат да редактират оръжия.";
+            return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+        }
+
+        var weapon = await _clubInventoryRepository.GetWeaponByIdAsync(model.Id);
+        if (weapon == null || weapon.ClubId != model.ClubId)
+        {
+            TempData["Error"] = "Оръжието не е намерено.";
+            return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+        }
+
+        if (!ModelState.IsValid)
+        {
+            TempData["Error"] = "Невалидни данни за оръжие.";
+            return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+        }
+
+        weapon.SerialNumber = model.SerialNumber.Trim();
+        weapon.Model = model.Model.Trim();
+        weapon.AssignedShooterId = model.AssignedShooterId;
+
+        await _clubInventoryRepository.UpdateWeaponAsync(weapon);
+        TempData["Success"] = "Оръжието е обновено успешно.";
+        return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteWeapon(int clubId, int id)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+        var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, clubId);
+        if (membership == null || membership.Role != ClubRole.Admin)
+        {
+            TempData["Error"] = "Само администратори могат да изтриват оръжия.";
+            return RedirectToAction(nameof(Inventory), new { id = clubId });
+        }
+
+        var weapon = await _clubInventoryRepository.GetWeaponByIdAsync(id);
+        if (weapon == null || weapon.ClubId != clubId)
+        {
+            TempData["Error"] = "Оръжието не е намерено.";
+            return RedirectToAction(nameof(Inventory), new { id = clubId });
+        }
+
+        try
+        {
+            await _clubInventoryRepository.DeleteWeaponAsync(weapon);
+            TempData["Success"] = "Оръжието е изтрито успешно.";
+        }
+        catch
+        {
+            TempData["Error"] = "Оръжието не може да бъде изтрито, защото има история на издавания.";
+        }
+        return RedirectToAction(nameof(Inventory), new { id = clubId });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddAmmo(AddAmmoViewModel model)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+        var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, model.ClubId);
+        if (membership == null || membership.Role != ClubRole.Admin)
+        {
+            TempData["Error"] = "Само администратори могат да добавят боеприпаси.";
+            return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+        }
+
+        if (!ModelState.IsValid)
+        {
+            TempData["Error"] = "Невалидни данни за боеприпас.";
+            return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+        }
+
+        await _clubInventoryRepository.AddAmmoAsync(new ClubAmmo
+        {
+            ClubId = model.ClubId,
+            SerialNumber = model.SerialNumber.Trim(),
+            Type = model.Type,
+            Quantity = model.Quantity,
+            RemainingQuantity = model.Quantity,
+            CreatedAt = DateTime.UtcNow
+        });
+
+        TempData["Success"] = "Боеприпасът е добавен успешно.";
+        return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditAmmo(EditAmmoViewModel model)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+        var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, model.ClubId);
+        if (membership == null || membership.Role != ClubRole.Admin)
+        {
+            TempData["Error"] = "Само администратори могат да редактират патрони.";
+            return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+        }
+
+        var ammo = await _clubInventoryRepository.GetAmmoByIdAsync(model.Id);
+        if (ammo == null || ammo.ClubId != model.ClubId)
+        {
+            TempData["Error"] = "Патроните не са намерени.";
+            return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+        }
+
+        if (!ModelState.IsValid || model.RemainingQuantity > model.Quantity)
+        {
+            TempData["Error"] = "Невалидни данни за патрони.";
+            return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+        }
+
+        ammo.SerialNumber = model.SerialNumber.Trim();
+        ammo.Type = model.Type;
+        ammo.Quantity = model.Quantity;
+        ammo.RemainingQuantity = model.RemainingQuantity;
+
+        await _clubInventoryRepository.UpdateAmmoAsync(ammo);
+        TempData["Success"] = "Патроните са обновени успешно.";
+        return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteAmmo(int clubId, int id)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+        var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, clubId);
+        if (membership == null || membership.Role != ClubRole.Admin)
+        {
+            TempData["Error"] = "Само администратори могат да изтриват патрони.";
+            return RedirectToAction(nameof(Inventory), new { id = clubId });
+        }
+
+        var ammo = await _clubInventoryRepository.GetAmmoByIdAsync(id);
+        if (ammo == null || ammo.ClubId != clubId)
+        {
+            TempData["Error"] = "Патроните не са намерени.";
+            return RedirectToAction(nameof(Inventory), new { id = clubId });
+        }
+
+        try
+        {
+            await _clubInventoryRepository.DeleteAmmoAsync(ammo);
+            TempData["Success"] = "Патроните са изтрити успешно.";
+        }
+        catch
+        {
+            TempData["Error"] = "Патроните не могат да бъдат изтрити, защото има история на издавания.";
+        }
+        return RedirectToAction(nameof(Inventory), new { id = clubId });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> IssueWeapon(IssueWeaponViewModel model)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+        var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, model.ClubId, ClubMemberIncludeOptions.All);
+        if (membership == null || !membership.CanTrain)
+        {
+            TempData["Error"] = "Само треньори могат да издават оръжие.";
+            return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+        }
+
+        var weapon = await _clubInventoryRepository.GetWeaponByIdAsync(model.WeaponId);
+        var shooter = await _clubMemberRepository.GetClubMemberByIdAsync(model.ShooterId);
+        if (weapon == null || shooter == null || weapon.ClubId != model.ClubId || shooter.ClubId != model.ClubId)
+        {
+            TempData["Error"] = "Невалидни данни за издаване на оръжие.";
+            return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+        }
+
+        weapon.AssignedShooterId = shooter.Id;
+        await _clubInventoryRepository.UpdateWeaponAsync(weapon);
+
+        await _clubInventoryRepository.AddIssueAsync(new InventoryIssue
+        {
+            ClubId = model.ClubId,
+            ShooterId = shooter.Id,
+            IssuedById = membership.Id,
+            WeaponId = weapon.Id,
+            IssuedAt = DateTime.UtcNow
+        });
+
+        TempData["Success"] = "Оръжието е издадено успешно.";
+        return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> IssueAmmo(IssueAmmoViewModel model)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+        var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, model.ClubId, ClubMemberIncludeOptions.All);
+        if (membership == null || !membership.CanTrain)
+        {
+            TempData["Error"] = "Само треньори могат да издават боеприпаси.";
+            return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+        }
+
+        var ammo = await _clubInventoryRepository.GetAmmoByIdAsync(model.AmmoId);
+        var shooter = await _clubMemberRepository.GetClubMemberByIdAsync(model.ShooterId);
+        if (ammo == null || shooter == null || ammo.ClubId != model.ClubId || shooter.ClubId != model.ClubId)
+        {
+            TempData["Error"] = "Невалидни данни за издаване на боеприпас.";
+            return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+        }
+
+        if (model.Quantity <= 0 || ammo.RemainingQuantity < model.Quantity)
+        {
+            TempData["Error"] = "Недостатъчно количество в избрания боеприпас.";
+            return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
+        }
+
+        ammo.RemainingQuantity -= model.Quantity;
+        await _clubInventoryRepository.UpdateAmmoAsync(ammo);
+
+        await _clubInventoryRepository.AddIssueAsync(new InventoryIssue
+        {
+            ClubId = model.ClubId,
+            ShooterId = shooter.Id,
+            IssuedById = membership.Id,
+            AmmoId = ammo.Id,
+            AmmoQuantity = model.Quantity,
+            IssuedAt = DateTime.UtcNow
+        });
+
+        TempData["Success"] = "Боеприпасът е издаден успешно.";
+        return RedirectToAction(nameof(Inventory), new { id = model.ClubId });
     }
 
     // GET: /Clubs/AssignTrainer/5?competitorId=10
@@ -1303,5 +1677,49 @@ public class ClubsController : Controller
 
         // Outside ring 1 (miss)
         return 0;
+    }
+
+    // POST: /Clubs/Announcement
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CreateAnnouncement(CreateAnnouncementViewModel model)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            TempData["Error"] = "Моля, попълнете коректно заглавието и съдържанието на съобщението.";
+            return RedirectToAction(nameof(Details), new { id = model.ClubId });
+        }
+
+        var membership = await _clubMemberRepository.GetByUserAndClubAsync(userId, model.ClubId, ClubMemberIncludeOptions.User);
+        if (membership == null || (membership.Role != ClubRole.Admin && membership.Role != ClubRole.Trainer))
+        {
+            TempData["Error"] = "Само администратори и треньори могат да публикуват съобщения.";
+            return RedirectToAction(nameof(Details), new { id = model.ClubId });
+        }
+
+        var authorName = !string.IsNullOrWhiteSpace(membership.User?.FirstName)
+            ? $"{membership.User.FirstName} {membership.User.LastName}".Trim()
+            : membership.User?.UserName ?? "Неизвестен";
+
+        var announcement = new ClubAnnouncement
+        {
+            ClubId = model.ClubId,
+            Title = model.Title.Trim(),
+            Content = model.Content.Trim(),
+            CreatedByUserId = userId,
+            CreatedByName = authorName,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        await _clubAnnouncementRepository.AddAsync(announcement);
+        TempData["Success"] = "Съобщението е публикувано успешно.";
+
+        return RedirectToAction(nameof(Details), new { id = model.ClubId });
     }
 }
